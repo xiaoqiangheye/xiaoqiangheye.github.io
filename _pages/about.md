@@ -20,7 +20,7 @@ social: false  # includes social icons at the bottom of the page
 ---
 
 
-I am currently a master student studying Computer Science at [Columbia](https://cs.columbia.edu). I earned by Bachelor's degree in `Computer Science` and `Mathematics` at [University of Washington](https://www.washington.edu).
+I am currently a master student studying Computer Science at [Columbia](https://cs.columbia.edu). I earned my Bachelor's degree in `Computer Science` and `Mathematics` at [University of Washington](https://www.washington.edu).
 
 I have broad interests on many aspects of `Computer Science` and `Mathematics`. Particularly, I am interested in `programming languages`, `formal verification`, `distributed system`, and `software systems`.
 
