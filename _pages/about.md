@@ -27,10 +27,13 @@ I have broad interests on `Computer Science` and `Mathematics`. Particularly, I 
 Aside from academics, I am interested in musicals, food, and cooking.
 
 
-##TAed
-  -CU COMS 6998-Types, Languages, and Compilers
-  -CU COMS 4995-Parallel functional programming
-  -UW CSE 341-Programming languages
-  -UW CSE 413-Programming languages and Implementations
+## TAed
+  - CU COMS 6998-Types, Languages, and Compilers
+  - CU COMS 4995-Parallel functional programming
+  - UW CSE 341-Programming languages
+  - UW CSE 413-Programming languages and Implementations
+
+## Projects
+Coming soon...
 
 <!-- Link to your social media connections, too. This theme is set up to use [Font Awesome icons](http://fortawesome.github.io/Font-Awesome/) and [Academicons](https://jpswalsh.github.io/academicons/), like the ones below. Add your Facebook, Twitter, LinkedIn, Google Scholar, or just disable all of them. -->
