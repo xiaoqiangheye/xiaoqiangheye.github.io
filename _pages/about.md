@@ -24,7 +24,7 @@ social: false  # includes social icons at the bottom of the page
 wei.qiang at cs dot columbia dot edu
 
 ## Me
-I am currently a master student studying Computer Science at [Columbia](https://cs.columbia.edu). I earned my Bachelor's degree in `Computer Science` and `Mathematics` at [University of Washington](https://www.washington.edu).
+I am currently a first year Phd student studying Computer Science at [Columbia](https://cs.columbia.edu). I earned my Bachelor's degree in `Computer Science` and `Mathematics` at [University of Washington](https://www.washington.edu).
 
 I have broad interests on `Computer Science` and `Mathematics`. Particularly, I am interested in `software engineering`, `programming languages`, `formal verification`, and `software systems`. I am currently advised by Prof.[Ronghui Gu](https://www.cs.columbia.edu/~rgu/), and work closely with Prof. [Jason Nieh](https://www.cs.columbia.edu/~nieh/). 
 
