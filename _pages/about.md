@@ -30,7 +30,7 @@ I have broad interests on `Computer Science` and `Mathematics`. Particularly, I 
 
 Aside from academics, I am interested in movies, food, musicals, and cooking.
 
-If you wise to collaborate please contact me. Also, if you are undergrad or master students looking for research of programming languages, and verifications with me and my advisor, you may also contact me.
+If you are undergrad or master students looking for research of programming languages and verifications with me and my advisor, please contact me.
 
 
 ## TAed
