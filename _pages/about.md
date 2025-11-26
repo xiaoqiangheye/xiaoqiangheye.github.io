@@ -2,7 +2,7 @@
 layout: about
 title: about
 permalink: /
-subtitle: First year Phd CS Student at Columbia
+subtitle: second year Phd CS Student at Columbia
 
 profile:
   align: right
