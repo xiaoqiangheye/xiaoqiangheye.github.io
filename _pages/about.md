@@ -24,9 +24,9 @@ social: false  # includes social icons at the bottom of the page
 wei.qiang at cs dot columbia dot edu
 
 ## Me
-I am currently a first year Phd student studying Computer Science at [Columbia](https://cs.columbia.edu). I earned my Bachelor's degree in `Computer Science` and `Mathematics` at [University of Washington](https://www.washington.edu).
+I am currently a second year Phd student studying Computer Science at [Columbia](https://cs.columbia.edu). I earned my Bachelor's degree in `Computer Science` and `Mathematics` at [University of Washington](https://www.washington.edu).
 
-I have broad interests on `Computer Science` and `Mathematics`. Particularly, I am interested in `software engineering`, `programming languages`, `formal verification`, and `software systems`. I am currently advised by Prof.[Ronghui Gu](https://www.cs.columbia.edu/~rgu/), and work closely with Prof. [Jason Nieh](https://www.cs.columbia.edu/~nieh/). 
+I have broad interests on `Computer Science` and `Mathematics`. Particularly, I am interested in `programming languages`, `formal verification`, and `systems`. I am currently advised by Prof.[Ronghui Gu](https://www.cs.columbia.edu/~rgu/), and work closely with Prof. [Jason Nieh](https://www.cs.columbia.edu/~nieh/). 
 
 Aside from academics, I am interested in movies, food, musicals, and cooking.
 
@@ -39,7 +39,7 @@ If you wise to collaborate please contact me. Also, if you are undergrad or mast
   - UW CSE 341-Programming languages
   - UW CSE 413-Programming languages and Implementations
 
-## Projects
-Coming soon...
+<!-- ## Projects
+Coming soon... -->
 
 <!-- Link to your social media connections, too. This theme is set up to use [Font Awesome icons](http://fortawesome.github.io/Font-Awesome/) and [Academicons](https://jpswalsh.github.io/academicons/), like the ones below. Add your Facebook, Twitter, LinkedIn, Google Scholar, or just disable all of them. -->
