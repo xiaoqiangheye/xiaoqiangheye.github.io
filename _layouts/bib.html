@@ -105,10 +105,6 @@
         {%- endif -%}
 
         </div>
-        {% if entry.co-first-author-note %}
-        <div class="author co-first-author-note"><em>{{ entry.co-first-author-note }}</em></div>
-        {% endif %}
-
         <!-- Journal/Book title and date -->
         {% assign proceedings = "inproceedings,incollection" | split: ','%}
         {% assign thesis = "thesis,mastersthesis,phdthesis" | split: ','%}
@@ -135,6 +131,12 @@
         <div class="periodical">
           {{ entry.note | strip }}
         </div>
+        {% if entry.award %}
+        <div class="periodical"><strong>{{ entry.award }}</strong></div>
+        {% endif %}
+        {% if entry.co-first-author-note %}
+        <div class="author co-first-author-note"><em>{{ entry.co-first-author-note }}</em></div>
+        {% endif %}
 
           <!-- Links/Buttons -->
           <div class="links">
