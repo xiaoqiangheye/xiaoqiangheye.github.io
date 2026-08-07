@@ -13,3 +13,48 @@ $max-content-width: {{ site.max_width }};
   "base",
   "distill"
 ;
+
+// About-page name heading
+.post > .post-header > .post-title {
+  .author-name {
+    font-weight: 700;
+    letter-spacing: -0.02em;
+  }
+
+  .author-name-cn {
+    margin-left: 0.6rem;
+    font-weight: 500;
+    color: var(--global-theme-color);
+    letter-spacing: 0.02em;
+  }
+}
+
+// Section headings on the about page (Contact, Me, TAed, News, Latest posts, Selected publications)
+.post > article h2 {
+  position: relative;
+  margin-top: 2.5rem;
+  margin-bottom: 1.4rem;
+  padding-bottom: 0.5rem;
+  font-weight: 700;
+  letter-spacing: -0.015em;
+  border-bottom: 1px solid var(--global-divider-color);
+
+  &::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -1px;
+    width: 2.5rem;
+    height: 2px;
+    background-color: var(--global-theme-color);
+  }
+
+  a {
+    color: inherit;
+
+    &:hover {
+      color: var(--global-theme-color);
+      text-decoration: none;
+    }
+  }
+}

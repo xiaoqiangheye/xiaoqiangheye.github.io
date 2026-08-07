@@ -34,10 +34,10 @@ If you are undergrad or master students looking for research of programming lang
 
 
 ## TAed
-  - CU COMS 6998-Types, Languages, and Compilers
-  - CU COMS 4995-Parallel functional programming
-  - UW CSE 341-Programming languages
-  - UW CSE 413-Programming languages and Implementations
+  - [CU COMS 6998 — Types, Languages, and Compilers](https://www.cs.columbia.edu/~sedwards/classes/2023/6998-spring-tlc/index.html)
+  - [CU COMS 4995 — Parallel Functional Programming](https://www.cs.columbia.edu/~sedwards/classes/2024/4995-fall/index.html)
+  - [UW CSE 341 — Programming Languages](https://courses.cs.washington.edu/courses/cse341/)
+  - [UW CSE 413 — Programming Languages and Implementations](https://courses.cs.washington.edu/courses/cse413/)
 
 <!-- ## Projects
 Coming soon... -->
