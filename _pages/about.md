@@ -8,7 +8,6 @@ profile:
   align: right
   image: self.png
   image_circular: true # crops the image to make it circular
-  cv: cv.pdf # shows a CV button below the profile image
   # address: >
   #   <p>555 your office number</p>
   #   <p>123 your address street</p>
@@ -23,6 +22,8 @@ social: false  # includes social icons at the bottom of the page
 
 ## Contact
 wei.qiang at cs dot columbia dot edu
+
+[CV (PDF)](/assets/pdf/cv.pdf)
 
 ## Me
 I am currently a second year Phd student studying Computer Science at [Columbia](https://cs.columbia.edu). I earned my Bachelor's degree in `Computer Science` and `Mathematics` at [University of Washington](https://www.washington.edu).
