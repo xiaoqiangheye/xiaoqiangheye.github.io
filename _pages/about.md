@@ -8,6 +8,7 @@ profile:
   align: right
   image: self.png
   image_circular: true # crops the image to make it circular
+  cv: cv.pdf # shows a CV button below the profile image
   # address: >
   #   <p>555 your office number</p>
   #   <p>123 your address street</p>
