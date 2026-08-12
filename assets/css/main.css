@@ -603,6 +603,9 @@ footer.sticky-bottom {
   color: var(--global-theme-color) !important;
   border: 1px solid var(--global-theme-color);
 }
+.publications ol.bibliography li .award-text {
+  color: #FF3636;
+}
 .publications ol.bibliography li .title {
   font-weight: bolder;
 }
