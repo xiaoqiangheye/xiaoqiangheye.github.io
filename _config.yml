@@ -18,7 +18,7 @@ footer_text: >
 keywords: Wei Qiang, 强巍, Columbia University, PhD, Computer Science, programming languages, formal verification, systems, Ronghui Gu
 
 lang: en # the language of your site (for example: en, fr, cn, ru, etc.)
-icon: ⚛️  # the emoji used as the favicon (alternatively, provide image name in /assets/img/)
+icon: columbia-crown.png  # the emoji used as the favicon (alternatively, provide image name in /assets/img/)
 
 url: https://xiaoqiangheye.github.io # the base hostname & protocol for your site
 baseurl: # the subpath of your site, e.g. /blog/

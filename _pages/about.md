@@ -6,7 +6,7 @@ subtitle: second year Phd CS Student at Columbia
 
 profile:
   align: right
-  image: columbia-crown.png
+  image: self.png
   image_circular: true # crops the image to make it circular
   # address: >
   #   <p>555 your office number</p>
