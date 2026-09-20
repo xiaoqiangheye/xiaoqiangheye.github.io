@@ -187,8 +187,11 @@
             {%- endif %}
           {%- endif %}
           {%- if entry.slides %}
+            {%- assign slides_first_character = entry.slides | slice: 0, 1 -%}
             {% if entry.slides contains '://' -%}
             <a href="{{ entry.slides }}" class="btn btn-sm z-depth-0" role="button">Slides</a>
+            {%- elsif slides_first_character == '/' -%}
+            <a href="{{ entry.slides | relative_url }}" class="btn btn-sm z-depth-0" role="button">Slides</a>
             {%- else -%}
             <a href="{{ entry.slides | prepend: '/assets/pdf/' | relative_url }}" class="btn btn-sm z-depth-0" role="button">Slides</a>
             {%- endif %}
