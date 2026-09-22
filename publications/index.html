@@ -148,17 +148,33 @@
 
           <!-- Links/Buttons -->
           <div class="links">
+            <a class="abstract btn btn-sm z-depth-0" role="button">Abstract</a>
             <a href="http://arxiv.org/abs/2609.01762" class="btn btn-sm z-depth-0" role="button" rel="external nofollow noopener" target="_blank">arXiv</a>
+            <a class="bibtex btn btn-sm z-depth-0" role="button">Cite</a>
             <a href="/assets/pdf/qsymb-oopsla26.pdf" class="btn btn-sm z-depth-0" role="button">Preprint</a>
             <a href="https://github.com/VeriGu/QSymb" class="btn btn-sm z-depth-0" role="button" rel="external nofollow noopener" target="_blank">Code</a>
           </div>
           
           <div class="badges">
-            <span class="altmetric-embed" data-hide-no-mentions="true" data-hide-less-than="15" data-badge-type="2" data-badge-popover="right"></span>
-              <span class="__dimensions_badge_embed__" data-pmid="" data-hide-zero-citations="true" data-style="small_rectangle" data-legend="hover-right" style="margin-bottom: 3px;"></span>
+            <span class="altmetric-embed" data-hide-no-mentions="true" data-hide-less-than="15" data-badge-type="2" data-badge-popover="right" data-doi="10.1145/3839450"></span>
+              <span class="__dimensions_badge_embed__" data-doi="10.1145/3839450" data-hide-zero-citations="true" data-style="small_rectangle" data-legend="hover-right" style="margin-bottom: 3px;"></span>
           </div>
 
-          
+          <!-- Hidden abstract block -->
+          <div class="abstract hidden">
+            <p>Today’s quantum devices are noisy, so reducing circuit size is critical for reliable execution. Existing rule-based optimizers often rely on large rule sets that are difficult to manage and still miss long-distance transformations. We present QSymb, a framework for synthesizing compact and expressive quantum-circuit rewrite rules with formal guarantees. We formalize symbolic rewrite rules in which a symbolic gate represents infinitely many subcircuits. We then define canonical symbolic rules of the form L; S = S; R and prove that they constitute a compact generative core from which general symbolic rules can be derived. On top of this formal foundation, given a gate set, QSymb synthesizes (1) a small, non-derivable concrete rule set that is complete up to chosen size and qubit bounds, and (2) a small but expressive canonical symbolic rule set that captures transformations beyond finite or monomial-only patterns. We further present rule anchoring to derive optimization-effective rules from canonical symbolic rules. Together, these results provide both expressiveness and guarantees: soundness of synthesized rules via validation, non-derivability, and bounded completeness. On the IBM-Eagle gate set, QSymb strictly outperforms state-of-the-art rewrite-based optimizers (Qiskit, Guoq, Quartz, TKET, and Queso) in two-qubit-gate reduction on 90%, 67%, 82%, 85%, and 83% of standard quantum algorithm benchmarks, respectively; on Nam gate set, the corresponding rates are 88%, 74%, 81%, 86%, and 82.9%. It achieves final average two-qubit-gate reductions of 27.44% and 29.95%, respectively.</p>
+          </div>
+<!-- Hidden bibtex block -->
+          <div class="bibtex hidden">
+            <figure class="highlight"><pre><code class="language-bibtex" data-lang="bibtex"><span class="nc">@inproceedings</span><span class="p">{</span><span class="nl">qsymb</span><span class="p">,</span>
+  <span class="na">author</span> <span class="p">=</span> <span class="s">{Qiang, Wei and Gu, Ronghui}</span><span class="p">,</span>
+  <span class="na">title</span> <span class="p">=</span> <span class="s">{Synthesis of Compact and Expressive Quantum-Circuit Optimizations}</span><span class="p">,</span>
+  <span class="na">booktitle</span> <span class="p">=</span> <span class="s">{Proceedings of the ACM on Programming Languages (OOPSLA 2026)}</span><span class="p">,</span>
+  <span class="na">year</span> <span class="p">=</span> <span class="s">{2026}</span><span class="p">,</span>
+  <span class="na">publisher</span> <span class="p">=</span> <span class="s">{ACM}</span><span class="p">,</span>
+  <span class="na">doi</span> <span class="p">=</span> <span class="s">{10.1145/3839450}</span><span class="p">,</span>
+<span class="p">}</span></code></pre></figure>
+          </div>
         </div>
       </div>
 </li>
@@ -207,6 +223,8 @@
 
           <!-- Links/Buttons -->
           <div class="links">
+            <a class="abstract btn btn-sm z-depth-0" role="button">Abstract</a>
+            <a class="bibtex btn btn-sm z-depth-0" role="button">Cite</a>
             <a href="https://dl.acm.org/doi/10.1145/3779212.3790171" class="btn btn-sm z-depth-0" role="button" rel="external nofollow noopener" target="_blank">HTML</a>
             <a href="https://www.cs.columbia.edu/%7Ergu/publications/asplos26-yang.pdf" class="btn btn-sm z-depth-0" role="button" rel="external nofollow noopener" target="_blank">PDF</a>
             <a href="https://github.com/VeriGu/spoq2" class="btn btn-sm z-depth-0" role="button" rel="external nofollow noopener" target="_blank">Code</a>
@@ -217,7 +235,22 @@
               <span class="__dimensions_badge_embed__" data-pmid="" data-hide-zero-citations="true" data-style="small_rectangle" data-legend="hover-right" style="margin-bottom: 3px;"></span>
           </div>
 
-          
+          <!-- Hidden abstract block -->
+          <div class="abstract hidden">
+            <p>System software is often complex and hides exploitable security vulnerabilities. Formal verification promises bug-free software but comes with a prohibitive proof cost. We present Spoq2, the first verification framework to highly automate security verification of unmodified system software. Spoq2 is based on the observation that many security properties, such as noninterference, can be reduced to establishing inductive invariants on individual transitions of a transition system that models system software. However, directly verifying such invariants for real system code overwhelms existing SMT solvers. Spoq2 makes this possible by automatically reducing verification complexity. It decomposes transitions into individual execution paths, extends cone-of-influence analysis to the individual transition level, and eliminates irrelevant machine states, clauses, and control-flow paths before invoking the SMT solver. Spoq2 further optimizes how pointer operations are modeled and verified through pointer abstractions that eliminate expensive bit-wise operations from SMT queries. We demonstrate the effectiveness of Spoq2 by verifying security properties of four unmodified, real-world system codebases with minimal manual effort.</p>
+          </div>
+<!-- Hidden bibtex block -->
+          <div class="bibtex hidden">
+            <figure class="highlight"><pre><code class="language-bibtex" data-lang="bibtex"><span class="nc">@inproceedings</span><span class="p">{</span><span class="nl">spoq2</span><span class="p">,</span>
+  <span class="na">author</span> <span class="p">=</span> <span class="s">{Yang*, Ganxiang and Qiang*, Wei and Rong*, Yi and Li, Xuheng and Yu, Fanqi and Gu, Ronghui and Nieh, Jason}</span><span class="p">,</span>
+  <span class="na">title</span> <span class="p">=</span> <span class="s">{Spoq2: Highly Automated Verification of Security Properties for Unmodified System Software}</span><span class="p">,</span>
+  <span class="na">booktitle</span> <span class="p">=</span> <span class="s">{Proceedings of the 31st International Conference on Architectural Support for Programming Languages and Operating Systems (ASPLOS 2026)}</span><span class="p">,</span>
+  <span class="na">year</span> <span class="p">=</span> <span class="s">{2026}</span><span class="p">,</span>
+  <span class="na">address</span> <span class="p">=</span> <span class="s">{Pittsburgh, PA}</span><span class="p">,</span>
+  <span class="na">publisher</span> <span class="p">=</span> <span class="s">{ACM}</span><span class="p">,</span>
+  <span class="na">month</span> <span class="p">=</span> <span class="nv">mar</span><span class="p">,</span>
+<span class="p">}</span></code></pre></figure>
+          </div>
         </div>
       </div>
 </li>
@@ -265,6 +298,8 @@
 
           <!-- Links/Buttons -->
           <div class="links">
+            <a class="abstract btn btn-sm z-depth-0" role="button">Abstract</a>
+            <a class="bibtex btn btn-sm z-depth-0" role="button">Cite</a>
             <a href="https://www.usenix.org/system/files/osdi23-li-xupeng.pdf" class="btn btn-sm z-depth-0" role="button" rel="external nofollow noopener" target="_blank">PDF</a>
             <a href="https://github.com/columbia/osdi23-paper114-ae" class="btn btn-sm z-depth-0" role="button" rel="external nofollow noopener" target="_blank">Code</a>
           </div>
@@ -274,7 +309,25 @@
               <span class="__dimensions_badge_embed__" data-pmid="" data-hide-zero-citations="true" data-style="small_rectangle" data-legend="hover-right" style="margin-bottom: 3px;"></span>
           </div>
 
-          
+          <!-- Hidden abstract block -->
+          <div class="abstract hidden">
+            <p>System software is often large and complex, resulting in many vulnerabilities that can potentially be exploited to compromise the security of a system. Formal verification offers a potential solution to creating bug-free software, but a key impediment to its adoption remains proof cost. We present Spoq, a highly automated verification framework to construct machine-checkable proofs in Coq for system software with much less proof cost. Spoq introduces a novel program structure reconstruction technique to leverage LLVM to translate C code into Coq, supporting full C semantics, including C macros, inline assembly, and compiler directives, so that source code no longer has to be manually modified to be verified. Spoq leverages a layering proof strategy and introduces novel Coq tactics and transformation rules to automatically generate layer specifications and refinement proofs to simplify verification of concurrent system software. Spoq also supports easy integration of manually written layer specifications and refinement proofs. We use Spoq to verify a multiprocessor KVM hypervisor implementation. Verification using Spoq required 70% less proof effort than the manually written specifications and proofs to verify an older implementation. Furthermore, the proofs using Spoq hold for the unmodified implementation that is directly compiled and executed.</p>
+          </div>
+<!-- Hidden bibtex block -->
+          <div class="bibtex hidden">
+            <figure class="highlight"><pre><code class="language-bibtex" data-lang="bibtex"><span class="nc">@inproceedings</span><span class="p">{</span><span class="nl">spoq</span><span class="p">,</span>
+  <span class="na">author</span> <span class="p">=</span> <span class="s">{Li, Xupeng and Li, Xuheng and Qiang, Wei and Gu, Ronghui and Nieh, Jason}</span><span class="p">,</span>
+  <span class="na">title</span> <span class="p">=</span> <span class="s">{Spoq: Scaling Machine-Checkable Systems Verification in Coq}</span><span class="p">,</span>
+  <span class="na">booktitle</span> <span class="p">=</span> <span class="s">{17th USENIX Symposium on Operating Systems Design and Implementation (OSDI 23)}</span><span class="p">,</span>
+  <span class="na">year</span> <span class="p">=</span> <span class="s">{2023}</span><span class="p">,</span>
+  <span class="na">isbn</span> <span class="p">=</span> <span class="s">{978-1-939133-34-2}</span><span class="p">,</span>
+  <span class="na">address</span> <span class="p">=</span> <span class="s">{Boston, MA}</span><span class="p">,</span>
+  <span class="na">pages</span> <span class="p">=</span> <span class="s">{851--869}</span><span class="p">,</span>
+  <span class="na">url</span> <span class="p">=</span> <span class="s">{https://www.usenix.org/conference/osdi23/presentation/li-xupeng}</span><span class="p">,</span>
+  <span class="na">publisher</span> <span class="p">=</span> <span class="s">{USENIX Association}</span><span class="p">,</span>
+  <span class="na">month</span> <span class="p">=</span> <span class="nv">jul</span><span class="p">,</span>
+<span class="p">}</span></code></pre></figure>
+          </div>
         </div>
       </div>
 </li></ol>
