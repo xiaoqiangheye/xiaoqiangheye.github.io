@@ -5,4 +5,4 @@ inline: true
 related_posts: false
 ---
 
-Our paper QSymb is accepted at OOPSLA 2026! :tada:
+Our paper [QSymb](/assets/pdf/qsymb-oopsla26.pdf) is accepted at OOPSLA 2026! :tada:
