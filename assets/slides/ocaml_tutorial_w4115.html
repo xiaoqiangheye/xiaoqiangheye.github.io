@@ -1,0 +1,1820 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>OCaml Tutorial · COMS W4115</title>
+<style>
+:root{
+  --bg:#fbfbfa; --paper:#fff; --ink:#111827; --muted:#667085; --line:#d9dee7;
+  --navy:#12263a; --blue:#315f8c; --blue2:#edf4fa; --gold:#f5d66f;
+  --green:#117a4b; --green2:#eaf8f1; --red:#b42318; --red2:#fff0ee;
+  --orange:#a45b00; --orange2:#fff6e8; --shadow:0 15px 42px rgba(18,38,58,.11);
+  --sans:Inter,ui-sans-serif,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  --mono:"SFMono-Regular",Consolas,"Liberation Mono",Menlo,monospace;
+}
+*{box-sizing:border-box}
+html,body{margin:0;width:100%;height:100%;overflow:hidden;background:var(--bg);color:var(--ink);font-family:var(--sans)}
+body{background:linear-gradient(180deg,#fff 0,#fbfbfa 55%,#f7f9fb 100%)}
+.deck{position:relative;width:100vw;height:100vh}
+.topbar{
+  position:fixed;z-index:20;left:0;right:0;top:0;height:50px;padding:0 28px;
+  display:flex;align-items:center;justify-content:space-between;background:rgba(255,255,255,.94);
+  border-bottom:1px solid var(--line);backdrop-filter:blur(10px)
+}
+.brand{font-size:12px;letter-spacing:.12em;text-transform:uppercase;font-weight:900;color:var(--blue)}
+.meta{display:flex;gap:14px;align-items:center;color:var(--muted);font-size:12px}
+.kbd{font-family:var(--mono);border:1px solid #cdd5df;border-bottom-width:2px;padding:2px 6px;border-radius:5px;background:white}
+.slide{
+  display:none;position:absolute;inset:50px 0 6px 0;padding:30px 5.5vw 34px;overflow:hidden
+}
+.slide.active{display:block;animation:enter .16s ease-out}
+@keyframes enter{from{opacity:.2;transform:translateX(8px)}to{opacity:1;transform:none}}
+.inner{max-width:1200px;min-height:0;margin:auto;display:flex;flex-direction:column;justify-content:center;transform-origin:top center;will-change:transform}
+.kicker{font-size:13px;font-weight:900;text-transform:uppercase;letter-spacing:.12em;color:var(--blue);margin-bottom:9px}
+h1{font-size:clamp(44px,5.3vw,72px);line-height:1.01;letter-spacing:-.045em;margin:0 0 18px}
+h2{font-size:clamp(32px,3.5vw,52px);line-height:1.07;letter-spacing:-.035em;margin:0 0 20px}
+h3{font-size:22px;line-height:1.2;margin:0 0 10px}
+p{font-size:clamp(18px,1.75vw,25px);line-height:1.45;margin:8px 0 13px}
+.lead{font-size:clamp(22px,2.15vw,31px);line-height:1.38;color:#30465a}
+.small{font-size:15px;line-height:1.45}
+.muted{color:var(--muted)}
+.em{color:var(--blue);font-weight:850}
+.rule{height:1px;background:var(--line);margin:22px 0}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:22px;align-items:stretch}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.card{border:1px solid var(--line);border-radius:17px;background:white;padding:18px 20px;box-shadow:0 3px 13px rgba(18,38,58,.035)}
+.card.blue{background:var(--blue2);border-color:#c9ddea}
+.card.green{background:var(--green2);border-color:#cbe9da}
+.card.orange{background:var(--orange2);border-color:#ecd7b3}
+ul,ol{margin:8px 0 0 24px;padding:0}
+li{font-size:clamp(17px,1.55vw,22px);line-height:1.42;margin:7px 0}
+code{font-family:var(--mono)}
+pre{
+  background:var(--navy);color:#f8fafc;border-radius:14px;padding:16px 19px;margin:9px 0;
+  font-family:var(--mono);font-size:clamp(16px,1.45vw,21px);line-height:1.52;overflow:auto;
+  box-shadow:0 7px 24px rgba(18,38,58,.11)
+}
+.inline{font-family:var(--mono);font-size:.9em;padding:.08em .33em;border-radius:6px;background:#edf1f5;border:1px solid #dbe2e9}
+.hl{background:rgba(245,214,111,.22);outline:1px solid rgba(245,214,111,.5);border-radius:4px;padding:0 2px}
+.dim{opacity:.48}
+.kw{color:#ffd166}.ty{color:#7dd3fc}.str{color:#b9f18c}.cm{color:#9bb0c2}
+.callout{border-left:5px solid var(--blue);background:var(--blue2);padding:13px 18px;border-radius:0 13px 13px 0;margin:16px 0;font-size:20px;line-height:1.42}
+.question{
+  border:1px solid #cbd7e2;background:white;border-radius:20px;padding:24px 26px;box-shadow:var(--shadow);max-width:1100px
+}
+.qtext{font-size:clamp(22px,2vw,29px);font-weight:850;line-height:1.3;margin:5px 0 15px}
+.choices{display:grid;grid-template-columns:1fr 1fr;gap:11px}
+.choice{
+  text-align:left;border:1px solid #cad5de;background:#fafcfd;border-radius:11px;padding:13px 15px;
+  font-size:17px;line-height:1.35;cursor:pointer;transition:.12s
+}
+.choice:hover{border-color:#86abc8;background:#f2f7fb}
+.choice.correct{background:var(--green2);border-color:#74bd98;color:#0b5e39}
+.choice.wrong{background:var(--red2);border-color:#e2a097;color:#8f221a}
+.answer{display:none;margin-top:15px;border-radius:11px;padding:13px 15px;font-size:17px;line-height:1.42}
+.answer.show.good{display:block;background:var(--green2);color:#0d5f3a;border:1px solid #c0e3d0}
+.answer.show.bad{display:block;background:var(--red2);color:#8b2018;border:1px solid #edc0bb}
+.table{width:100%;border-collapse:separate;border-spacing:0;border:1px solid var(--line);border-radius:13px;overflow:hidden;background:white}
+.table th,.table td{padding:11px 14px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top;font-size:16px;line-height:1.35}
+.table th{background:#edf4f9;color:#2d526f;text-transform:uppercase;letter-spacing:.06em;font-size:12px}
+.table tr:last-child td{border-bottom:none}
+.timeline{display:grid;grid-template-columns:repeat(5,1fr);gap:9px}
+.tbox{border-top:5px solid var(--blue);border-left:1px solid var(--line);border-right:1px solid var(--line);border-bottom:1px solid var(--line);border-radius:10px;background:white;padding:13px}
+.tbox b{font-size:22px;display:block;margin-bottom:4px}.tbox span{font-size:13px;color:var(--muted);line-height:1.35}
+.stepbox{display:grid;grid-template-columns:48px 1fr;gap:14px;align-items:start;margin:12px 0}
+.stepnum{width:38px;height:38px;border-radius:50%;display:grid;place-items:center;background:var(--blue);color:white;font-weight:900}
+.steptext{font-size:19px;line-height:1.43}
+.fragment{opacity:0;transform:translateY(7px);transition:.25s ease}
+.fragment.visible{opacity:1;transform:none}
+.fragment.reveal-code{display:none}
+.fragment.reveal-code.visible{display:block}
+.codebuild{position:relative}
+.placeholder{background:#344b60;color:#c7d5e1;padding:1px 5px;border-radius:4px}
+.fill{color:#b9f18c;font-weight:750}
+.explain{background:white;border:1px solid var(--line);border-radius:13px;padding:14px 16px;font-size:17px;line-height:1.4}
+.trace{font-family:var(--mono);background:#f4f7f9;border:1px solid var(--line);border-radius:13px;padding:16px;font-size:17px;line-height:1.55}
+.big{font-size:clamp(25px,2.6vw,37px);font-weight:850;line-height:1.28;letter-spacing:-.025em}
+.title-chip{display:inline-flex;align-items:center;gap:8px;width:max-content;border:1px solid #caddea;background:#edf6fb;padding:7px 11px;border-radius:999px;text-transform:uppercase;letter-spacing:.07em;font-size:12px;font-weight:900;color:#2e6389;margin-bottom:18px}
+.dot{width:9px;height:9px;border-radius:50%;background:var(--blue)}
+.progress{position:fixed;bottom:0;left:0;height:4px;background:var(--blue);z-index:30;transition:width .15s}
+.nav{position:fixed;z-index:18;top:50%;transform:translateY(-50%);width:38px;height:54px;border:1px solid var(--line);background:rgba(255,255,255,.84);border-radius:10px;color:var(--blue);font-size:22px;cursor:pointer;opacity:.58}
+.nav:hover{opacity:1}.prev{left:10px}.next{right:10px}
+.footer{position:fixed;left:26px;bottom:12px;z-index:15;color:#7c8b99;font-size:11px}
+.notes{display:none;position:fixed;right:17px;bottom:20px;z-index:40;width:min(440px,43vw);max-height:42vh;overflow:auto;padding:16px;background:#fff8df;border:1px solid #ead7a0;border-radius:13px;box-shadow:var(--shadow);font-size:14px;line-height:1.43;color:#4f431e}
+.notes.show{display:block}
+.overview{display:none;position:fixed;z-index:50;inset:0;background:rgba(10,23,37,.94);padding:34px;overflow:auto}
+.overview.show{display:block}
+.overview h2{color:white;font-size:32px}
+.ogrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:10px}
+.oit{border:1px solid rgba(255,255,255,.19);background:#172b40;color:white;border-radius:11px;padding:12px;text-align:left;cursor:pointer;min-height:80px}
+.oit:hover{background:#213c57}.oit .n{display:block;color:#86c3ea;font:11px var(--mono);margin-bottom:5px}.oit .t{font-size:14px;font-weight:750;line-height:1.28}
+.section-slide .inner{align-items:flex-start}
+.section-slide h1{max-width:1000px}
+.badge{display:inline-block;padding:5px 9px;border-radius:999px;background:#edf4fa;color:#315f8c;font-size:12px;font-weight:850}
+.rulebox{
+  border:1px solid var(--line);
+  background:white;
+  border-radius:16px;
+  padding:18px 22px;
+  text-align:center;
+}
+.rulelabel{
+  font-size:14px;
+  font-weight:900;
+  text-transform:uppercase;
+  letter-spacing:.08em;
+  color:var(--blue);
+  margin-bottom:12px;
+}
+.inference{
+  display:inline-flex;
+  flex-direction:column;
+  align-items:center;
+  font-family:var(--mono);
+  font-size:clamp(17px,1.55vw,22px);
+  line-height:1.45;
+}
+.premises{
+  padding:0 14px 7px;
+  white-space:nowrap;
+}
+.ruleline{
+  width:100%;
+  border-top:2px solid #32485d;
+}
+.conclusion{
+  padding:7px 14px 0;
+  white-space:nowrap;
+}
+.legend{
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px 18px;
+  margin-top:16px;
+  color:var(--muted);
+  font-size:14px;
+}
+.legend code{color:var(--ink)}
+.rule-choices{grid-template-columns:1fr !important}
+.choice.rule-choice{padding:14px 18px}
+.mini-rule{
+  display:grid;
+  grid-template-columns:34px 1fr;
+  gap:10px;
+  align-items:center;
+  width:100%;
+}
+.mini-rule .letter{font-weight:900;color:var(--blue)}
+.mini-rule .formula{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  font-family:var(--mono);
+  font-size:15px;
+  line-height:1.32;
+}
+.mini-rule .top{
+  width:100%;
+  text-align:center;
+  padding-bottom:5px;
+  border-bottom:1.5px solid #506274;
+}
+.mini-rule .bottom{
+  width:100%;
+  text-align:center;
+  padding-top:5px;
+}
+
+
+@media(max-width:900px){
+ .grid2,.grid3,.timeline{grid-template-columns:1fr}
+ .choices{grid-template-columns:1fr}
+ .slide{padding-left:51px;padding-right:51px}
+ .kbd{display:none}
+}
+
+@media(max-height:760px){
+ .slide{padding-top:20px;padding-bottom:24px}
+ h2{margin-bottom:14px}
+ p{margin:6px 0 10px}
+ li{margin:5px 0}
+ .grid2,.grid3{gap:14px}
+}
+@media print{
+ html,body{overflow:visible;height:auto}.topbar,.nav,.progress,.footer,.overview,.notes{display:none!important}
+ .slide{display:block!important;position:relative;inset:auto;min-height:100vh;page-break-after:always}
+ .inner{min-height:auto}.fragment{opacity:1!important;transform:none!important;display:block!important}
+}
+
+/* v30: larger presentation typography and balanced content columns. */
+.slide{padding:26px max(48px,4vw) 32px}
+.slide.active{display:flex;align-items:center}
+.inner{width:100%;max-width:1480px;flex-shrink:0;transform-origin:center center;justify-content:flex-start}
+h2{font-size:clamp(36px,3.3vw,52px);line-height:1.12;margin-bottom:24px}
+h3{font-size:clamp(22px,1.9vw,28px);line-height:1.25}
+p,li{font-size:clamp(21px,1.8vw,28px);line-height:1.4}
+.lead{font-size:clamp(23px,2vw,31px)}
+.small,.steptext,.explain,.callout{font-size:clamp(20px,1.7vw,25px);line-height:1.4}
+pre{font-size:clamp(21px,1.85vw,28px);line-height:1.4;padding:18px 20px;white-space:pre-wrap;overflow-wrap:break-word;overflow:visible}
+pre code{white-space:inherit}
+.grid2{grid-template-columns:repeat(2,minmax(0,1fr));gap:32px;align-items:start}
+.grid3{grid-template-columns:repeat(3,minmax(0,1fr));gap:24px}
+.grid2>*,.grid3>*{min-width:0}
+.grid2>div>h3:first-child{min-height:1.3em;margin-bottom:12px}
+.grid2>div>pre:first-child{margin-top:0}
+.card{padding:20px 22px}
+.stacked{display:grid;gap:16px}
+.stepbox{grid-template-columns:38px minmax(0,1fr);gap:12px;margin:8px 0 14px}
+.steptext pre{margin:8px 0;font-size:clamp(20px,1.7vw,25px)}
+.trace{font-size:clamp(20px,1.75vw,26px);line-height:1.5;overflow-wrap:break-word}
+.table{table-layout:auto}
+.table td{font-size:clamp(20px,1.7vw,26px);padding:15px 18px;line-height:1.4}
+.table th{font-size:clamp(15px,1.2vw,19px);padding:14px 18px}
+.table td:first-child{white-space:nowrap}
+.question{width:100%;max-width:none;display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:18px 30px;padding:24px}
+.qtext{min-width:0;margin:0;font-size:clamp(23px,2vw,30px)}
+.qtext pre{margin:0}
+.choices{grid-template-columns:1fr;align-content:start;gap:12px}
+.choice{font-size:clamp(20px,1.7vw,25px);padding:15px 18px;line-height:1.4}
+.answer{grid-column:1/-1;font-size:clamp(20px,1.65vw,24px);margin:0}
+.question:has(.rule-choices){grid-template-columns:1fr}
+.rule-choices{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:18px}
+.mini-rule{grid-template-columns:24px minmax(0,1fr);gap:8px}
+.mini-rule .formula{font-size:clamp(18px,1.5vw,23px);line-height:1.45}
+.tbox{padding:18px 16px}.tbox b{font-size:28px}.tbox span{font-size:20px;line-height:1.4}
+@media(max-width:1000px){
+ .grid2{gap:22px}.question{gap:16px}
+ .slide{padding-left:48px;padding-right:48px}
+ .timeline{grid-template-columns:repeat(5,minmax(0,1fr))}
+ .tbox{padding:12px}.tbox span{font-size:18px}
+}
+@media(max-width:700px) and (orientation:portrait){
+ .grid2,.grid3,.question{grid-template-columns:1fr}
+ .rule-choices{grid-template-columns:1fr!important}
+ .timeline{grid-template-columns:1fr 1fr}
+}
+@media print{
+ .slide.active{display:block}
+ .inner{transform:none!important;width:100%!important}
+}
+
+/* Step-controlled stack creation, returns, and frame reuse. */
+#stack-animation h2{margin-bottom:14px}
+.stack-comparison{gap:28px;margin-top:8px}
+.stack-heading{display:flex;align-items:baseline;justify-content:space-between;gap:12px}
+.stack-heading h3{margin:0}
+.stack-heading>span{font-size:19px;white-space:nowrap;color:var(--blue);font-weight:750}
+.stack-stage{position:relative;height:286px;margin:12px 0 0;border-bottom:3px solid #94a3b8}
+.stack-frame{position:absolute;bottom:calc(var(--level,0)*68px + 8px);left:0;right:0;height:60px;border:2px solid #9ab5cb;border-radius:10px;background:#edf4fa;padding:6px 14px;display:flex;flex-direction:column;justify-content:center;opacity:0;transform:translateY(-18px) scale(.97);transition:opacity .32s ease,transform .4s ease,background-color .3s,border-color .3s;pointer-events:none}
+.stack-frame.is-present{opacity:1;transform:none}
+.stack-frame.is-current{background:#fff4cb;border-color:#c69a20}
+.stack-frame code{font-size:clamp(21px,1.8vw,27px);line-height:1.15;font-weight:700}
+.stack-frame span{font-size:18px;line-height:1.25;margin-top:3px;color:#42566a}
+.tail-frame{border-color:#4c9b77;background:#eaf8f1}
+.tail-frame.is-current{border-color:#228855;background:#eaf8f1}
+.tail-frame.is-updating{animation:frame-reuse .55s ease}
+@keyframes frame-reuse{0%,100%{background:#eaf8f1}40%{background:#c4ecd6;box-shadow:0 0 0 4px #7cb89a55}}
+.stack-result{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;gap:12px;color:var(--green);font-size:40px;opacity:0;transform:translateY(10px);transition:opacity .35s,transform .35s;pointer-events:none}
+.stack-result.is-present{opacity:1;transform:none}
+.stack-cost{font-size:20px;margin:10px 0 0}
+.stack-caption{font-size:clamp(21px,1.8vw,27px);line-height:1.35;min-height:2.7em;padding-top:16px;color:var(--navy);font-weight:650}
+.stack-controls{display:flex;align-items:center;flex-wrap:wrap;gap:10px}
+.stack-controls button{font:inherit;font-size:19px;padding:9px 16px;border:1px solid #a7bdcf;border-radius:8px;background:white;color:var(--navy);cursor:pointer}
+.stack-controls button:hover:not(:disabled){background:var(--blue2)}
+.stack-controls button:focus-visible{outline:3px solid var(--blue);outline-offset:2px}
+.stack-controls button:disabled{opacity:.4;cursor:default}
+#stack-step{margin-left:auto;font-size:19px;color:var(--muted)}
+.stack-hint{font-size:17px;color:var(--muted);margin:8px 0 0}
+@media(prefers-reduced-motion:reduce){.stack-frame,.stack-result{transition:none}.tail-frame.is-updating{animation:none}}
+@media print{#stack-animation .stack-frame{opacity:1;transform:none}#stack-animation .stack-result,.stack-controls,.stack-hint{display:none}}
+
+/* Paired AST exercises: common context above four equally aligned code choices. */
+.ast-exercise h2{margin-bottom:16px}
+.ast-context{gap:28px;margin-bottom:12px;align-items:start}
+.ast-context h3{font-size:22px;margin-bottom:8px}
+.ast-context pre{margin:0;font-size:clamp(20px,1.65vw,25px);line-height:1.35;padding:12px 16px}
+.ast-context p{font-size:20px;line-height:1.35;margin:0 0 10px}
+.ast-exercise .question{grid-template-columns:1fr;padding:16px 20px;gap:12px}
+.ast-exercise .qtext{font-size:22px}
+.ast-exercise .choices{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px 16px}
+.ast-exercise .choice{display:grid;grid-template-columns:24px minmax(0,1fr);align-items:start;gap:6px;padding:12px}
+.ast-exercise .choice pre{background:transparent;color:inherit;box-shadow:none;margin:0;padding:0;font-size:clamp(20px,1.6vw,24px);line-height:1.4;border-radius:0}
+.ast-exercise .answer{font-size:20px;line-height:1.35}
+@media(max-width:700px) and (orientation:portrait){.ast-exercise .choices{grid-template-columns:1fr}}
+
+.ast-task h2{margin-bottom:18px}
+.ast-task pre{font-size:clamp(20px,1.65vw,25px);line-height:1.35;margin:8px 0 12px;padding:14px 18px}
+.ast-task .small,.ast-task .callout{font-size:clamp(20px,1.65vw,25px);line-height:1.35}
+.ast-task .callout{margin:14px 0 10px}
+.ast-task .task-check{margin-bottom:0}
+</style>
+</head>
+<body>
+<div class="deck">
+<header class="topbar">
+  <div class="brand">COMS W4115 · OCaml Tutorial</div>
+  <div class="meta"><span><span class="kbd">←</span>/<span class="kbd">→</span> reveal / navigate · <span class="kbd">O</span> overview · <span class="kbd">N</span> presenter notes · <span class="kbd">F</span> fullscreen</span><span id="counter">1</span></div>
+</header>
+<button class="nav prev" id="prev">‹</button><button class="nav next" id="next">›</button>
+<div class="progress" id="progress"></div>
+
+
+<section class="slide active" data-title="OCaml Tutorial">
+ <div class="inner">
+  <div class="kicker">COMS W4115 · 75-minute tutorial</div>
+  <h1>OCaml Tutorial</h1>
+  <p class="lead">Expressions · Pattern Matching · Recursion · Higher-Order Functions</p>
+ </div>
+ <aside class="notes"><strong>Presenter note</strong>Set expectations: this is a practical OCaml tutorial for reading and writing compiler code. Emphasize that we will learn by predicting small examples and building recursive functions step by step.</aside>
+</section>
+
+
+
+<section class="slide section-slide" data-title="Part I — Expressions and let">
+ <div class="inner"><span class="badge">Part I · ~16 min</span><h1>Expressions and <code>let</code></h1><p class="lead">A <code>let</code> expression creates a local binding that can be used while evaluating a larger expression.</p></div>
+ <aside class="notes"><strong>Presenter note</strong>Transition into the first topic. Say that we start with values, types, and local bindings because every later OCaml feature builds on these.</aside>
+</section>
+
+<section class="slide" data-title="Basic OCaml types">
+ <div class="inner">
+  <div class="kicker">Basic types</div>
+  <h2>Values and their inferred types</h2>
+  <div class="grid2">
+   <div>
+    <pre><code># 42;;
+- : int = 42
+
+# 3.14;;
+- : float = 3.14
+
+# true;;
+- : bool = true</code></pre>
+   </div>
+   <div>
+    <pre><code># 'a';;
+- : char = 'a'
+
+# "ocaml";;
+- : string = "ocaml"
+
+# ();;
+- : unit = ()</code></pre>
+   </div>
+  </div>
+  <div class="callout">In the REPL, <code>- : type = value</code> means “this expression has this type and evaluates to this value.”</div>
+ </div>
+ <aside class="notes"><strong>Presenter note</strong>Read the REPL output as type plus value. Stress the syntax difference between int, float, bool, char, string, and unit; especially that char uses single quotes and string uses double quotes.</aside>
+</section>
+
+
+
+
+<section class="slide" data-title="List type and structure">
+ <div class="inner">
+ <div class="kicker">Basic types · Lists</div><h2>Lists have two shapes: <code>[]</code> and <code>::</code></h2>
+<div class="grid2"><div><h3>List syntax</h3><pre><code># [1; 2; 3];;
+- : int list = [1; 2; 3]
+
+# [];;
+- : 'a list = []
+
+# 1 :: [2; 3];;
+- : int list = [1; 2; 3]</code></pre></div><div><h3>Empty or head and tail</h3><pre><code>[]
+head :: tail</code></pre><div class="fragment"><pre><code>[1; 2; 3]
+= 1 :: (2 :: (3 :: []))</code></pre></div></div></div><div class="fragment"><div class="callout">Every list is empty, or contains one head element followed by a smaller tail list.</div></div>
+ </div>
+ <aside class="notes"><strong>Presenter note</strong>Start with the list notation on the left. Stress that :: takes one element and a list. Reveal the expansion of [1;2;3], ending at []. Pause on the two shapes before introducing a user-defined datatype on the next slide.</aside>
+</section>
+
+<section class="slide" data-title="Define our own list type">
+ <div class="inner">
+ <div class="kicker">Basic types · Recursive datatypes</div><h2>The same structure in our own datatype</h2>
+<div class="grid2"><div><h3>Type definition</h3><pre><code>type 'a mylist =
+  | Nil
+  | Cons of 'a * 'a mylist</code></pre><div class="fragment"><div class="callout"><code>Nil</code> plays the role of <code>[]</code>.<br><code>Cons</code> plays the role of <code>::</code>.</div></div></div><div><h3>The value containing 1, 2, 3</h3><div class="fragment"><pre><code>Cons (1,
+  Cons (2,
+    Cons (3, Nil)))</code></pre></div><div class="fragment"><h3>Built-in equivalent</h3><pre><code>1 :: (2 :: (3 :: []))</code></pre></div></div></div>
+ </div>
+ <aside class="notes"><strong>Presenter note</strong>Connect the previous slide's two shapes to Nil and Cons. Explain that 'a is the element type, and 'a mylist in the Cons payload makes this datatype recursive. Reveal the value, then its built-in equivalent. Stress that both describe the same recursive structure.</aside>
+</section>
+
+<section class="slide" data-title="Basic expressions in the REPL">
+ <div class="inner">
+  <div class="kicker">Expressions</div>
+  <h2>Operators determine the type of the expression</h2>
+  <div class="grid2">
+   <div>
+    <h3>Numbers and booleans</h3>
+    <pre><code># 2 + 3;;
+- : int = 5
+
+# 2.0 +. 3.0;;
+- : float = 5.
+
+# 3 &lt; 5;;
+- : bool = true</code></pre>
+   </div>
+   <div>
+    <h3>Strings, tuples, and lists</h3>
+    <pre><code># "ocaml" ^ "!";
+- : string = "ocaml!"
+
+# (1, "one");;
+- : int * string = (1, "one")
+
+# [1; 2; 3];;
+- : int list = [1; 2; 3]</code></pre>
+   </div>
+  </div>
+  <div class="fragment">
+   <div class="callout"><code>+</code> is integer addition, while <code>+.</code> is floating-point addition. OCaml keeps these operations distinct at the type level.</div>
+  </div>
+ </div>
+ <aside class="notes"><strong>Presenter note</strong>Show that operators determine types. Stress the separate integer and floating-point operators, then point out tuple and list type syntax.</aside>
+</section>
+
+
+
+<section class="slide" data-title="Let examples">
+ <div class="inner">
+  <div class="kicker">Let expressions</div>
+  <h2><code>let</code> names an intermediate value</h2>
+  <div class="grid2">
+   <div>
+    <pre><code># let x = 3 in x + 1;;
+- : int = 4
+
+# let x = 2.5 in x *. 2.0;;
+- : float = 5.</code></pre>
+   </div>
+   <div>
+    <pre><code># let s = "ocaml" in s ^ "!";;
+- : string = "ocaml!"
+
+# let x = 3 in x &gt; 0;;
+- : bool = true</code></pre>
+   </div>
+  </div>
+  <div class="fragment">
+   <pre><code># let x = 3 in
+  let y = x + 4 in
+  x * y;;
+- : int = 21</code></pre>
+  </div>
+ </div>
+ <aside class="notes"><strong>Presenter note</strong>Use the examples to show that let names an intermediate value inside an expression. Stress that the type of the whole let expression is the type of its body.</aside>
+</section>
+
+<section class="slide" data-title="Type checking a let expression">
+ <div class="inner">
+  <div class="kicker">Let · Type checking</div>
+  <h2>Running example: type-check a <code>let</code></h2><div class="grid2"><div><pre><code>let x = 3 in
+let y = x + 1 in
+y &gt; 0</code></pre></div><div>
+
+  <div class="fragment">
+   <div class="stepbox">
+    <div class="stepnum">1</div>
+    <div class="steptext">
+     Type the bound expression:
+     <pre><code>Γ ⊢ 3 : int</code></pre>
+    </div>
+   </div>
+  </div>
+
+  <div class="fragment">
+   <div class="stepbox">
+    <div class="stepnum">2</div>
+    <div class="steptext">
+     Add <code>x : int</code>; type the next expression:
+     <pre><code>Γ[x ↦ int] ⊢ x + 1 : int</code></pre>
+    </div>
+   </div>
+  </div>
+
+  <div class="fragment">
+   <div class="stepbox">
+    <div class="stepnum">3</div>
+    <div class="steptext">
+     Add <code>y : int</code>; type the final body:
+     <pre><code>Γ[x ↦ int, y ↦ int] ⊢ y &gt; 0 : bool</code></pre>
+    </div>
+   </div>
+  </div>
+
+  <div class="fragment">
+   <div class="callout">Therefore the whole expression has type <code>bool</code>.</div>
+  </div></div></div>
+ </div>
+ <aside class="notes"><strong>Presenter note</strong>Walk through the environments slowly. Stress the pattern: type the bound expression, extend Γ, then type the body; the final body determines the overall type.</aside>
+</section>
+
+<section class="slide" data-title="MCQ: typing rule for let">
+ <div class="inner">
+  <div class="kicker">Multiple Choice</div>
+  <h2>Which typing rule should <code>let</code> use?</h2>
+  <div class="question"
+       data-explanation="First type e₁ under Γ and obtain τ₁. Then type e₂ in the extended environment Γ[x ↦ τ₁]. The whole let expression has the type τ₂ of its body.">
+   <div class="qtext" style="text-align:center">
+    <code>let x = e₁ in e₂</code>
+   </div>
+   <div class="choices rule-choices">
+
+    <button class="choice rule-choice" data-correct="true">
+     <span class="mini-rule">
+      <span class="letter">A.</span>
+      <span class="formula">
+       <span class="top">Γ ⊢ e₁ : τ₁ &nbsp;&nbsp;&nbsp; Γ[x ↦ τ₁] ⊢ e₂ : τ₂</span>
+       <span class="bottom">Γ ⊢ let x = e₁ in e₂ : τ₂</span>
+      </span>
+     </span>
+    </button>
+
+    <button class="choice rule-choice">
+     <span class="mini-rule">
+      <span class="letter">B.</span>
+      <span class="formula">
+       <span class="top">Γ ⊢ e₁ : τ₁ &nbsp;&nbsp;&nbsp; Γ ⊢ e₂ : τ₂</span>
+       <span class="bottom">Γ ⊢ let x = e₁ in e₂ : τ₂</span>
+      </span>
+     </span>
+    </button>
+
+    <button class="choice rule-choice">
+     <span class="mini-rule">
+      <span class="letter">C.</span>
+      <span class="formula">
+       <span class="top">Γ ⊢ e₁ : τ₁ &nbsp;&nbsp;&nbsp; Γ[x ↦ τ₂] ⊢ e₂ : τ₂</span>
+       <span class="bottom">Γ ⊢ let x = e₁ in e₂ : τ₁</span>
+      </span>
+     </span>
+    </button>
+
+    <button class="choice rule-choice">
+     <span class="mini-rule">
+      <span class="letter">D.</span>
+      <span class="formula">
+       <span class="top">Γ[x ↦ τ₁] ⊢ e₁ : τ₁ &nbsp;&nbsp;&nbsp; Γ[x ↦ τ₁] ⊢ e₂ : τ₂</span>
+       <span class="bottom">Γ ⊢ let x = e₁ in e₂ : τ₁</span>
+      </span>
+     </span>
+    </button>
+
+   </div>
+   <div class="answer"></div>
+  </div>
+ </div>
+ <aside class="notes"><strong>Presenter note</strong>Pause before clicking. Ask which rule matches the running example; after the answer, stress why e2 must be checked in Γ extended with x : τ1.</aside>
+</section>
+
+<section class="slide" data-title="Evaluate a let expression">
+ <div class="inner">
+  <div class="kicker">Let · Evaluation</div><h2>Evaluate from the outside inward</h2><div class="grid2"><div><pre><code>let x = 3 + 4 in
+let y = x * 2 in
+y - x</code></pre></div><div>
+  <div class="fragment"><div class="stepbox"><div class="stepnum">1</div><div class="steptext"><code>3 + 4</code> evaluates to <code>7</code>, so the local environment now contains <code>x ↦ 7</code>.</div></div></div>
+  <div class="fragment"><div class="stepbox"><div class="stepnum">2</div><div class="steptext">With that binding, <code>x * 2</code> evaluates to <code>14</code>, adding <code>y ↦ 14</code>.</div></div></div>
+  <div class="fragment"><div class="stepbox"><div class="stepnum">3</div><div class="steptext">The body <code>y - x</code> evaluates to <code>14 - 7 = 7</code>. That is the value of the whole <code>let</code>.</div></div></div></div></div>
+ </div>
+ <aside class="notes"><strong>Presenter note</strong>Trace the values in order. Stress that evaluation mirrors the typing structure: evaluate the bound expression, extend the value environment, then evaluate the body.</aside>
+</section>
+
+
+<section class="slide" data-title="MCQ: scope and shadowing">
+ <div class="inner">
+  <div class="kicker">Multiple Choice</div>
+  <h2>What does this expression evaluate to?</h2>
+  <div class="question"
+       data-explanation="The first x is 10, so y is bound to 11. The later let x = 100 creates a new x only for the final body. Therefore x + y = 100 + 11 = 111.">
+   <div class="qtext"><pre><code>let x = 10 in
+let y = x + 1 in
+let x = 100 in
+x + y</code></pre></div>
+   <div class="choices">
+    <button class="choice">A. <code>21</code></button>
+    <button class="choice">B. <code>101</code></button>
+    <button class="choice">C. <code>110</code></button>
+    <button class="choice" data-correct="true">D. <code>111</code></button>
+   </div>
+   <div class="answer"></div>
+  </div>
+ </div>
+ <aside class="notes"><strong>Presenter note</strong>Let students compute it first. After revealing, stress that y was computed with the old x, while the final body sees the new x.</aside>
+</section>
+
+
+
+<section class="slide" data-title="Closure and lexical scope">
+ <div class="inner">
+ <div class="kicker">Functions · Lexical scope</div><h2>A function captures its defining environment</h2>
+<div class="grid2"><div><pre><code>let x = 10 in
+let add_x y = x + y in
+let x = 100 in
+add_x 1</code></pre></div><div><div class="fragment"><h3>1. Bind <code>x</code></h3><pre><code>x ↦ 10</code></pre></div><div class="fragment"><h3>2. Create <code>add_x</code></h3><pre><code>add_x = &lt;code, x ↦ 10&gt;</code></pre></div></div></div><div class="callout">The function keeps access to the binding of <code>x</code> used by its body.</div>
+ </div>
+ <aside class="notes"><strong>Presenter note</strong>Read the example, stopping at the function definition. Reveal x = 10, then the closure containing the code and its captured binding. Ask students to predict whether the later binding x = 100 changes this function.</aside>
+</section>
+
+<section class="slide" data-title="Calling the captured function">
+ <div class="inner">
+ <div class="kicker">Functions · Lexical scope</div><h2>A later binding leaves the closure unchanged</h2>
+<div class="grid2"><div><pre><code>let x = 10 in
+let add_x y = x + y in
+let x = 100 in
+add_x 1</code></pre></div><div><div class="fragment"><h3>3. Introduce a new binding</h3><p>The surrounding expression now sees <code>x = 100</code>.</p><p><code>add_x</code> still captures <code>x = 10</code>.</p></div><div class="fragment"><h3>4. Call <code>add_x 1</code></h3><pre><code>10 + 1 = 11</code></pre></div></div></div><div class="fragment"><div class="callout"><b>Lexical scope:</b> a function uses bindings from where it was defined.</div></div>
+ </div>
+ <aside class="notes"><strong>Presenter note</strong>Reveal the new outer binding, then the result. Stress that shadowing introduces a new binding and does not mutate the one captured by add_x. Connect the answer 11 to the function definition, not the call site.</aside>
+</section>
+
+<section class="slide" data-title="Let patterns">
+ <div class="inner">
+  <div class="kicker">Let · Patterns on the left</div><h2>The left side of <code>let</code> can be a pattern</h2>
+  <pre><code>let (name, score) = ("Ada", 98) in
+name ^ " scored " ^ string_of_int score</code></pre>
+  <div class="callout">This is already pattern matching: the tuple pattern <code>(name, score)</code> has the same shape as the tuple value and introduces two bindings.</div>
+ </div>
+ <aside class="notes"><strong>Presenter note</strong>Show that the left side of let can itself destructure a value. Stress that this is pattern matching, not a special tuple-only feature.</aside>
+</section>
+
+<section class="slide" data-title="Why local bindings matter">
+ <div class="inner">
+  <div class="kicker">Let · Naming recursive results</div><h2>A local binding avoids repeated recursive work</h2>
+  <div class="grid2">
+   <div><h3>Repeated recursive computation</h3><pre><code>let rec max1 xs =
+  match xs with
+  | [] -&gt; None
+  | [x] -&gt; Some x
+  | x :: xs -&gt;
+      if x &gt; Option.get (max1 xs)
+      then Some x
+      else max1 xs</code></pre></div>
+   <div><h3>Bind the recursive result once</h3><pre><code>let rec max1 xs =
+  match xs with
+  | [] -&gt; None
+  | [x] -&gt; Some x
+  | x :: xs -&gt;
+      let m = Option.get (max1 xs) in
+      if x &gt; m then Some x
+      else Some m</code></pre></div>
+  </div>
+  <p class="small muted">The local binding gives the recursive result a name and reuses it in both branches.</p>
+ </div>
+ <aside class="notes"><strong>Presenter note</strong>Focus on avoiding duplicated recursive work. Stress that naming the recursive result makes the computation clearer and prevents evaluating the same suffix twice.</aside>
+</section>
+
+
+
+<section class="slide" data-title="The two jobs of a pattern">
+ <div class="inner">
+ <div class="kicker">Pattern matching</div><h2>Pattern matching decomposes values</h2>
+<div class="grid2"><div><h3>The <code>option</code> type</h3><pre><code>type 'a option =
+  | None
+  | Some of 'a</code></pre><h3>Example values</h3><pre><code>None
+Some 3
+Some (3, 4)</code></pre></div><div><h3>Match and extract</h3><div class="fragment"><pre><code>match Some (3, 4) with
+| Some (x, y) -&gt; x + y
+| None -&gt; 0</code></pre></div><div class="fragment"><pre><code>x = 3
+y = 4</code></pre></div><div class="fragment"><div class="callout">Match the <code>Some</code> constructor, then bind the two tuple fields.</div></div></div></div>
+ </div>
+ <aside class="notes"><strong>Presenter note</strong>Define option first, then use Some (3,4) to show constructor matching plus tuple decomposition. Stress exactly which values x and y receive.</aside>
+</section>
+
+<section class="slide" data-title="Pattern rules">
+ <div class="inner">
+  <div class="kicker">Patterns · Core rules</div><h2>A compact semantics for matching</h2>
+  <table class="table">
+   <thead><tr><th>Pattern</th><th>When it matches</th><th>Bindings introduced</th></tr></thead>
+   <tbody>
+    <tr><td><code>x</code></td><td>Always</td><td><code>x</code> becomes the whole value</td></tr>
+    <tr><td><code>_</code></td><td>Always</td><td>None</td></tr>
+    <tr><td><code>[]</code></td><td>The value is the empty list</td><td>None</td></tr>
+    <tr><td><code>p1 :: p2</code></td><td>The value is a nonempty list and both subpatterns match the head and tail</td><td>Bindings from <code>p1</code> and <code>p2</code></td></tr>
+    <tr><td><code>(p1, p2)</code></td><td>The value is a pair and both subpatterns match</td><td>Bindings from both subpatterns</td></tr>
+    <tr><td><code>C p</code></td><td>The value uses constructor <code>C</code> and <code>p</code> matches its payload</td><td>Bindings from <code>p</code></td></tr>
+</tbody>
+  </table>
+ </div>
+ <aside class="notes"><strong>Presenter note</strong>Treat this as a compact reference table. Stress the two list cases [] and p1 :: p2 because they directly drive the later recursion examples.</aside>
+</section>
+
+
+<section class="slide" data-title="MCQ: variable pattern binding">
+ <div class="inner">
+  <div class="kicker">Multiple Choice</div>
+  <h2>What does this expression evaluate to?</h2>
+  <div class="question"
+       data-explanation='The result is true. In a pattern, expected is a fresh variable binding, so it matches "fee" and shadows the outer expected inside the branch. To compare with the outer value, use a different pattern variable, for example actual, and then evaluate actual = expected.'>
+   <div class="qtext"><pre><code>let expected = "tax" in
+match "fee" with
+| expected -&gt; true</code></pre></div>
+   <div class="choices">
+    <button class="choice" data-correct="true">A. <code>true</code></button>
+    <button class="choice">B. <code>false</code></button>
+    <button class="choice">C. Type error</button>
+    <button class="choice">D. <code>Match_failure</code></button>
+   </div>
+   <div class="answer"></div>
+  </div>
+ </div>
+ <aside class="notes"><strong>Presenter note</strong>Pause here because this is a common misconception. After the answer, stress that a variable in a pattern binds a fresh name; it does not compare against an outer variable.</aside>
+</section>
+
+<section class="slide" data-title="Tuple patterns">
+ <div class="inner">
+  <div class="kicker">Patterns · Tuples</div><h2>Tuple patterns decompose all fields at once</h2>
+  <pre><code>match ("while", 12, 4) with
+| (lexeme, line, column) -&gt;
+    line + column</code></pre>
+  <div class="fragment"><p class="lead">Bindings: <code>lexeme ↦ "while"</code>, <code>line ↦ 12</code>, <code>column ↦ 4</code>.</p></div>
+  <div class="fragment"><p>Use <code>_</code> for a component that is intentionally ignored:</p><pre><code>let (name, score, _) = ("Ada", 98, "A+") in score</code></pre></div>
+ </div>
+ <aside class="notes"><strong>Presenter note</strong>Show how one tuple pattern binds all components at once. Stress the role of _ for intentionally ignored fields.</aside>
+</section>
+
+<section class="slide" data-title="List patterns">
+ <div class="inner">
+  <div class="kicker">Patterns · Lists</div><h2>List patterns describe exact or partial shapes</h2>
+  <table class="table">
+   <thead><tr><th>Pattern</th><th>Matches</th><th>Example bindings</th></tr></thead>
+   <tbody>
+    <tr><td><code>[]</code></td><td>Exactly the empty list</td><td>none</td></tr>
+    <tr><td><code>[x]</code></td><td>Exactly one element</td><td><code>x</code> = that element</td></tr>
+    <tr><td><code>x :: xs</code></td><td>Any nonempty list</td><td>head → <code>x</code>, tail → <code>xs</code></td></tr>
+    <tr><td><code>x :: y :: zs</code></td><td>At least two elements</td><td>first → <code>x</code>, second → <code>y</code>, rest → <code>zs</code></td></tr>
+    <tr><td><code>[x; y]</code></td><td>Exactly two elements</td><td>first → <code>x</code>, second → <code>y</code></td></tr>
+   </tbody>
+  </table>
+ </div>
+ <aside class="notes"><strong>Presenter note</strong>Walk through the shapes, not the syntax alone. Stress the difference between exact-length patterns and head/tail decomposition.</aside>
+</section>
+
+<section class="slide" data-title="Exact length versus at least">
+ <div class="inner">
+  <div class="kicker">Patterns · Shape matters</div><h2>These patterns describe different list shapes</h2>
+  <div class="grid2">
+   <div class="card blue"><h3><code>a :: b :: rest</code></h3><p>Matches a list with <b>at least</b> two elements.</p><pre><code>[1;2]
+[1;2;3]
+[1;2;3;4]</code></pre></div>
+   <div class="card"><h3><code>[a; b]</code></h3><p>Matches a list with <b>exactly</b> two elements.</p><pre><code>[1;2]      ✓
+[1;2;3]    ✗</code></pre></div>
+  </div>
+ </div>
+ <aside class="notes"><strong>Presenter note</strong>Contrast [a;b] with a :: b :: rest. Stress that the first fixes the entire length, while the second leaves the remainder unconstrained.</aside>
+</section>
+
+<section class="slide" data-title="Nested patterns">
+ <div class="inner">
+  <div class="kicker">Patterns · Nesting</div><h2>Patterns can nest as deeply as values do</h2>
+  <pre><code>match [("x", 1); ("y", 2)] with
+| (name, n) :: rest -&gt;
+    (name, n, rest)
+| [] -&gt;
+    ("", 0, [])</code></pre>
+  <div class="fragment"><p class="lead">The outer <code>::</code> decomposes the list. The inner <code>(name, n)</code> decomposes its head tuple.</p></div>
+  <div class="fragment"><div class="callout">Nested patterns often replace nested <code>match</code> expressions with one direct description of the shape you care about.</div></div>
+ </div>
+ <aside class="notes"><strong>Presenter note</strong>Point out that patterns compose structurally. Stress that the list and tuple can be decomposed in one pattern rather than nested matches.</aside>
+</section>
+
+<section class="slide" data-title="Constructor patterns">
+ <div class="inner">
+  <div class="kicker">Patterns · Variants</div><h2>Constructors are part of the shape</h2>
+  <pre><code>type result =
+  | Ok of int
+  | Error of string
+
+let describe r =
+  match r with
+  | Ok n -&gt; "value " ^ string_of_int n
+  | Error msg -&gt; "error: " ^ msg</code></pre>
+  <p class="lead"><code>Ok n</code> matches only values built with <code>Ok</code>, and then binds its payload to <code>n</code>.</p>
+ </div>
+ <aside class="notes"><strong>Presenter note</strong>Use Ok/Error to show that variants are matched by constructor. Stress that constructor names distinguish the cases before payloads are bound.</aside>
+</section>
+
+<section class="slide" data-title="Pattern order">
+ <div class="inner">
+  <div class="kicker">Patterns · First match wins</div><h2>Order branches from specific to general</h2>
+  <div class="grid2">
+   <div><h3>Specific cases first</h3><pre><code>match xs with
+| [] -&gt; 0
+| [x] -&gt; x
+| x :: _ -&gt; x</code></pre></div>
+   <div><h3>Wildcard first</h3><pre><code>match xs with
+| _ -&gt; 0
+| [x] -&gt; x
+| x :: _ -&gt; x</code></pre><p class="muted">The wildcard catches everything, so later branches are unreachable.</p></div>
+  </div>
+ </div>
+ <aside class="notes"><strong>Presenter note</strong>Explain first-match-wins. Stress that a wildcard or very general branch placed first makes later specific branches unreachable.</aside>
+</section>
+
+
+<section class="slide" data-title="MCQ: nested list pattern">
+ <div class="inner">
+  <div class="kicker">Multiple Choice</div>
+  <h2>Which pattern matches this value?</h2>
+  <div class="question" data-explanation="The value is a two-element list of pairs. <code>[(name, score)]</code> requires exactly one element, while <code>(name, score) :: rest</code> matches any nonempty list whose head is a pair.">
+   <div class="qtext"><pre><code>[("Ada", 98); ("Grace", 95)]</code></pre></div>
+   <div class="choices">
+    <button class="choice">A. <code>[(name, score)]</code></button>
+    <button class="choice" data-correct="true">B. <code>(name, score) :: rest</code></button>
+    <button class="choice">C. <code>Some (name, score)</code></button>
+    <button class="choice">D. <code>(name :: score) :: rest</code></button>
+   </div>
+   <div class="answer"></div>
+  </div>
+ </div>
+ <aside class="notes"><strong>Presenter note</strong>Give students time to test each pattern mentally against the value. After revealing, stress both list length and head shape.</aside>
+</section>
+
+
+<section class="slide" data-title="MCQ: pattern bindings">
+ <div class="inner">
+  <div class="kicker">Multiple Choice</div>
+  <h2>What value is returned?</h2>
+  <div class="question" data-explanation='The pattern binds name = "x" and rest = [2;3]. Therefore List.length rest is 2, so the result is ("x", 2).'>
+   <div class="qtext"><pre><code>match Some ("x", [1;2;3]) with
+| Some (name, _ :: rest) -&gt;
+    (name, List.length rest)
+| _ -&gt;
+    ("", 0)</code></pre></div>
+   <div class="choices">
+    <button class="choice">A. <code>("x", 1)</code></button>
+    <button class="choice" data-correct="true">B. <code>("x", 2)</code></button>
+    <button class="choice">C. <code>("x", 3)</code></button>
+    <button class="choice">D. <code>("", 0)</code></button>
+   </div>
+   <div class="answer"></div>
+  </div>
+ </div>
+ <aside class="notes"><strong>Presenter note</strong>Ask students to write the bindings before computing the final expression. Stress that matching gives concrete values to each variable.</aside>
+</section>
+
+<section class="slide" data-title="Exhaustiveness">
+ <div class="inner">
+  <div class="kicker">Patterns · Safety</div><h2>Let the compiler tell you when shapes are missing</h2>
+  <pre><code>let head xs =
+  match xs with
+  | x :: _ -&gt; x</code></pre>
+  <div class="fragment"><div class="callout"><b>Compiler warning:</b> non-exhaustive pattern match. The empty-list case <code>[]</code> is missing.</div></div>
+  <div class="fragment"><pre><code>let safe_head xs =
+  match xs with
+  | [] -&gt; None
+  | x :: _ -&gt; Some x</code></pre><p class="lead">Use exhaustiveness warnings as design feedback about missing cases.</p></div>
+ </div>
+ <aside class="notes"><strong>Presenter note</strong>Show the compiler warning as useful feedback. Stress that every constructor/shape should be handled unless partial matching is intentional.</aside>
+</section>
+
+<section class="slide section-slide" data-title="Part III — Recursion">
+ <div class="inner"><span class="badge">Part III · ~16 min</span><h1>Recursion follows the data</h1><p class="lead">Recursive code follows the constructors of the datatype and continues on the smaller values contained inside them.</p></div>
+ <aside class="notes"><strong>Presenter note</strong>Transition from pattern matching to recursion. Stress that recursion will follow exactly the same datatype structure students just learned to match.</aside>
+</section>
+
+
+
+<section class="slide" data-title="Build length from data shape">
+ <div class="inner">
+  <div class="kicker">Recursion · Build it</div><h2>Example: <code>length</code></h2><div class="grid2"><div><pre><code>let rec length xs =
+  match xs with
+  | [] -&gt; <span class="placeholder">?</span>
+  | _ :: rest -&gt; <span class="placeholder">?</span></code></pre></div><div>
+  <div class="fragment"><div class="explain"><b>Base case:</b> the empty list contains zero elements.</div><pre><code>  | [] -&gt; <span class="fill">0</span></code></pre></div>
+  <div class="fragment"><div class="explain"><b>Recursive case:</b> the head contributes one element; assume <code>length rest</code> gives the rest.</div><pre><code>  | _ :: rest -&gt;
+    <span class="fill">1 + length rest</span></code></pre></div></div></div>
+ </div>
+ <aside class="notes"><strong>Presenter note</strong>Reveal one branch at a time. Stress that the base case comes from [], and the recursive case is one current element plus the answer for the tail.</aside>
+</section>
+
+<section class="slide" data-title="Recursive minimum and let">
+ <div class="inner">
+  <div class="kicker">Recursion · Reuse the recursive result</div><h2>Compute the recursive answer once</h2>
+  <pre><code>let rec min_nonempty xs =
+  match xs with
+  | [x] -&gt; x
+  | x :: xs -&gt;
+      let m = min_nonempty xs in
+      if x &lt; m then x else m
+  | [] -&gt; invalid_arg "empty"</code></pre>
+  <div class="callout">This combines all three core ideas: a list pattern chooses the case, recursion solves the suffix, and a local <code>let</code> names that recursive result exactly once.</div>
+ </div>
+ <aside class="notes"><strong>Presenter note</strong>Connect recursion back to let. Stress that min_nonempty xs is computed once, named m, and then reused in the comparison.</aside>
+</section>
+
+
+<section class="slide" data-title="MCQ: recursive case">
+ <div class="inner">
+  <div class="kicker">Multiple Choice</div>
+  <h2>Which branch correctly counts the zeros?</h2>
+  <div class="question" data-explanation="For each head x, add 1 only when x is zero, then recursively count the zeros in the tail.">
+   <div class="qtext"><pre><code>let rec count_zeros xs =
+  match xs with
+  | [] -&gt; 0
+  | x :: xs -&gt; ???</code></pre></div>
+   <div class="choices">
+    <button class="choice">A. <code>1 + count_zeros xs</code></button>
+    <button class="choice" data-correct="true">B. <code>if x = 0 then 1 + count_zeros xs else count_zeros xs</code></button>
+    <button class="choice">C. <code>if x = 0 then 1 else 0</code></button>
+    <button class="choice">D. <code>count_zeros (x :: xs)</code></button>
+   </div>
+   <div class="answer"></div>
+  </div>
+ </div>
+ <aside class="notes"><strong>Presenter note</strong>Pause before revealing. Ask which choice both counts the current zero correctly and still recurses on the smaller tail.</aside>
+</section>
+
+
+<section class="slide" data-title="What remains after recursion?">
+ <div class="inner">
+  <div class="kicker">Tail recursion</div>
+  <h2>Same sum, different call position</h2>
+
+  <div class="grid2">
+   <div class="card">
+    <h3>Non-tail-recursive <code>sum</code></h3>
+    <pre><code>let rec sum xs =
+  match xs with
+  | [] -&gt; 0
+  | x :: xs -&gt;
+      x + sum xs</code></pre>
+    <p>After <code>sum xs</code> returns, the caller still has to compute <code>x + ...</code>.</p>
+   </div>
+
+   <div class="card blue">
+    <h3>Tail-recursive <code>sum</code></h3>
+    <pre><code>let sum xs =
+  let rec loop acc xs =
+    match xs with
+    | [] -&gt; acc
+    | x :: xs -&gt;
+        loop (acc + x) xs
+  in
+  loop 0 xs</code></pre>
+    <p>The recursive call to <code>loop</code> is the last operation performed.</p>
+   </div>
+  </div>
+
+  <div class="fragment">
+   <div class="callout">
+    Both functions compute the same result. The difference is whether any work remains after the recursive call returns.
+   </div>
+  </div>
+ </div>
+ <aside class="notes"><strong>Presenter note</strong>Compare the same sum computation on both sides. Stress the single difference: non-tail recursion has pending work after the recursive call; tail recursion does not.</aside>
+</section>
+
+<section class="slide" id="stack-animation" data-title="Tail calls and the stack">
+ <div class="inner">
+  <div class="kicker">Tail recursion · Stack space</div>
+  <h2>Watch the stack grow, then unwind</h2>
+  <p class="small">A stack frame holds a call’s local state and return point. Both examples sum <code>[1;2;3]</code>.</p>
+  <div class="grid2 stack-comparison">
+   <div class="card">
+    <div class="stack-heading"><h3>Ordinary recursion</h3><span id="ordinary-count">0 frames</span></div>
+    <div class="stack-stage" aria-label="Ordinary recursive sum stack"><div class="stack-frame" data-frame="0" style="--level:0"><code>sum [1;2;3]</code><span>Waiting to add 1</span></div>
+<div class="stack-frame" data-frame="1" style="--level:1"><code>sum [2;3]</code><span>Waiting to add 2</span></div>
+<div class="stack-frame" data-frame="2" style="--level:2"><code>sum [3]</code><span>Waiting to add 3</span></div>
+<div class="stack-frame" data-frame="3" style="--level:3"><code>sum []</code><span>Base case: return 0</span></div>
+     <div class="stack-result" id="ordinary-result">Result: <b>6</b></div>
+    </div>
+    <p class="stack-cost"><b>O(n)</b> stack space · callers wait to add</p>
+   </div>
+   <div class="card blue">
+    <div class="stack-heading"><h3>Tail recursion</h3><span id="tail-count">0 frames</span></div>
+    <div class="stack-stage" aria-label="Tail-recursive loop stack">
+     <div class="stack-frame tail-frame" id="tail-frame"><code id="tail-call">loop 0 [1;2;3]</code><span id="tail-detail">Accumulator: 0</span></div>
+     <div class="stack-result" id="tail-result">Result: <b>6</b></div>
+    </div>
+    <p class="stack-cost"><b>O(1)</b> stack space · one frame reused</p>
+   </div>
+  </div>
+  <div class="stack-caption" id="stack-caption" role="status" aria-live="polite">Start with no active calls. Step forward to create the first frames.</div>
+  <div class="stack-controls">
+   <button type="button" id="stack-back" disabled>Previous step</button>
+   <button type="button" id="stack-next">Next step</button>
+   <button type="button" id="stack-play">Play</button>
+   <button type="button" id="stack-replay">Restart</button>
+   <span id="stack-step">Step 0 / 8</span>
+  </div>
+  <p class="stack-hint">Arrow keys also step through the animation. After step 8, the next arrow advances the slide.</p>
+ </div>
+ <aside class="notes"><strong>Presenter note</strong>Use Next step or the right arrow to create each frame; Play advances automatically and stops at the result. Step 1 creates one frame per example. Steps 2–4 push ordinary calls upward while the same tail-loop frame changes its arguments. At step 4, count four ordinary frames versus one loop frame. Step 5 returns 0 on the left and 6 on the right. Steps 6–8 finish the waiting additions: 3 + 0, 2 + 3, 1 + 5. Stress that the right side computes each addition before the next call. Both take O(n) time; only the ordinary version grows the stack with input length. This diagram shows the recursive calls and omits fixed caller/wrapper overhead and the input list. Previous step reverses the demonstration; Restart clears it. Reference: <a href="https://ocaml.org/docs/loops-recursion">OCaml: Loops and Recursion</a>.</aside>
+</section>
+
+<section class="slide" data-title="Accumulator method">
+ <div class="inner">
+  <div class="kicker">Tail recursion · Transformation</div><h2>Move pending work into an accumulator</h2><div class="grid2"><div><pre><code>let sum xs =
+  let rec go acc xs =
+    match xs with
+    | [] -&gt; acc
+    | x :: rest -&gt; go (acc + x) rest
+  in
+  go 0 xs</code></pre></div><div>
+  <div class="stacked">
+   <div class="card"><h3>Initial accumulator</h3><p>The old base value: <code>0</code>.</p></div>
+   <div class="card blue"><h3>Recursive step</h3><p>Update <code>acc</code> before recursing.</p></div>
+   <div class="card"><h3>New base case</h3><p>Return the accumulated answer directly.</p></div>
+  </div></div></div>
+ </div>
+ <aside class="notes"><strong>Presenter note</strong>Explain the accumulator as the partial answer so far. Stress that work moves before the recursive call, making the recursive call the final operation.</aside>
+</section>
+
+
+<section class="slide" data-title="MCQ: tail call">
+ <div class="inner">
+  <div class="kicker">Multiple Choice</div>
+  <h2>Which recursive call is in tail position?</h2>
+  <div class="question" data-explanation="In B, the recursive result is returned immediately. The other choices still perform multiplication, list construction, or addition after the recursive call returns.">
+   <div class="qtext">Choose the expression in which no work remains after the recursive call returns.</div>
+   <div class="choices">
+    <button class="choice">A. <code>n * fact (n - 1)</code></button>
+    <button class="choice" data-correct="true">B. <code>loop (acc + x) xs</code></button>
+    <button class="choice">C. <code>x :: copy xs</code></button>
+    <button class="choice">D. <code>1 + size tree</code></button>
+   </div>
+   <div class="answer"></div>
+  </div>
+ </div>
+ <aside class="notes"><strong>Presenter note</strong>Ask students to identify whether anything remains after each recursive call. Stress that syntactic position matters because it enables frame reuse.</aside>
+</section>
+
+
+<section class="slide" data-title="Function types">
+ <div class="inner">
+  <div class="kicker">Functions · Types</div>
+  <h2>Read function types from left to right</h2>
+
+  <div class="grid2">
+   <div>
+    <pre><code># let add x y = x + y;;
+val add : int -&gt; int -&gt; int = &lt;fun&gt;</code></pre>
+
+    <div class="fragment">
+     <div class="callout">
+      Function arrows associate to the right:
+      <code>int -&gt; int -&gt; int</code>
+      means
+      <code>int -&gt; (int -&gt; int)</code>.
+     </div>
+    </div>
+   </div>
+
+   <div>
+    <pre><code># let add3 = add 3;;
+val add3 : int -&gt; int = &lt;fun&gt;
+
+# add3 4;;
+- : int = 7</code></pre>
+
+    <div class="fragment">
+     <p><code>add 3</code> supplies the first argument and returns a new function waiting for the second argument.</p>
+    </div>
+   </div>
+  </div>
+ </div>
+ <aside class="notes"><strong>Presenter note</strong>Read int -&gt; int -&gt; int as int -&gt; (int -&gt; int). Stress currying and show that partial application returns another function.</aside>
+</section>
+
+<section class="slide" data-title="MCQ: function types">
+ <div class="inner">
+  <div class="kicker">Multiple Choice</div>
+  <h2>What is the type of <code>f</code>?</h2>
+
+  <div class="question"
+       data-explanation="add has type int -&gt; int -&gt; int. Supplying the first int leaves a function that still expects one int, so f : int -&gt; int.">
+   <div class="qtext"><pre><code>let add x y = x + y
+let f = add 10</code></pre></div>
+
+   <div class="choices">
+    <button class="choice">A. <code>int</code></button>
+    <button class="choice" data-correct="true">B. <code>int -&gt; int</code></button>
+    <button class="choice">C. <code>int * int -&gt; int</code></button>
+    <button class="choice">D. <code>int -&gt; int -&gt; int</code></button>
+   </div>
+
+   <div class="answer"></div>
+  </div>
+ </div>
+ <aside class="notes"><strong>Presenter note</strong>Pause and let them derive the remaining argument type. After revealing, stress that add 10 consumes only the first argument.</aside>
+</section>
+
+<section class="slide" data-title="Polymorphic types">
+ <div class="inner">
+  <div class="kicker">Functions · Polymorphism</div>
+  <h2>One type variable, many concrete types</h2>
+
+  <div class="grid2">
+   <div>
+    <pre><code># let id x = x;;
+val id : 'a -&gt; 'a = &lt;fun&gt;
+
+# id 3;;
+- : int = 3
+
+# id "ocaml";;
+- : string = "ocaml"</code></pre>
+   </div>
+
+   <div>
+    <pre><code># let first (x, y) = x;;
+val first : 'a * 'b -&gt; 'a = &lt;fun&gt;</code></pre>
+
+    <div class="fragment">
+     <div class="callout">
+      <code>'a</code> and <code>'b</code> are type variables. Repeated occurrences of the same variable refer to the same type within one type expression.
+     </div>
+    </div>
+   </div>
+  </div>
+ </div>
+ <aside class="notes"><strong>Presenter note</strong>Introduce 'a and 'b as type variables. Stress that the same variable repeated in one type means the same type must appear in those positions.</aside>
+</section>
+
+<section class="slide" data-title="MCQ: polymorphic type">
+ <div class="inner">
+  <div class="kicker">Multiple Choice</div>
+  <h2>What type does OCaml infer?</h2>
+
+  <div class="question"
+       data-explanation="x can have any type. The function returns a pair containing x twice, so both components have the same type as the input: 'a -&gt; 'a * 'a.">
+   <div class="qtext"><pre><code>let duplicate x =
+  (x, x)</code></pre></div>
+
+   <div class="choices">
+    <button class="choice">A. <code>int -&gt; int * int</code></button>
+    <button class="choice" data-correct="true">B. <code>'a -&gt; 'a * 'a</code></button>
+    <button class="choice">C. <code>'a -&gt; 'b * 'c</code></button>
+    <button class="choice">D. <code>'a * 'a -&gt; 'a</code></button>
+   </div>
+
+   <div class="answer"></div>
+  </div>
+ </div>
+ <aside class="notes"><strong>Presenter note</strong>Ask students whether the two tuple components can have different types. Stress that both components are copies of the same x, so both are 'a.</aside>
+</section>
+
+<section class="slide section-slide" data-title="Part IV — Build map, filter, fold">
+ <div class="inner"><span class="badge">Part IV · ~19 min</span><h1>Build <code>map</code>, <code>filter</code>, and <code>fold</code></h1><p class="lead">We will derive each function from the list datatype, one missing piece at a time.</p></div>
+ <aside class="notes"><strong>Presenter note</strong>Transition to the coding exercises. Stress that these are not magic library functions; each will be derived from the same list recursion pattern.</aside>
+</section>
+
+<section class="slide" data-title="Map: specification">
+ <div class="inner">
+  <div class="kicker">Coding exercise 1 · Map</div><h2>What should <code>map</code> mean?</h2>
+  <pre><code>let square x = x * x in
+map square [1;2;3]
+= [1;4;9]</code></pre>
+  <div class="grid2">
+   <div class="card blue"><h3>Input shape</h3><p>A list of <code>'a</code>.</p></div>
+   <div class="card"><h3>Output shape</h3><p>A list of <code>'b</code>, same length and order.</p></div>
+  </div>
+  <p class="lead">Expected type: <code>('a -&gt; 'b) -&gt; 'a list -&gt; 'b list</code></p>
+ </div>
+ <aside class="notes"><strong>Presenter note</strong>Start from behavior, not implementation. Stress that map preserves list length and order while changing each element's value and possibly its type.</aside>
+</section>
+
+<section class="slide" data-title="Map: derive the skeleton">
+ <div class="inner">
+  <div class="kicker">Map · Step 1</div><h2>Start from the list's two shapes</h2><div class="grid2"><div><pre><code>let rec map f xs =
+  match xs with
+  | [] -&gt; <span class="placeholder">?</span>
+  | x :: rest -&gt; <span class="placeholder">?</span></code></pre></div><div>
+  <div class="fragment"><div class="explain"><b>Question:</b> if the input contains no elements, how many transformed elements should the output contain?</div></div>
+  <div class="fragment"><pre><code>  | [] -&gt; <span class="fill">[]</span></code></pre><div class="explain">The output preserves list shape: empty maps to empty.</div></div></div></div>
+ </div>
+ <aside class="notes"><strong>Presenter note</strong>Reveal the empty-list branch first. Stress that the output shape for [] must also be [].</aside>
+</section>
+
+<section class="slide" data-title="Map: derive recursive case">
+ <div class="inner">
+  <div class="kicker">Map · Step 2</div><h2>Use the recursive result for the tail</h2><div class="grid2"><div><pre><code>let rec map f xs =
+  match xs with
+  | [] -&gt; []
+  | x :: rest -&gt; <span class="placeholder">?</span></code></pre></div><div>
+  <div class="fragment"><div class="explain"><b>Recursive assumption:</b> <code>map f rest</code> already gives the correctly transformed tail.</div></div>
+  <div class="fragment"><div class="explain"><b>Current element:</b> apply <code>f</code> to <code>x</code>.</div><pre><code><span class="fill">f x</span></code></pre></div>
+  <div class="fragment"><div class="explain"><b>Rebuild the list:</b> cons the transformed head onto the transformed tail.</div><pre><code>  | x :: rest -&gt;
+    <span class="fill">f x :: map f rest</span></code></pre></div></div></div>
+ </div>
+ <aside class="notes"><strong>Presenter note</strong>Build the recursive branch in pieces. Stress: recursively map the tail, apply f to the head, then cons the transformed head onto the transformed tail.</aside>
+</section>
+
+<section class="slide" data-title="Map: complete implementation">
+ <div class="inner">
+  <div class="kicker">Map · Complete</div><h2>The complete <code>map</code> function</h2><div class="grid2"><div><pre><code>let rec map f xs =
+  match xs with
+  | [] -&gt; []
+  | x :: rest -&gt;
+      f x :: map f rest</code></pre></div><div>
+  <div class="trace">map square [1;2;3]<br>= square 1 :: map square [2;3]<br>= 1 :: (4 :: map square [3])<br>= 1 :: (4 :: (9 :: []))<br>= [1;4;9]</div></div></div>
+ </div>
+ <aside class="notes"><strong>Presenter note</strong>Show the finished function and connect each line back to the datatype structure. Keep the trace brief; the key point is preserving order and shape.</aside>
+</section>
+
+
+<section class="slide" data-title="MCQ: map">
+ <div class="inner">
+  <div class="kicker">Multiple Choice</div>
+  <h2>What is the result?</h2>
+  <div class="question" data-explanation="map applies the function to every pair while preserving list order. The sums are 1 + 2 = 3 and 3 + 4 = 7.">
+   <div class="qtext"><pre><code>let add_pair pair =
+  match pair with
+  | (x, y) -&gt; x + y
+in
+map add_pair [(1, 2); (3, 4)]</code></pre></div>
+   <div class="choices">
+    <button class="choice">A. <code>[1;2;3;4]</code></button>
+    <button class="choice" data-correct="true">B. <code>[3;7]</code></button>
+    <button class="choice">C. <code>[(3,7)]</code></button>
+    <button class="choice">D. <code>10</code></button>
+   </div>
+   <div class="answer"></div>
+  </div>
+ </div>
+ <aside class="notes"><strong>Presenter note</strong>Let students compute each mapped element independently. Stress that map changes values one-for-one and preserves the list structure.</aside>
+</section>
+
+<section class="slide" data-title="Filter: specification">
+ <div class="inner">
+  <div class="kicker">Coding exercise 2 · Filter</div><h2><code>filter</code> makes a yes/no decision per element</h2>
+  <pre><code>let is_even x = x mod 2 = 0 in
+filter is_even [1;2;3;4]
+= [2;4]</code></pre>
+  <div class="callout">Unlike <code>map</code>, the output may be shorter. But the surviving elements stay in their original order.</div>
+  <p class="lead">Expected type: <code>('a -&gt; bool) -&gt; 'a list -&gt; 'a list</code></p>
+ </div>
+ <aside class="notes"><strong>Presenter note</strong>Contrast filter with map. Stress that filter preserves order but may shorten the list because each element is either kept or dropped.</aside>
+</section>
+
+<section class="slide" data-title="Filter: derive the base case">
+ <div class="inner">
+  <div class="kicker">Filter · Step 1</div><h2>Again, begin with the data shape</h2><div class="grid2"><div><pre><code>let rec filter keep xs =
+  match xs with
+  | [] -&gt; <span class="placeholder">?</span>
+  | x :: rest -&gt; <span class="placeholder">?</span></code></pre></div><div>
+  <div class="fragment"><div class="explain">There are no elements to keep from the empty list.</div><pre><code>  | [] -&gt; <span class="fill">[]</span></code></pre></div></div></div>
+ </div>
+ <aside class="notes"><strong>Presenter note</strong>Reveal only the base case first. Stress that there are no elements to keep from an empty list.</aside>
+</section>
+
+<section class="slide" data-title="Filter: derive the recursive case">
+ <div class="inner">
+ <div class="kicker">Filter · Step 2</div><h2>When the predicate is true, keep the head</h2>
+<div class="grid2"><div><pre><code>| x :: rest -&gt;
+    if keep x then
+      <span class="placeholder">?</span>
+    else
+      <span class="placeholder">?</span></code></pre></div><div><div class="fragment"><h3>Test the current element</h3><p><code>keep x</code> decides whether <code>x</code> belongs in the result.</p></div><div class="fragment"><h3>True: keep <code>x</code></h3><pre><code><span class="fill">x :: filter keep rest</span></code></pre><p>Preserve the head and filter the tail.</p></div></div></div>
+ </div>
+ <aside class="notes"><strong>Presenter note</strong>Start with the predicate decision. Reveal the true case only. Stress that :: retains the current element and the recursive call processes the smaller tail. Ask what should change when keep x is false.</aside>
+</section>
+
+<section class="slide" data-title="Filter: drop the head">
+ <div class="inner">
+ <div class="kicker">Filter · Step 3</div><h2>When the predicate is false, use only the tail</h2>
+<div class="grid2"><div><pre><code>| x :: rest -&gt;
+    if keep x then
+      x :: filter keep rest
+    else
+      <span class="placeholder">?</span></code></pre></div><div><div class="fragment"><h3>False: drop <code>x</code></h3><pre><code><span class="fill">filter keep rest</span></code></pre><p>The result is just the filtered tail.</p></div><div class="fragment"><div class="callout">Both branches recurse. Only the true branch adds <code>x</code> to the result.</div></div></div></div>
+ </div>
+ <aside class="notes"><strong>Presenter note</strong>Reveal the false branch and ask why there is no :: here. Stress that dropping the head still requires filtering the remaining elements. The next slide brings both branches together.</aside>
+</section>
+
+<section class="slide" data-title="Filter: complete implementation">
+ <div class="inner">
+  <div class="kicker">Filter · Complete</div><h2>The predicate controls whether we rebuild the head</h2>
+  <pre><code>let rec filter keep xs =
+  match xs with
+  | [] -&gt; []
+  | x :: rest -&gt;
+      if keep x then
+        x :: filter keep rest
+      else
+        filter keep rest</code></pre>
+  <p class="lead">Compare with <code>map</code>: both recurse on the tail; <code>filter</code> sometimes omits the current head.</p>
+ </div>
+ <aside class="notes"><strong>Presenter note</strong>Show the final code and compare mentally with map. Stress that the recursive structure is the same; only the combine rule changes.</aside>
+</section>
+
+
+<section class="slide" data-title="MCQ: filter">
+ <div class="inner">
+  <div class="kicker">Multiple Choice</div>
+  <h2>What is the result?</h2>
+  <div class="question" data-explanation='filter keeps the strings whose length is at least 3. "ocaml" and "fun" satisfy the predicate; "a" and "ml" do not.'>
+   <div class="qtext"><pre><code>let long_enough s = String.length s &gt;= 3 in
+filter long_enough ["a"; "ocaml"; "ml"; "fun"]</code></pre></div>
+   <div class="choices">
+    <button class="choice">A. <code>["a"; "ml"]</code></button>
+    <button class="choice" data-correct="true">B. <code>["ocaml"; "fun"]</code></button>
+    <button class="choice">C. <code>["ocaml"]</code></button>
+    <button class="choice">D. <code>["a"; "ocaml"; "ml"; "fun"]</code></button>
+   </div>
+   <div class="answer"></div>
+  </div>
+ </div>
+ <aside class="notes"><strong>Presenter note</strong>Ask students to test the predicate on each string. Stress that filter never transforms the surviving elements; it only selects them.</aside>
+</section>
+
+<section class="slide" data-title="Fold: specification">
+ <div class="inner">
+  <div class="kicker">Coding exercise 3 · Fold</div><h2><code>fold_left</code> carries a running result</h2>
+  <pre><code>fold_left (+) 0 [1;2;3;4]
+= (((0 + 1) + 2) + 3) + 4
+= 10</code></pre>
+  <div class="grid2">
+   <div class="card blue"><h3>Accumulator</h3><p>The partial answer built so far.</p></div>
+   <div class="card"><h3>Step function</h3><p>Combines the accumulator with one element.</p></div>
+  </div>
+  <p class="lead">Expected type: <code>('acc -&gt; 'a -&gt; 'acc) -&gt; 'acc -&gt; 'a list -&gt; 'acc</code></p>
+ </div>
+ <aside class="notes"><strong>Presenter note</strong>Introduce fold as carrying a running result. Stress the roles of the accumulator and step function, and read the type slowly.</aside>
+</section>
+
+<section class="slide" data-title="Fold: derive the base case">
+ <div class="inner">
+  <div class="kicker">Fold · Step 1</div><h2>If there are no elements left, what is the answer?</h2><div class="grid2"><div><pre><code>let rec fold_left step acc xs =
+  match xs with
+  | [] -&gt; <span class="placeholder">?</span>
+  | x :: rest -&gt; <span class="placeholder">?</span></code></pre></div><div>
+  <div class="fragment"><div class="explain">The accumulator already is the answer built from every element processed so far.</div><pre><code>  | [] -&gt; <span class="fill">acc</span></code></pre></div></div></div>
+ </div>
+ <aside class="notes"><strong>Presenter note</strong>Ask what remains when the input list is empty. Stress that the accumulator already contains the answer built so far.</aside>
+</section>
+
+<section class="slide" data-title="Fold: derive the recursive case">
+ <div class="inner">
+  <div class="kicker">Fold · Step 2</div><h2>Update the accumulator, then recurse</h2><div class="grid2"><div><pre><code>| x :: rest -&gt;
+    <span class="placeholder">?</span></code></pre></div><div>
+  <div class="fragment"><div class="explain"><b>Consume <code>x</code>:</b> compute the new accumulator using <code>step acc x</code>.</div><pre><code>let acc' = <span class="fill">step acc x</span> in
+<span class="placeholder">?</span></code></pre></div>
+  <div class="fragment"><div class="explain"><b>Continue:</b> process the smaller tail using that updated accumulator.</div><pre><code>let acc' = step acc x in
+<span class="fill">fold_left step acc' rest</span></code></pre></div></div></div>
+ </div>
+ <aside class="notes"><strong>Presenter note</strong>Show the update-then-recurse structure. Stress that step acc x creates the next accumulator before the recursive call.</aside>
+</section>
+
+<section class="slide" data-title="Fold: complete implementation">
+ <div class="inner">
+  <div class="kicker">Fold · Complete</div><h2><code>fold_left</code> is tail-recursive by construction</h2><div class="grid2"><div><pre><code>let rec fold_left step acc xs =
+  match xs with
+  | [] -&gt; acc
+  | x :: rest -&gt;
+      fold_left step (step acc x) rest</code></pre></div><div>
+  <div class="trace">fold_left (+) 0 [1;2;3]<br>
+  → fold_left (+) 1 [2;3]<br>
+  → fold_left (+) 3 [3]<br>
+  → fold_left (+) 6 []<br>
+  → 6</div></div></div>
+ </div>
+ <aside class="notes"><strong>Presenter note</strong>Point out that fold_left is tail-recursive by construction. Stress how each element is consumed exactly once as the accumulator changes.</aside>
+</section>
+
+<section class="slide" data-title="Map, filter, fold compared">
+ <div class="inner">
+  <div class="kicker">Higher-order functions · Compare</div><h2>Same traversal, different combination rules</h2>
+  <table class="table">
+   <thead><tr><th>Function</th><th>Empty list</th><th>Nonempty list</th><th>What changes?</th></tr></thead>
+   <tbody>
+    <tr><td><code>map f</code></td><td><code>[]</code></td><td><code>f x :: map f rest</code></td><td>Every element is transformed</td></tr>
+    <tr><td><code>filter keep</code></td><td><code>[]</code></td><td>Keep or skip <code>x</code>, then recurse</td><td>Some elements disappear</td></tr>
+    <tr><td><code>fold_left step acc</code></td><td><code>acc</code></td><td>Update accumulator, recurse</td><td>The list collapses into one result</td></tr>
+   </tbody>
+  </table>
+ </div>
+ <aside class="notes"><strong>Presenter note</strong>Use the table to unify the three functions. Stress that they share the same list traversal but differ in how they combine the current element with the recursive state.</aside>
+</section>
+
+
+<section class="slide" data-title="MCQ: fold trace">
+ <div class="inner">
+  <div class="kicker">Multiple Choice</div>
+  <h2>What is the final accumulator?</h2>
+  <div class="question" data-explanation="The accumulator evolves as 0 → 3 → 31 → 314, because each step computes acc * 10 + x.">
+   <div class="qtext"><pre><code>let append_digit acc x = acc * 10 + x in
+fold_left append_digit 0 [3;1;4]</code></pre></div>
+   <div class="choices">
+    <button class="choice">A. 8</button>
+    <button class="choice">B. 14</button>
+    <button class="choice">C. 34</button>
+    <button class="choice" data-correct="true">D. 314</button>
+   </div>
+   <div class="answer"></div>
+  </div>
+ </div>
+ <aside class="notes"><strong>Presenter note</strong>Have students write the accumulator after each element: 0, 3, 31, 314. Stress left-to-right order.</aside>
+</section>
+
+<section class="slide" data-title="Re-express sum with fold">
+ <div class="inner">
+  <div class="kicker">Fold · Why abstraction helps</div><h2>Fold packages the traversal</h2>
+  <div class="grid2">
+   <div><h3>Explicit recursion</h3><pre><code>let rec sum xs =
+  match xs with
+  | [] -&gt; 0
+  | x :: xs -&gt;
+      x + sum xs</code></pre></div>
+   <div><h3>Using fold</h3><pre><code>let sum xs =
+  let add acc x = acc + x in
+  fold_left add 0 xs</code></pre></div>
+  </div>
+  <p class="lead">Higher-order functions package common recursive traversal patterns into reusable operations.</p>
+ </div>
+ <aside class="notes"><strong>Presenter note</strong>Show that fold packages a common recursion pattern. Stress that the caller now supplies only the combining operation and initial accumulator.</aside>
+</section>
+
+<section class="slide section-slide" data-title="Part V — Connection to compilers">
+ <div class="inner"><span class="badge">Part V · ~6 min</span><h1>From lists to ASTs</h1><p class="lead">The same design method applies to compiler data: inspect the constructors, write one branch per constructor, recurse into recursive children.</p></div>
+ <aside class="notes"><strong>Presenter note</strong>Transition from lists to compiler data structures. Stress that AST traversal uses the exact same constructor-by-constructor recursion pattern.</aside>
+</section>
+
+<section class="slide" data-title="Recursive AST">
+ <div class="inner">
+  <div class="kicker">AST · Recursive variant</div><h2>An expression tree is a recursive datatype</h2><div class="grid2"><div><pre><code>type expr =
+  | Int of int
+  | Var of string
+  | Add of expr * expr
+  | Mul of expr * expr</code></pre></div><div>
+  <div class="stacked">
+   <div class="card blue"><h3>Base constructors</h3><p><code>Int</code> and <code>Var</code> contain no smaller expressions.</p></div>
+   <div class="card"><h3>Recursive constructors</h3><p><code>Add</code> and <code>Mul</code> contain two smaller expressions.</p></div>
+  </div></div></div>
+ </div>
+ <aside class="notes"><strong>Presenter note</strong>Identify the base constructors and recursive constructors. Stress that Add and Mul contain smaller expr values, which is why recursion is natural.</aside>
+</section>
+
+<section class="slide" data-title="Build AST size">
+ <div class="inner">
+  <div class="kicker">AST · Build one branch at a time</div><h2>Count expression nodes</h2><div class="grid2"><div><pre><code>let rec size e =
+  match e with
+  | Int _ -&gt; <span class="placeholder">?</span>
+  | Var _ -&gt; <span class="placeholder">?</span>
+  | Add (a,b) -&gt; <span class="placeholder">?</span>
+  | Mul (a,b) -&gt; <span class="placeholder">?</span></code></pre></div><div>
+  <div class="fragment"><div class="explain">Each leaf is one node.</div><pre><code>| Int _ -&gt; <span class="fill">1</span>
+| Var _ -&gt; <span class="fill">1</span></code></pre></div>
+  <div class="fragment"><div class="explain">For a binary node, count the current node plus both subtrees.</div><pre><code>| Add (a,b) -&gt;
+    <span class="fill">1 + size a + size b</span>
+| Mul (a,b) -&gt;
+    <span class="fill">1 + size a + size b</span></code></pre></div></div></div>
+ </div>
+ <aside class="notes"><strong>Presenter note</strong>Reveal leaves first, then binary nodes. Stress that each branch mirrors one datatype constructor and recursive calls follow the recursive fields.</aside>
+</section>
+
+<section class="slide ast-task" data-title="Exercise: implement an AST type checker and evaluator"><div class="inner"><div class="kicker">AST exercise · Your task</div><h2>Implement a type checker and an evaluator</h2><div class="grid2"><div><h3>Expression constructors</h3><pre><code>type expr =
+  | Int of int
+  | Bool of bool
+  | Var of string
+  | Add of expr * expr
+  | Mul of expr * expr
+  | Lt of expr * expr
+  | If of expr * expr * expr
+  | Let of string * expr * expr</code></pre><p class="small"><code>Lt (a,b)</code> means <code>a &lt; b</code>.<br><code>If (c,t,f)</code> means <code>if c then t else f</code>.</p></div><div><h3>Types and runtime values</h3><pre><code>type typ = TInt | TBool
+
+type value =
+  | VInt of int
+  | VBool of bool</code></pre><h3>Implement both functions</h3><pre><code>infer : (string * typ) list
+        -&gt; expr -&gt; typ
+
+eval : (string * value) list
+       -&gt; expr -&gt; value</code></pre></div></div><p class="small"><code>Let (name, bound, body)</code> represents <code>let name = bound in body</code>. Use explicit <code>match e with</code> and start with <code>[]</code>.</p></div><aside class="notes"><strong>Presenter note</strong>Give students 6–8 minutes across these two task slides. This extends the earlier AST only for this exercise; the earlier node-counting example remains about the smaller language. Explain the distinction between syntax Int/Bool, types TInt/TBool, and computed values VInt/VBool. The evaluator now returns a tagged value so its result can be either kind. Do not reveal implementations before students attempt them. Let is non-recursive and this language has no function types or let-polymorphism.</aside></section>
+<section class="slide ast-task" data-title="Exercise: typing and evaluation rules"><div class="inner"><div class="kicker">AST exercise · Your task</div><h2>Check types before evaluating</h2><table class="table"><thead><tr><th>Expression</th><th>Type-checking requirement</th><th>Evaluation</th></tr></thead><tbody>
+<tr><td><code>Int / Bool</code></td><td>Return <code>TInt / TBool</code></td><td>Return <code>VInt / VBool</code></td></tr>
+<tr><td><code>Var name</code></td><td>Look up its type</td><td>Look up its value</td></tr>
+<tr><td><code>Add / Mul</code></td><td>Two integers; result is integer</td><td>Add or multiply the integers</td></tr>
+<tr><td><code>Lt (a,b)</code></td><td>Two integers; result is boolean</td><td>Compare the integers</td></tr>
+<tr><td><code>If (c,t,f)</code></td><td>Boolean condition; both branches have the same type</td><td>Evaluate only the selected branch</td></tr>
+<tr><td><code>Let (n,b,e)</code></td><td>Check the bound expression and body with correct scope</td><td>Evaluate the binding, then its body with correct scope</td></tr>
+</tbody></table><p class="small"><b>Environment:</b> newest binding first. <code>List.assoc name env</code> finds the first match; an absent name raises <code>Not_found</code>. Reject type mismatches with <code>failwith "type error"</code>.</p><p class="small"><b>Tests:</b> accept <code>if 2 &lt; 3 then 4 else 5</code>; reject <code>1 + true</code>, <code>if 0 then 1 else 2</code>, and <code>if true then 1 else false</code>. Also test shadowing and unbound variables.</p></div><aside class="notes"><strong>Presenter note</strong>Infer must recursively check both If branches even when the condition is a literal true or false. Its result is the common branch type, which may be TInt or TBool. Eval evaluates the condition and only the selected branch; it does not evaluate both branches in advance. Run infer [] ast before eval [] ast; runtime tag mismatches can also raise an error. For Let, have students determine which recursive call needs the original environment and which needs its extension. First-class functions, implicit conversions and recursive let are outside this language. Students may write their own lookup if desired. Ask them to construct ASTs for the listed tests. The next two MCQs check the Let case using both integer and boolean bindings.</aside></section>
+
+<section class="slide ast-exercise" data-title="MCQ: type-check an AST let">
+ <div class="inner">
+  <div class="kicker">AST exercise · 1 of 2 · Type checking</div>
+  <h2>Which branch correctly type-checks Let?</h2>
+  <div class="grid2 ast-context">
+   <div><h3>Our running expression</h3><pre><code>let x = 3 in
+let ok = x &lt; 5 in
+if ok then (let x = x + 1 in x * 2)
+else x</code></pre></div>
+   <div><p class="small"><code>infer env e</code> returns the type of <code>e</code>. Here <code>env</code> maps names to <b>types</b>.</p><p class="small">The environment can contain both<br><b>integer and boolean types</b>.</p><p class="small"><code>Let (name, bound, body)</code> means<br><code>let name = bound in body</code>.</p></div>
+  </div>
+  <div class="question" data-explanation="B: infer bound in the current environment, then infer body with the new type binding. Here x has type TInt and ok has type TBool. The If condition is boolean and both branches are TInt, so the whole expression has type TInt. A mismatched branch must be rejected even if it would not be selected.">
+   <div class="qtext"><code>| Let (name, bound, body) -&gt; ???</code></div>
+   <div class="choices"><button class="choice"><b>A.</b><pre><code>let t = infer env bound in
+infer env body</code></pre></button><button class="choice" data-correct="true"><b>B.</b><pre><code>let t = infer env bound in
+infer ((name, t) :: env) body</code></pre></button><button class="choice"><b>C.</b><pre><code>infer env bound</code></pre></button><button class="choice"><b>D.</b><pre><code>let t = infer env body in
+infer ((name, t) :: env) bound</code></pre></button></div>
+   <div class="answer"></div>
+  </div>
+ </div>
+ <aside class="notes"><strong>Presenter note</strong>Pause before clicking B. The two environments carry types, not computed values. Trace x : TInt and ok : TBool. Infer must check the condition and both branches, including the nested Let in the true branch. Ask what happens if the else expression is changed to Bool false: type error. A omits the new binding, C ignores the body, and D reverses bound and body.<p>Running AST:</p><pre><code>Let (&quot;x&quot;, Int 3,
+  Let (&quot;ok&quot;, Lt (Var &quot;x&quot;, Int 5),
+    If (Var &quot;ok&quot;,
+      Let (&quot;x&quot;, Add (Var &quot;x&quot;, Int 1),
+        Mul (Var &quot;x&quot;, Int 2)),
+      Var &quot;x&quot;)))</code></pre></aside>
+</section>
+
+<section class="slide ast-exercise" data-title="MCQ: evaluate an AST let">
+ <div class="inner">
+  <div class="kicker">AST exercise · 2 of 2 · Evaluation</div>
+  <h2>Which branch correctly evaluates Let?</h2>
+  <div class="grid2 ast-context">
+   <div><h3>Our running expression</h3><pre><code>let x = 3 in
+let ok = x &lt; 5 in
+if ok then (let x = x + 1 in x * 2)
+else x</code></pre></div>
+   <div><p class="small"><code>eval env e</code> returns the value of <code>e</code>. Here <code>env</code> maps names to <b>values</b>.</p><p class="small">The environment can contain both<br><b>integer and boolean values</b>.</p><p class="small"><code>Let (name, bound, body)</code> means<br><code>let name = bound in body</code>.</p></div>
+  </div>
+  <div class="question" data-explanation="C: evaluate bound in the current environment, then evaluate body with the new value binding. Here x is VInt 3 and ok is VBool true. Only the true branch runs: its local x becomes VInt 4, and multiplication returns VInt 8. The outer x binding remains unchanged.">
+   <div class="qtext"><code>| Let (name, bound, body) -&gt; ???</code></div>
+   <div class="choices"><button class="choice"><b>A.</b><pre><code>eval env bound</code></pre></button><button class="choice"><b>B.</b><pre><code>let value = eval env bound in
+eval env body</code></pre></button><button class="choice" data-correct="true"><b>C.</b><pre><code>let value = eval env bound in
+eval ((name, value) :: env) body</code></pre></button><button class="choice"><b>D.</b><pre><code>let value = eval env body in
+eval ((name, value) :: env) bound</code></pre></button></div>
+   <div class="answer"></div>
+  </div>
+ </div>
+ <aside class="notes"><strong>Presenter note</strong>Pause before clicking C, and ask students for the tagged return value: VInt 8. Evaluate x < 5 to VBool true. Only the true branch is evaluated; its inner bound expression uses the outer x = 3, and its body uses the new x = 4. A stops too early, B omits the binding, and D evaluates the body before introducing the variable. Contrast eval selecting one If branch with infer checking both.<p>Running AST:</p><pre><code>Let (&quot;x&quot;, Int 3,
+  Let (&quot;ok&quot;, Lt (Var &quot;x&quot;, Int 5),
+    If (Var &quot;ok&quot;,
+      Let (&quot;x&quot;, Add (Var &quot;x&quot;, Int 1),
+        Mul (Var &quot;x&quot;, Int 2)),
+      Var &quot;x&quot;)))</code></pre></aside>
+</section>
+
+<section class="slide" data-title="Exit check">
+ <div class="inner">
+  <div class="kicker">Wrap-up</div><h2>Three models to take into W4115</h2>
+  <div class="grid3">
+   <div class="card blue"><h3><code>let</code></h3><p>Create a local environment, name intermediate results, avoid repeated computation.</p></div>
+   <div class="card"><h3>Patterns</h3><p>Describe a value's shape and bind the pieces you need.</p></div>
+   <div class="card green"><h3>Recursion</h3><p>Write one branch per constructor and recurse on structurally smaller data.</p></div>
+  </div>
+  <div class="rule"></div>
+  <p class="big">Map, filter, fold, and AST traversals are all variations of the same idea: <span class="em">follow the data structure.</span></p>
+ </div>
+ <aside class="notes"><strong>Presenter note</strong>Close by tying together the three core ideas: local bindings, patterns, and structural recursion. Stress that map/filter/fold and AST traversals are all instances of following datatype structure.</aside>
+</section>
+
+<div class="overview" id="overview"><h2>Slide overview</h2><div class="ogrid" id="ogrid"></div></div>
+
+<script>
+(() => {
+ const slides=[...document.querySelectorAll('.slide')], counter=document.getElementById('counter'),
+ progress=document.getElementById('progress'), overview=document.getElementById('overview'),
+ ogrid=document.getElementById('ogrid');
+ let index=0, presenterWin=null;
+
+ function currentFragments(){
+   return [...slides[index].querySelectorAll('.fragment')];
+ }
+ function firstHiddenFragment(){
+   return currentFragments().find(f=>!f.classList.contains('visible'));
+ }
+ function lastVisibleFragment(){
+   const vs=currentFragments().filter(f=>f.classList.contains('visible'));
+   return vs.length?vs[vs.length-1]:null;
+ }
+
+ function resetFit(slide){
+   const inner=slide.querySelector('.inner');
+   if(!inner) return;
+   inner.style.transform='none';
+   inner.style.width='';
+ }
+
+ function fitSlide(slide){
+   const inner=slide.querySelector('.inner');
+   if(!inner) return;
+
+   resetFit(slide);
+
+   const style=getComputedStyle(slide);
+   const padX=parseFloat(style.paddingLeft)+parseFloat(style.paddingRight);
+   const padY=parseFloat(style.paddingTop)+parseFloat(style.paddingBottom);
+   const availW=Math.max(100, slide.clientWidth-padX);
+   const availH=Math.max(100, slide.clientHeight-padY);
+
+   const naturalW=Math.max(inner.scrollWidth, inner.getBoundingClientRect().width);
+   const naturalH=inner.scrollHeight;
+   const scale=Math.min(1, availW/naturalW, availH/naturalH);
+
+   if(scale < 0.999){
+     inner.style.transform=`scale(${scale})`;
+   }
+ }
+
+ function fitActiveSlide(){
+   const slide=slides[index];
+   if(!slide) return;
+   requestAnimationFrame(()=>requestAnimationFrame(()=>fitSlide(slide)));
+ }
+
+ function show(i, hash=true){
+   pauseStack();
+   index=Math.max(0,Math.min(slides.length-1,i));
+   slides.forEach((s,j)=>s.classList.toggle('active',j===index));
+   counter.textContent=`${index+1} / ${slides.length}`;
+   progress.style.width=`${((index+1)/slides.length)*100}%`;
+   document.title=`${slides[index].dataset.title || 'OCaml Tutorial'} · COMS W4115`;
+   document.querySelectorAll('.notes').forEach(n=>n.classList.remove('show'));
+   updatePresenterNotes();
+   fitActiveSlide();
+   if(hash) history.replaceState(null,'',`#${index+1}`);
+ }
+ function next(){
+   if(slides[index]===stackSlide&&stackStep<8){stepStack(1);return;}
+   const f=firstHiddenFragment();
+   if(f){f.classList.add('visible');fitActiveSlide();return;}
+   show(index+1);
+ }
+ function prev(){
+   if(slides[index]===stackSlide&&stackStep>0){stepStack(-1);return;}
+   const f=lastVisibleFragment();
+   if(f){f.classList.remove('visible');fitActiveSlide();return;}
+   show(index-1);
+ }
+
+ function notesForSlide(i){
+   const note=slides[i].querySelector('.notes');
+   if(slides[i]===stackSlide) return note.innerHTML+'<p><b>Current animation step '+stackStep+'/8:</b> '+stackCaptions[stackStep]+'</p>';
+   return note ? note.innerHTML : '<span style="color:#7a8794">No presenter notes for this slide.</span>';
+ }
+
+ function presenterHtml(){
+   const title=slides[index].dataset.title || 'Slide';
+   const note=notesForSlide(index);
+   const nextTitle=index+1<slides.length ? (slides[index+1].dataset.title || 'Next slide') : 'End of deck';
+   return `<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Presenter Notes · ${title}</title>
+<style>
+html,body{margin:0;background:#f6f7f9;color:#17212b;font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+body{padding:24px}
+.meta{font-size:13px;color:#667789;margin-bottom:8px}
+h1{font-size:28px;line-height:1.15;margin:0 0 18px}
+.notes{display:block!important;position:static!important;width:auto!important;max-height:none!important;overflow:visible!important;
+padding:18px 20px;background:#fff8df;border:1px solid #e7d49a;border-radius:14px;
+box-shadow:none;font-size:17px;line-height:1.55;color:#4f431f}
+.notes strong{display:block;margin-bottom:8px}
+.next{margin-top:18px;padding:14px 16px;background:white;border:1px solid #d9dee7;border-radius:12px}
+.next .label{font-size:12px;text-transform:uppercase;letter-spacing:.08em;color:#6b7c8c;font-weight:800}
+.next .title{font-size:18px;font-weight:750;margin-top:4px}
+.hint{margin-top:16px;font-size:12px;color:#7c8b99}
+</style>
+</head>
+<body>
+<div class="meta">Slide ${index+1} of ${slides.length}</div>
+<h1>${title}</h1>
+<div class="notes">${note}</div>
+<div class="next"><div class="label">Next</div><div class="title">${nextTitle}</div></div>
+<div class="hint">This window follows the presentation automatically.</div>
+</body>
+</html>`;
+ }
+
+ function updatePresenterNotes(){
+   if(!presenterWin || presenterWin.closed) return;
+   presenterWin.document.open();
+   presenterWin.document.write(presenterHtml());
+   presenterWin.document.close();
+ }
+
+ function togglePresenterNotes(){
+   if(presenterWin && !presenterWin.closed){
+     presenterWin.close();
+     presenterWin=null;
+     return;
+   }
+   presenterWin=window.open('', 'ocaml-presenter-notes',
+     'popup=yes,width=520,height=720,resizable=yes,scrollbars=yes');
+   if(!presenterWin){
+     alert('The presenter-notes window was blocked by the browser. Allow pop-ups for this file and press N again.');
+     return;
+   }
+   updatePresenterNotes();
+   presenterWin.focus();
+ }
+
+ document.fonts?.ready.then(fitActiveSlide);
+ window.addEventListener('resize', fitActiveSlide);
+ document.addEventListener('fullscreenchange', fitActiveSlide);
+ document.getElementById('next').onclick=next;
+ document.getElementById('prev').onclick=prev;
+ document.addEventListener('keydown',e=>{
+   if(e.target.closest?.('.stack-controls')&&[' ','Enter'].includes(e.key))return;
+   if(overview.classList.contains('show') && e.key==='Escape'){overview.classList.remove('show');return;}
+   if(['ArrowRight','PageDown',' '].includes(e.key)){e.preventDefault();next();}
+   else if(['ArrowLeft','PageUp'].includes(e.key)){e.preventDefault();prev();}
+   else if(e.key==='Home')show(0);
+   else if(e.key==='End')show(slides.length-1);
+   else if(e.key.toLowerCase()==='o')overview.classList.toggle('show');
+   else if(e.key.toLowerCase()==='n'){togglePresenterNotes();}
+   else if(e.key.toLowerCase()==='f'){if(!document.fullscreenElement)document.documentElement.requestFullscreen?.();else document.exitFullscreen?.();}
+ });
+ document.querySelectorAll('.question').forEach(q=>{
+   const ans=q.querySelector('.answer'), choices=[...q.querySelectorAll('.choice')];
+   choices.forEach(c=>c.onclick=()=>{
+     if(q.dataset.done==='1')return;q.dataset.done='1';
+     const good=c.dataset.correct==='true';
+     choices.forEach(x=>{if(x.dataset.correct==='true')x.classList.add('correct')});
+     if(!good)c.classList.add('wrong');
+     ans.className='answer show '+(good?'good':'bad');
+     ans.innerHTML=`<b>${good?'Correct.':'The correct choice is highlighted.'}</b> ${q.dataset.explanation||''}`;
+     fitActiveSlide();
+   });
+ });
+ slides.forEach((s,i)=>{
+   const b=document.createElement('button');b.className='oit';
+   b.innerHTML=`<span class="n">${String(i+1).padStart(2,'0')}</span><span class="t">${s.dataset.title||'Slide'}</span>`;
+   b.onclick=()=>{overview.classList.remove('show');show(i)};ogrid.appendChild(b);
+ });
+
+ // The animation uses one persistent element for each frame, including the reused tail frame.
+ const stackSlide=document.getElementById('stack-animation');
+ let stackStep=0, stackTimer=null;
+ const stackCaptions=[
+   'Start with no active calls. Step forward to create the first frames.',
+   'Create the first frames: sum [1;2;3] and loop 0 [1;2;3].',
+   'Push sum [2;3]; its caller waits to add 1. Reuse the loop frame with acc = 1.',
+   'Push sum [3]; another caller waits to add 2. Reuse the loop frame with acc = 3.',
+   'Push sum []. Four ordinary frames are alive; the loop still uses one frame, now with acc = 6.',
+   'The base cases return: sum [] gives 0; loop 6 [] gives 6 and finishes.',
+   'Return 3 + 0 = 3. Pop the sum [3] frame; the remaining callers still wait.',
+   'Return 2 + 3 = 5. Pop the sum [2;3] frame; one addition remains.',
+   'Return 1 + 5 = 6. Both computations finish, but their peak stack usage differs.'
+ ];
+ function stackState(step){
+   const ordinaryCount=step<=4?step:8-step;
+   const tailIndex=Math.max(0,Math.min(3,step-1));
+   return {ordinaryCount,tailIndex,tailPresent:step>=1&&step<=4,tailDone:step>=5,ordinaryDone:step===8};
+ }
+ function pauseStack(){
+   if(stackTimer!==null){clearInterval(stackTimer);stackTimer=null;}
+   document.getElementById('stack-play').textContent='Play';
+ }
+ function renderStack(animate=true){
+   const state=stackState(stackStep);
+   stackSlide.querySelectorAll('[data-frame]').forEach((frame,i)=>{
+     frame.classList.toggle('is-present',i<state.ordinaryCount);
+     frame.classList.toggle('is-current',i===state.ordinaryCount-1);
+     frame.setAttribute('aria-hidden',String(i>=state.ordinaryCount));
+   });
+   const tailFrame=document.getElementById('tail-frame');
+   const calls=['loop 0 [1;2;3]','loop 1 [2;3]','loop 3 [3]','loop 6 []'];
+   const accs=[0,1,3,6];
+   const changed=document.getElementById('tail-call').textContent!==calls[state.tailIndex];
+   document.getElementById('tail-call').textContent=calls[state.tailIndex];
+   document.getElementById('tail-detail').textContent='Same frame · accumulator: '+accs[state.tailIndex];
+   tailFrame.classList.toggle('is-present',state.tailPresent);
+   tailFrame.classList.toggle('is-current',state.tailPresent);
+   tailFrame.setAttribute('aria-hidden',String(!state.tailPresent));
+   tailFrame.classList.remove('is-updating');
+   if(animate&&changed&&state.tailPresent){void tailFrame.offsetWidth;tailFrame.classList.add('is-updating');}
+   for(const [id,visible] of [['tail-result',state.tailDone],['ordinary-result',state.ordinaryDone]]){
+     const result=document.getElementById(id);
+     result.classList.toggle('is-present',visible);
+     result.setAttribute('aria-hidden',String(!visible));
+   }
+   document.getElementById('ordinary-count').textContent=state.ordinaryCount+' '+(state.ordinaryCount===1?'frame':'frames');
+   document.getElementById('tail-count').textContent=state.tailPresent?'1 frame':'0 frames';
+   document.getElementById('stack-caption').textContent=stackCaptions[stackStep];
+   document.getElementById('stack-step').textContent='Step '+stackStep+' / 8';
+   document.getElementById('stack-back').disabled=stackStep===0;
+   document.getElementById('stack-next').disabled=stackStep===8;
+   fitActiveSlide();
+   updatePresenterNotes();
+ }
+ function stepStack(delta){
+   pauseStack();
+   stackStep=Math.max(0,Math.min(8,stackStep+delta));
+   renderStack();
+ }
+ document.getElementById('stack-back').onclick=()=>stepStack(-1);
+ document.getElementById('stack-next').onclick=()=>stepStack(1);
+ document.getElementById('stack-replay').onclick=()=>{pauseStack();stackStep=0;renderStack();};
+ document.getElementById('stack-play').onclick=()=>{
+   if(stackTimer!==null){pauseStack();return;}
+   if(stackStep===8){stackStep=0;renderStack(false);}
+   document.getElementById('stack-play').textContent='Pause';
+   stackTimer=setInterval(()=>{
+     if(slides[index]!==stackSlide||document.hidden){pauseStack();return;}
+     stackStep=Math.min(8,stackStep+1);renderStack();
+     if(stackStep===8)pauseStack();
+   },1500);
+ };
+ document.addEventListener('visibilitychange',()=>{if(document.hidden)pauseStack();});
+ renderStack(false);
+
+ const h=parseInt(location.hash.slice(1),10);if(Number.isFinite(h))index=Math.max(0,Math.min(slides.length-1,h-1));
+ show(index,false);
+})();
+</script>
+</div>
+</body>
+</html>
