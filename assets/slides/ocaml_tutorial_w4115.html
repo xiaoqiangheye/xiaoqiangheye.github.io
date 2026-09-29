@@ -101,8 +101,6 @@ pre{
 .nav{position:fixed;z-index:18;top:50%;transform:translateY(-50%);width:38px;height:54px;border:1px solid var(--line);background:rgba(255,255,255,.84);border-radius:10px;color:var(--blue);font-size:22px;cursor:pointer;opacity:.58}
 .nav:hover{opacity:1}.prev{left:10px}.next{right:10px}
 .footer{position:fixed;left:26px;bottom:12px;z-index:15;color:#7c8b99;font-size:11px}
-.notes{display:none;position:fixed;right:17px;bottom:20px;z-index:40;width:min(440px,43vw);max-height:42vh;overflow:auto;padding:16px;background:#fff8df;border:1px solid #ead7a0;border-radius:13px;box-shadow:var(--shadow);font-size:14px;line-height:1.43;color:#4f431e}
-.notes.show{display:block}
 .overview{display:none;position:fixed;z-index:50;inset:0;background:rgba(10,23,37,.94);padding:34px;overflow:auto}
 .overview.show{display:block}
 .overview h2{color:white;font-size:32px}
@@ -202,7 +200,7 @@ pre{
  .grid2,.grid3{gap:14px}
 }
 @media print{
- html,body{overflow:visible;height:auto}.topbar,.nav,.progress,.footer,.overview,.notes{display:none!important}
+ html,body{overflow:visible;height:auto}.topbar,.nav,.progress,.footer,.overview{display:none!important}
  .slide{display:block!important;position:relative;inset:auto;min-height:100vh;page-break-after:always}
  .inner{min-height:auto}.fragment{opacity:1!important;transform:none!important;display:block!important}
 }
@@ -314,7 +312,7 @@ pre code{white-space:inherit}
 <div class="deck">
 <header class="topbar">
   <div class="brand">COMS W4115 · OCaml Tutorial</div>
-  <div class="meta"><span><span class="kbd">←</span>/<span class="kbd">→</span> reveal / navigate · <span class="kbd">O</span> overview · <span class="kbd">N</span> presenter notes · <span class="kbd">F</span> fullscreen</span><span id="counter">1</span></div>
+  <div class="meta"><span><span class="kbd">←</span>/<span class="kbd">→</span> reveal / navigate · <span class="kbd">O</span> overview · <span class="kbd">F</span> fullscreen</span><span id="counter">1</span></div>
 </header>
 <button class="nav prev" id="prev">‹</button><button class="nav next" id="next">›</button>
 <div class="progress" id="progress"></div>
@@ -326,14 +324,14 @@ pre code{white-space:inherit}
   <h1>OCaml Tutorial</h1>
   <p class="lead">Expressions · Pattern Matching · Recursion · Higher-Order Functions</p>
  </div>
- <aside class="notes"><strong>Presenter note</strong>Set expectations: this is a practical OCaml tutorial for reading and writing compiler code. Emphasize that we will learn by predicting small examples and building recursive functions step by step.</aside>
+ 
 </section>
 
 
 
 <section class="slide section-slide" data-title="Part I — Expressions and let">
  <div class="inner"><span class="badge">Part I · ~16 min</span><h1>Expressions and <code>let</code></h1><p class="lead">A <code>let</code> expression creates a local binding that can be used while evaluating a larger expression.</p></div>
- <aside class="notes"><strong>Presenter note</strong>Transition into the first topic. Say that we start with values, types, and local bindings because every later OCaml feature builds on these.</aside>
+ 
 </section>
 
 <section class="slide" data-title="Basic OCaml types">
@@ -364,7 +362,7 @@ pre code{white-space:inherit}
   </div>
   <div class="callout">In the REPL, <code>- : type = value</code> means “this expression has this type and evaluates to this value.”</div>
  </div>
- <aside class="notes"><strong>Presenter note</strong>Read the REPL output as type plus value. Stress the syntax difference between int, float, bool, char, string, and unit; especially that char uses single quotes and string uses double quotes.</aside>
+ 
 </section>
 
 
@@ -384,7 +382,7 @@ pre code{white-space:inherit}
 head :: tail</code></pre><div class="fragment"><pre><code>[1; 2; 3]
 = 1 :: (2 :: (3 :: []))</code></pre></div></div></div><div class="fragment"><div class="callout">Every list is empty, or contains one head element followed by a smaller tail list.</div></div>
  </div>
- <aside class="notes"><strong>Presenter note</strong>Start with the list notation on the left. Stress that :: takes one element and a list. Reveal the expansion of [1;2;3], ending at []. Pause on the two shapes before introducing a user-defined datatype on the next slide.</aside>
+ 
 </section>
 
 <section class="slide" data-title="Define our own list type">
@@ -396,7 +394,7 @@ head :: tail</code></pre><div class="fragment"><pre><code>[1; 2; 3]
   Cons (2,
     Cons (3, Nil)))</code></pre></div><div class="fragment"><h3>Built-in equivalent</h3><pre><code>1 :: (2 :: (3 :: []))</code></pre></div></div></div>
  </div>
- <aside class="notes"><strong>Presenter note</strong>Connect the previous slide's two shapes to Nil and Cons. Explain that 'a is the element type, and 'a mylist in the Cons payload makes this datatype recursive. Reveal the value, then its built-in equivalent. Stress that both describe the same recursive structure.</aside>
+ 
 </section>
 
 <section class="slide" data-title="Basic expressions in the REPL">
@@ -431,7 +429,7 @@ head :: tail</code></pre><div class="fragment"><pre><code>[1; 2; 3]
    <div class="callout"><code>+</code> is integer addition, while <code>+.</code> is floating-point addition. OCaml keeps these operations distinct at the type level.</div>
   </div>
  </div>
- <aside class="notes"><strong>Presenter note</strong>Show that operators determine types. Stress the separate integer and floating-point operators, then point out tuple and list type syntax.</aside>
+ 
 </section>
 
 
@@ -463,7 +461,7 @@ head :: tail</code></pre><div class="fragment"><pre><code>[1; 2; 3]
 - : int = 21</code></pre>
   </div>
  </div>
- <aside class="notes"><strong>Presenter note</strong>Use the examples to show that let names an intermediate value inside an expression. Stress that the type of the whole let expression is the type of its body.</aside>
+ 
 </section>
 
 <section class="slide" data-title="Type checking a let expression">
@@ -507,7 +505,7 @@ y &gt; 0</code></pre></div><div>
    <div class="callout">Therefore the whole expression has type <code>bool</code>.</div>
   </div></div></div>
  </div>
- <aside class="notes"><strong>Presenter note</strong>Walk through the environments slowly. Stress the pattern: type the bound expression, extend Γ, then type the body; the final body determines the overall type.</aside>
+ 
 </section>
 
 <section class="slide" data-title="MCQ: typing rule for let">
@@ -565,7 +563,7 @@ y &gt; 0</code></pre></div><div>
    <div class="answer"></div>
   </div>
  </div>
- <aside class="notes"><strong>Presenter note</strong>Pause before clicking. Ask which rule matches the running example; after the answer, stress why e2 must be checked in Γ extended with x : τ1.</aside>
+ 
 </section>
 
 <section class="slide" data-title="Evaluate a let expression">
@@ -577,7 +575,7 @@ y - x</code></pre></div><div>
   <div class="fragment"><div class="stepbox"><div class="stepnum">2</div><div class="steptext">With that binding, <code>x * 2</code> evaluates to <code>14</code>, adding <code>y ↦ 14</code>.</div></div></div>
   <div class="fragment"><div class="stepbox"><div class="stepnum">3</div><div class="steptext">The body <code>y - x</code> evaluates to <code>14 - 7 = 7</code>. That is the value of the whole <code>let</code>.</div></div></div></div></div>
  </div>
- <aside class="notes"><strong>Presenter note</strong>Trace the values in order. Stress that evaluation mirrors the typing structure: evaluate the bound expression, extend the value environment, then evaluate the body.</aside>
+ 
 </section>
 
 
@@ -600,7 +598,7 @@ x + y</code></pre></div>
    <div class="answer"></div>
   </div>
  </div>
- <aside class="notes"><strong>Presenter note</strong>Let students compute it first. After revealing, stress that y was computed with the old x, while the final body sees the new x.</aside>
+ 
 </section>
 
 
@@ -613,7 +611,7 @@ let add_x y = x + y in
 let x = 100 in
 add_x 1</code></pre></div><div><div class="fragment"><h3>1. Bind <code>x</code></h3><pre><code>x ↦ 10</code></pre></div><div class="fragment"><h3>2. Create <code>add_x</code></h3><pre><code>add_x = &lt;code, x ↦ 10&gt;</code></pre></div></div></div><div class="callout">The function keeps access to the binding of <code>x</code> used by its body.</div>
  </div>
- <aside class="notes"><strong>Presenter note</strong>Read the example, stopping at the function definition. Reveal x = 10, then the closure containing the code and its captured binding. Ask students to predict whether the later binding x = 100 changes this function.</aside>
+ 
 </section>
 
 <section class="slide" data-title="Calling the captured function">
@@ -624,7 +622,7 @@ let add_x y = x + y in
 let x = 100 in
 add_x 1</code></pre></div><div><div class="fragment"><h3>3. Introduce a new binding</h3><p>The surrounding expression now sees <code>x = 100</code>.</p><p><code>add_x</code> still captures <code>x = 10</code>.</p></div><div class="fragment"><h3>4. Call <code>add_x 1</code></h3><pre><code>10 + 1 = 11</code></pre></div></div></div><div class="fragment"><div class="callout"><b>Lexical scope:</b> a function uses bindings from where it was defined.</div></div>
  </div>
- <aside class="notes"><strong>Presenter note</strong>Reveal the new outer binding, then the result. Stress that shadowing introduces a new binding and does not mutate the one captured by add_x. Connect the answer 11 to the function definition, not the call site.</aside>
+ 
 </section>
 
 <section class="slide" data-title="Let patterns">
@@ -634,7 +632,7 @@ add_x 1</code></pre></div><div><div class="fragment"><h3>3. Introduce a new bind
 name ^ " scored " ^ string_of_int score</code></pre>
   <div class="callout">This is already pattern matching: the tuple pattern <code>(name, score)</code> has the same shape as the tuple value and introduces two bindings.</div>
  </div>
- <aside class="notes"><strong>Presenter note</strong>Show that the left side of let can itself destructure a value. Stress that this is pattern matching, not a special tuple-only feature.</aside>
+ 
 </section>
 
 <section class="slide" data-title="Why local bindings matter">
@@ -660,7 +658,7 @@ name ^ " scored " ^ string_of_int score</code></pre>
   </div>
   <p class="small muted">The local binding gives the recursive result a name and reuses it in both branches.</p>
  </div>
- <aside class="notes"><strong>Presenter note</strong>Focus on avoiding duplicated recursive work. Stress that naming the recursive result makes the computation clearer and prevents evaluating the same suffix twice.</aside>
+ 
 </section>
 
 
@@ -677,7 +675,7 @@ Some (3, 4)</code></pre></div><div><h3>Match and extract</h3><div class="fragmen
 | None -&gt; 0</code></pre></div><div class="fragment"><pre><code>x = 3
 y = 4</code></pre></div><div class="fragment"><div class="callout">Match the <code>Some</code> constructor, then bind the two tuple fields.</div></div></div></div>
  </div>
- <aside class="notes"><strong>Presenter note</strong>Define option first, then use Some (3,4) to show constructor matching plus tuple decomposition. Stress exactly which values x and y receive.</aside>
+ 
 </section>
 
 <section class="slide" data-title="Pattern rules">
@@ -695,7 +693,7 @@ y = 4</code></pre></div><div class="fragment"><div class="callout">Match the <co
 </tbody>
   </table>
  </div>
- <aside class="notes"><strong>Presenter note</strong>Treat this as a compact reference table. Stress the two list cases [] and p1 :: p2 because they directly drive the later recursion examples.</aside>
+ 
 </section>
 
 
@@ -717,7 +715,7 @@ match "fee" with
    <div class="answer"></div>
   </div>
  </div>
- <aside class="notes"><strong>Presenter note</strong>Pause here because this is a common misconception. After the answer, stress that a variable in a pattern binds a fresh name; it does not compare against an outer variable.</aside>
+ 
 </section>
 
 <section class="slide" data-title="Tuple patterns">
@@ -729,7 +727,7 @@ match "fee" with
   <div class="fragment"><p class="lead">Bindings: <code>lexeme ↦ "while"</code>, <code>line ↦ 12</code>, <code>column ↦ 4</code>.</p></div>
   <div class="fragment"><p>Use <code>_</code> for a component that is intentionally ignored:</p><pre><code>let (name, score, _) = ("Ada", 98, "A+") in score</code></pre></div>
  </div>
- <aside class="notes"><strong>Presenter note</strong>Show how one tuple pattern binds all components at once. Stress the role of _ for intentionally ignored fields.</aside>
+ 
 </section>
 
 <section class="slide" data-title="List patterns">
@@ -746,7 +744,7 @@ match "fee" with
    </tbody>
   </table>
  </div>
- <aside class="notes"><strong>Presenter note</strong>Walk through the shapes, not the syntax alone. Stress the difference between exact-length patterns and head/tail decomposition.</aside>
+ 
 </section>
 
 <section class="slide" data-title="Exact length versus at least">
@@ -760,7 +758,7 @@ match "fee" with
 [1;2;3]    ✗</code></pre></div>
   </div>
  </div>
- <aside class="notes"><strong>Presenter note</strong>Contrast [a;b] with a :: b :: rest. Stress that the first fixes the entire length, while the second leaves the remainder unconstrained.</aside>
+ 
 </section>
 
 <section class="slide" data-title="Nested patterns">
@@ -774,7 +772,7 @@ match "fee" with
   <div class="fragment"><p class="lead">The outer <code>::</code> decomposes the list. The inner <code>(name, n)</code> decomposes its head tuple.</p></div>
   <div class="fragment"><div class="callout">Nested patterns often replace nested <code>match</code> expressions with one direct description of the shape you care about.</div></div>
  </div>
- <aside class="notes"><strong>Presenter note</strong>Point out that patterns compose structurally. Stress that the list and tuple can be decomposed in one pattern rather than nested matches.</aside>
+ 
 </section>
 
 <section class="slide" data-title="Constructor patterns">
@@ -790,7 +788,7 @@ let describe r =
   | Error msg -&gt; "error: " ^ msg</code></pre>
   <p class="lead"><code>Ok n</code> matches only values built with <code>Ok</code>, and then binds its payload to <code>n</code>.</p>
  </div>
- <aside class="notes"><strong>Presenter note</strong>Use Ok/Error to show that variants are matched by constructor. Stress that constructor names distinguish the cases before payloads are bound.</aside>
+ 
 </section>
 
 <section class="slide" data-title="Pattern order">
@@ -807,7 +805,7 @@ let describe r =
 | x :: _ -&gt; x</code></pre><p class="muted">The wildcard catches everything, so later branches are unreachable.</p></div>
   </div>
  </div>
- <aside class="notes"><strong>Presenter note</strong>Explain first-match-wins. Stress that a wildcard or very general branch placed first makes later specific branches unreachable.</aside>
+ 
 </section>
 
 
@@ -826,7 +824,7 @@ let describe r =
    <div class="answer"></div>
   </div>
  </div>
- <aside class="notes"><strong>Presenter note</strong>Give students time to test each pattern mentally against the value. After revealing, stress both list length and head shape.</aside>
+ 
 </section>
 
 
@@ -849,7 +847,7 @@ let describe r =
    <div class="answer"></div>
   </div>
  </div>
- <aside class="notes"><strong>Presenter note</strong>Ask students to write the bindings before computing the final expression. Stress that matching gives concrete values to each variable.</aside>
+ 
 </section>
 
 <section class="slide" data-title="Exhaustiveness">
@@ -864,12 +862,12 @@ let describe r =
   | [] -&gt; None
   | x :: _ -&gt; Some x</code></pre><p class="lead">Use exhaustiveness warnings as design feedback about missing cases.</p></div>
  </div>
- <aside class="notes"><strong>Presenter note</strong>Show the compiler warning as useful feedback. Stress that every constructor/shape should be handled unless partial matching is intentional.</aside>
+ 
 </section>
 
 <section class="slide section-slide" data-title="Part III — Recursion">
  <div class="inner"><span class="badge">Part III · ~16 min</span><h1>Recursion follows the data</h1><p class="lead">Recursive code follows the constructors of the datatype and continues on the smaller values contained inside them.</p></div>
- <aside class="notes"><strong>Presenter note</strong>Transition from pattern matching to recursion. Stress that recursion will follow exactly the same datatype structure students just learned to match.</aside>
+ 
 </section>
 
 
@@ -884,7 +882,7 @@ let describe r =
   <div class="fragment"><div class="explain"><b>Recursive case:</b> the head contributes one element; assume <code>length rest</code> gives the rest.</div><pre><code>  | _ :: rest -&gt;
     <span class="fill">1 + length rest</span></code></pre></div></div></div>
  </div>
- <aside class="notes"><strong>Presenter note</strong>Reveal one branch at a time. Stress that the base case comes from [], and the recursive case is one current element plus the answer for the tail.</aside>
+ 
 </section>
 
 <section class="slide" data-title="Recursive minimum and let">
@@ -899,7 +897,7 @@ let describe r =
   | [] -&gt; invalid_arg "empty"</code></pre>
   <div class="callout">This combines all three core ideas: a list pattern chooses the case, recursion solves the suffix, and a local <code>let</code> names that recursive result exactly once.</div>
  </div>
- <aside class="notes"><strong>Presenter note</strong>Connect recursion back to let. Stress that min_nonempty xs is computed once, named m, and then reused in the comparison.</aside>
+ 
 </section>
 
 
@@ -921,7 +919,7 @@ let describe r =
    <div class="answer"></div>
   </div>
  </div>
- <aside class="notes"><strong>Presenter note</strong>Pause before revealing. Ask which choice both counts the current zero correctly and still recurses on the smaller tail.</aside>
+ 
 </section>
 
 
@@ -961,7 +959,7 @@ let describe r =
    </div>
   </div>
  </div>
- <aside class="notes"><strong>Presenter note</strong>Compare the same sum computation on both sides. Stress the single difference: non-tail recursion has pending work after the recursive call; tail recursion does not.</aside>
+ 
 </section>
 
 <section class="slide" id="stack-animation" data-title="Tail calls and the stack">
@@ -999,7 +997,7 @@ let describe r =
   </div>
   <p class="stack-hint">Arrow keys also step through the animation. After step 8, the next arrow advances the slide.</p>
  </div>
- <aside class="notes"><strong>Presenter note</strong>Use Next step or the right arrow to create each frame; Play advances automatically and stops at the result. Step 1 creates one frame per example. Steps 2–4 push ordinary calls upward while the same tail-loop frame changes its arguments. At step 4, count four ordinary frames versus one loop frame. Step 5 returns 0 on the left and 6 on the right. Steps 6–8 finish the waiting additions: 3 + 0, 2 + 3, 1 + 5. Stress that the right side computes each addition before the next call. Both take O(n) time; only the ordinary version grows the stack with input length. This diagram shows the recursive calls and omits fixed caller/wrapper overhead and the input list. Previous step reverses the demonstration; Restart clears it. Reference: <a href="https://ocaml.org/docs/loops-recursion">OCaml: Loops and Recursion</a>.</aside>
+ 
 </section>
 
 <section class="slide" data-title="Accumulator method">
@@ -1017,7 +1015,7 @@ let describe r =
    <div class="card"><h3>New base case</h3><p>Return the accumulated answer directly.</p></div>
   </div></div></div>
  </div>
- <aside class="notes"><strong>Presenter note</strong>Explain the accumulator as the partial answer so far. Stress that work moves before the recursive call, making the recursive call the final operation.</aside>
+ 
 </section>
 
 
@@ -1036,7 +1034,7 @@ let describe r =
    <div class="answer"></div>
   </div>
  </div>
- <aside class="notes"><strong>Presenter note</strong>Ask students to identify whether anything remains after each recursive call. Stress that syntactic position matters because it enables frame reuse.</aside>
+ 
 </section>
 
 
@@ -1073,7 +1071,7 @@ val add3 : int -&gt; int = &lt;fun&gt;
    </div>
   </div>
  </div>
- <aside class="notes"><strong>Presenter note</strong>Read int -&gt; int -&gt; int as int -&gt; (int -&gt; int). Stress currying and show that partial application returns another function.</aside>
+ 
 </section>
 
 <section class="slide" data-title="MCQ: function types">
@@ -1096,7 +1094,7 @@ let f = add 10</code></pre></div>
    <div class="answer"></div>
   </div>
  </div>
- <aside class="notes"><strong>Presenter note</strong>Pause and let them derive the remaining argument type. After revealing, stress that add 10 consumes only the first argument.</aside>
+ 
 </section>
 
 <section class="slide" data-title="Polymorphic types">
@@ -1128,7 +1126,7 @@ val first : 'a * 'b -&gt; 'a = &lt;fun&gt;</code></pre>
    </div>
   </div>
  </div>
- <aside class="notes"><strong>Presenter note</strong>Introduce 'a and 'b as type variables. Stress that the same variable repeated in one type means the same type must appear in those positions.</aside>
+ 
 </section>
 
 <section class="slide" data-title="MCQ: polymorphic type">
@@ -1151,12 +1149,12 @@ val first : 'a * 'b -&gt; 'a = &lt;fun&gt;</code></pre>
    <div class="answer"></div>
   </div>
  </div>
- <aside class="notes"><strong>Presenter note</strong>Ask students whether the two tuple components can have different types. Stress that both components are copies of the same x, so both are 'a.</aside>
+ 
 </section>
 
 <section class="slide section-slide" data-title="Part IV — Build map, filter, fold">
  <div class="inner"><span class="badge">Part IV · ~19 min</span><h1>Build <code>map</code>, <code>filter</code>, and <code>fold</code></h1><p class="lead">We will derive each function from the list datatype, one missing piece at a time.</p></div>
- <aside class="notes"><strong>Presenter note</strong>Transition to the coding exercises. Stress that these are not magic library functions; each will be derived from the same list recursion pattern.</aside>
+ 
 </section>
 
 <section class="slide" data-title="Map: specification">
@@ -1171,7 +1169,7 @@ map square [1;2;3]
   </div>
   <p class="lead">Expected type: <code>('a -&gt; 'b) -&gt; 'a list -&gt; 'b list</code></p>
  </div>
- <aside class="notes"><strong>Presenter note</strong>Start from behavior, not implementation. Stress that map preserves list length and order while changing each element's value and possibly its type.</aside>
+ 
 </section>
 
 <section class="slide" data-title="Map: derive the skeleton">
@@ -1183,7 +1181,7 @@ map square [1;2;3]
   <div class="fragment"><div class="explain"><b>Question:</b> if the input contains no elements, how many transformed elements should the output contain?</div></div>
   <div class="fragment"><pre><code>  | [] -&gt; <span class="fill">[]</span></code></pre><div class="explain">The output preserves list shape: empty maps to empty.</div></div></div></div>
  </div>
- <aside class="notes"><strong>Presenter note</strong>Reveal the empty-list branch first. Stress that the output shape for [] must also be [].</aside>
+ 
 </section>
 
 <section class="slide" data-title="Map: derive recursive case">
@@ -1197,7 +1195,7 @@ map square [1;2;3]
   <div class="fragment"><div class="explain"><b>Rebuild the list:</b> cons the transformed head onto the transformed tail.</div><pre><code>  | x :: rest -&gt;
     <span class="fill">f x :: map f rest</span></code></pre></div></div></div>
  </div>
- <aside class="notes"><strong>Presenter note</strong>Build the recursive branch in pieces. Stress: recursively map the tail, apply f to the head, then cons the transformed head onto the transformed tail.</aside>
+ 
 </section>
 
 <section class="slide" data-title="Map: complete implementation">
@@ -1209,7 +1207,7 @@ map square [1;2;3]
       f x :: map f rest</code></pre></div><div>
   <div class="trace">map square [1;2;3]<br>= square 1 :: map square [2;3]<br>= 1 :: (4 :: map square [3])<br>= 1 :: (4 :: (9 :: []))<br>= [1;4;9]</div></div></div>
  </div>
- <aside class="notes"><strong>Presenter note</strong>Show the finished function and connect each line back to the datatype structure. Keep the trace brief; the key point is preserving order and shape.</aside>
+ 
 </section>
 
 
@@ -1232,7 +1230,7 @@ map add_pair [(1, 2); (3, 4)]</code></pre></div>
    <div class="answer"></div>
   </div>
  </div>
- <aside class="notes"><strong>Presenter note</strong>Let students compute each mapped element independently. Stress that map changes values one-for-one and preserves the list structure.</aside>
+ 
 </section>
 
 <section class="slide" data-title="Filter: specification">
@@ -1244,7 +1242,7 @@ filter is_even [1;2;3;4]
   <div class="callout">Unlike <code>map</code>, the output may be shorter. But the surviving elements stay in their original order.</div>
   <p class="lead">Expected type: <code>('a -&gt; bool) -&gt; 'a list -&gt; 'a list</code></p>
  </div>
- <aside class="notes"><strong>Presenter note</strong>Contrast filter with map. Stress that filter preserves order but may shorten the list because each element is either kept or dropped.</aside>
+ 
 </section>
 
 <section class="slide" data-title="Filter: derive the base case">
@@ -1255,7 +1253,7 @@ filter is_even [1;2;3;4]
   | x :: rest -&gt; <span class="placeholder">?</span></code></pre></div><div>
   <div class="fragment"><div class="explain">There are no elements to keep from the empty list.</div><pre><code>  | [] -&gt; <span class="fill">[]</span></code></pre></div></div></div>
  </div>
- <aside class="notes"><strong>Presenter note</strong>Reveal only the base case first. Stress that there are no elements to keep from an empty list.</aside>
+ 
 </section>
 
 <section class="slide" data-title="Filter: derive the recursive case">
@@ -1267,7 +1265,7 @@ filter is_even [1;2;3;4]
     else
       <span class="placeholder">?</span></code></pre></div><div><div class="fragment"><h3>Test the current element</h3><p><code>keep x</code> decides whether <code>x</code> belongs in the result.</p></div><div class="fragment"><h3>True: keep <code>x</code></h3><pre><code><span class="fill">x :: filter keep rest</span></code></pre><p>Preserve the head and filter the tail.</p></div></div></div>
  </div>
- <aside class="notes"><strong>Presenter note</strong>Start with the predicate decision. Reveal the true case only. Stress that :: retains the current element and the recursive call processes the smaller tail. Ask what should change when keep x is false.</aside>
+ 
 </section>
 
 <section class="slide" data-title="Filter: drop the head">
@@ -1279,7 +1277,7 @@ filter is_even [1;2;3;4]
     else
       <span class="placeholder">?</span></code></pre></div><div><div class="fragment"><h3>False: drop <code>x</code></h3><pre><code><span class="fill">filter keep rest</span></code></pre><p>The result is just the filtered tail.</p></div><div class="fragment"><div class="callout">Both branches recurse. Only the true branch adds <code>x</code> to the result.</div></div></div></div>
  </div>
- <aside class="notes"><strong>Presenter note</strong>Reveal the false branch and ask why there is no :: here. Stress that dropping the head still requires filtering the remaining elements. The next slide brings both branches together.</aside>
+ 
 </section>
 
 <section class="slide" data-title="Filter: complete implementation">
@@ -1295,7 +1293,7 @@ filter is_even [1;2;3;4]
         filter keep rest</code></pre>
   <p class="lead">Compare with <code>map</code>: both recurse on the tail; <code>filter</code> sometimes omits the current head.</p>
  </div>
- <aside class="notes"><strong>Presenter note</strong>Show the final code and compare mentally with map. Stress that the recursive structure is the same; only the combine rule changes.</aside>
+ 
 </section>
 
 
@@ -1315,7 +1313,7 @@ filter long_enough ["a"; "ocaml"; "ml"; "fun"]</code></pre></div>
    <div class="answer"></div>
   </div>
  </div>
- <aside class="notes"><strong>Presenter note</strong>Ask students to test the predicate on each string. Stress that filter never transforms the surviving elements; it only selects them.</aside>
+ 
 </section>
 
 <section class="slide" data-title="Fold: specification">
@@ -1330,7 +1328,7 @@ filter long_enough ["a"; "ocaml"; "ml"; "fun"]</code></pre></div>
   </div>
   <p class="lead">Expected type: <code>('acc -&gt; 'a -&gt; 'acc) -&gt; 'acc -&gt; 'a list -&gt; 'acc</code></p>
  </div>
- <aside class="notes"><strong>Presenter note</strong>Introduce fold as carrying a running result. Stress the roles of the accumulator and step function, and read the type slowly.</aside>
+ 
 </section>
 
 <section class="slide" data-title="Fold: derive the base case">
@@ -1341,7 +1339,7 @@ filter long_enough ["a"; "ocaml"; "ml"; "fun"]</code></pre></div>
   | x :: rest -&gt; <span class="placeholder">?</span></code></pre></div><div>
   <div class="fragment"><div class="explain">The accumulator already is the answer built from every element processed so far.</div><pre><code>  | [] -&gt; <span class="fill">acc</span></code></pre></div></div></div>
  </div>
- <aside class="notes"><strong>Presenter note</strong>Ask what remains when the input list is empty. Stress that the accumulator already contains the answer built so far.</aside>
+ 
 </section>
 
 <section class="slide" data-title="Fold: derive the recursive case">
@@ -1353,7 +1351,7 @@ filter long_enough ["a"; "ocaml"; "ml"; "fun"]</code></pre></div>
   <div class="fragment"><div class="explain"><b>Continue:</b> process the smaller tail using that updated accumulator.</div><pre><code>let acc' = step acc x in
 <span class="fill">fold_left step acc' rest</span></code></pre></div></div></div>
  </div>
- <aside class="notes"><strong>Presenter note</strong>Show the update-then-recurse structure. Stress that step acc x creates the next accumulator before the recursive call.</aside>
+ 
 </section>
 
 <section class="slide" data-title="Fold: complete implementation">
@@ -1369,7 +1367,7 @@ filter long_enough ["a"; "ocaml"; "ml"; "fun"]</code></pre></div>
   → fold_left (+) 6 []<br>
   → 6</div></div></div>
  </div>
- <aside class="notes"><strong>Presenter note</strong>Point out that fold_left is tail-recursive by construction. Stress how each element is consumed exactly once as the accumulator changes.</aside>
+ 
 </section>
 
 <section class="slide" data-title="Map, filter, fold compared">
@@ -1384,7 +1382,7 @@ filter long_enough ["a"; "ocaml"; "ml"; "fun"]</code></pre></div>
    </tbody>
   </table>
  </div>
- <aside class="notes"><strong>Presenter note</strong>Use the table to unify the three functions. Stress that they share the same list traversal but differ in how they combine the current element with the recursive state.</aside>
+ 
 </section>
 
 
@@ -1404,7 +1402,7 @@ fold_left append_digit 0 [3;1;4]</code></pre></div>
    <div class="answer"></div>
   </div>
  </div>
- <aside class="notes"><strong>Presenter note</strong>Have students write the accumulator after each element: 0, 3, 31, 314. Stress left-to-right order.</aside>
+ 
 </section>
 
 <section class="slide" data-title="Re-express sum with fold">
@@ -1422,12 +1420,12 @@ fold_left append_digit 0 [3;1;4]</code></pre></div>
   </div>
   <p class="lead">Higher-order functions package common recursive traversal patterns into reusable operations.</p>
  </div>
- <aside class="notes"><strong>Presenter note</strong>Show that fold packages a common recursion pattern. Stress that the caller now supplies only the combining operation and initial accumulator.</aside>
+ 
 </section>
 
 <section class="slide section-slide" data-title="Part V — Connection to compilers">
  <div class="inner"><span class="badge">Part V · ~6 min</span><h1>From lists to ASTs</h1><p class="lead">The same design method applies to compiler data: inspect the constructors, write one branch per constructor, recurse into recursive children.</p></div>
- <aside class="notes"><strong>Presenter note</strong>Transition from lists to compiler data structures. Stress that AST traversal uses the exact same constructor-by-constructor recursion pattern.</aside>
+ 
 </section>
 
 <section class="slide" data-title="Recursive AST">
@@ -1442,7 +1440,7 @@ fold_left append_digit 0 [3;1;4]</code></pre></div>
    <div class="card"><h3>Recursive constructors</h3><p><code>Add</code> and <code>Mul</code> contain two smaller expressions.</p></div>
   </div></div></div>
  </div>
- <aside class="notes"><strong>Presenter note</strong>Identify the base constructors and recursive constructors. Stress that Add and Mul contain smaller expr values, which is why recursion is natural.</aside>
+ 
 </section>
 
 <section class="slide" data-title="Build AST size">
@@ -1460,7 +1458,7 @@ fold_left append_digit 0 [3;1;4]</code></pre></div>
 | Mul (a,b) -&gt;
     <span class="fill">1 + size a + size b</span></code></pre></div></div></div>
  </div>
- <aside class="notes"><strong>Presenter note</strong>Reveal leaves first, then binary nodes. Stress that each branch mirrors one datatype constructor and recursive calls follow the recursive fields.</aside>
+ 
 </section>
 
 <section class="slide ast-task" data-title="Exercise: implement an AST type checker and evaluator"><div class="inner"><div class="kicker">AST exercise · Your task</div><h2>Implement a type checker and an evaluator</h2><div class="grid2"><div><h3>Expression constructors</h3><pre><code>type expr =
@@ -1479,7 +1477,7 @@ type value =
         -&gt; expr -&gt; typ
 
 eval : (string * value) list
-       -&gt; expr -&gt; value</code></pre></div></div><p class="small"><code>Let (name, bound, body)</code> represents <code>let name = bound in body</code>. Use explicit <code>match e with</code> and start with <code>[]</code>.</p></div><aside class="notes"><strong>Presenter note</strong>Give students 6–8 minutes across these two task slides. This extends the earlier AST only for this exercise; the earlier node-counting example remains about the smaller language. Explain the distinction between syntax Int/Bool, types TInt/TBool, and computed values VInt/VBool. The evaluator now returns a tagged value so its result can be either kind. Do not reveal implementations before students attempt them. Let is non-recursive and this language has no function types or let-polymorphism.</aside></section>
+       -&gt; expr -&gt; value</code></pre></div></div><p class="small"><code>Let (name, bound, body)</code> represents <code>let name = bound in body</code>. Use explicit <code>match e with</code> and start with <code>[]</code>.</p></div></section>
 <section class="slide ast-task" data-title="Exercise: typing and evaluation rules"><div class="inner"><div class="kicker">AST exercise · Your task</div><h2>Check types before evaluating</h2><table class="table"><thead><tr><th>Expression</th><th>Type-checking requirement</th><th>Evaluation</th></tr></thead><tbody>
 <tr><td><code>Int / Bool</code></td><td>Return <code>TInt / TBool</code></td><td>Return <code>VInt / VBool</code></td></tr>
 <tr><td><code>Var name</code></td><td>Look up its type</td><td>Look up its value</td></tr>
@@ -1487,7 +1485,7 @@ eval : (string * value) list
 <tr><td><code>Lt (a,b)</code></td><td>Two integers; result is boolean</td><td>Compare the integers</td></tr>
 <tr><td><code>If (c,t,f)</code></td><td>Boolean condition; both branches have the same type</td><td>Evaluate only the selected branch</td></tr>
 <tr><td><code>Let (n,b,e)</code></td><td>Check the bound expression and body with correct scope</td><td>Evaluate the binding, then its body with correct scope</td></tr>
-</tbody></table><p class="small"><b>Environment:</b> newest binding first. <code>List.assoc name env</code> finds the first match; an absent name raises <code>Not_found</code>. Reject type mismatches with <code>failwith "type error"</code>.</p><p class="small"><b>Tests:</b> accept <code>if 2 &lt; 3 then 4 else 5</code>; reject <code>1 + true</code>, <code>if 0 then 1 else 2</code>, and <code>if true then 1 else false</code>. Also test shadowing and unbound variables.</p></div><aside class="notes"><strong>Presenter note</strong>Infer must recursively check both If branches even when the condition is a literal true or false. Its result is the common branch type, which may be TInt or TBool. Eval evaluates the condition and only the selected branch; it does not evaluate both branches in advance. Run infer [] ast before eval [] ast; runtime tag mismatches can also raise an error. For Let, have students determine which recursive call needs the original environment and which needs its extension. First-class functions, implicit conversions and recursive let are outside this language. Students may write their own lookup if desired. Ask them to construct ASTs for the listed tests. The next two MCQs check the Let case using both integer and boolean bindings.</aside></section>
+</tbody></table><p class="small"><b>Environment:</b> newest binding first. <code>List.assoc name env</code> finds the first match; an absent name raises <code>Not_found</code>. Reject type mismatches with <code>failwith "type error"</code>.</p><p class="small"><b>Tests:</b> accept <code>if 2 &lt; 3 then 4 else 5</code>; reject <code>1 + true</code>, <code>if 0 then 1 else 2</code>, and <code>if true then 1 else false</code>. Also test shadowing and unbound variables.</p></div></section>
 
 <section class="slide ast-exercise" data-title="MCQ: type-check an AST let">
  <div class="inner">
@@ -1509,12 +1507,7 @@ infer ((name, t) :: env) bound</code></pre></button></div>
    <div class="answer"></div>
   </div>
  </div>
- <aside class="notes"><strong>Presenter note</strong>Pause before clicking B. The two environments carry types, not computed values. Trace x : TInt and ok : TBool. Infer must check the condition and both branches, including the nested Let in the true branch. Ask what happens if the else expression is changed to Bool false: type error. A omits the new binding, C ignores the body, and D reverses bound and body.<p>Running AST:</p><pre><code>Let (&quot;x&quot;, Int 3,
-  Let (&quot;ok&quot;, Lt (Var &quot;x&quot;, Int 5),
-    If (Var &quot;ok&quot;,
-      Let (&quot;x&quot;, Add (Var &quot;x&quot;, Int 1),
-        Mul (Var &quot;x&quot;, Int 2)),
-      Var &quot;x&quot;)))</code></pre></aside>
+ 
 </section>
 
 <section class="slide ast-exercise" data-title="MCQ: evaluate an AST let">
@@ -1537,12 +1530,7 @@ eval ((name, value) :: env) bound</code></pre></button></div>
    <div class="answer"></div>
   </div>
  </div>
- <aside class="notes"><strong>Presenter note</strong>Pause before clicking C, and ask students for the tagged return value: VInt 8. Evaluate x < 5 to VBool true. Only the true branch is evaluated; its inner bound expression uses the outer x = 3, and its body uses the new x = 4. A stops too early, B omits the binding, and D evaluates the body before introducing the variable. Contrast eval selecting one If branch with infer checking both.<p>Running AST:</p><pre><code>Let (&quot;x&quot;, Int 3,
-  Let (&quot;ok&quot;, Lt (Var &quot;x&quot;, Int 5),
-    If (Var &quot;ok&quot;,
-      Let (&quot;x&quot;, Add (Var &quot;x&quot;, Int 1),
-        Mul (Var &quot;x&quot;, Int 2)),
-      Var &quot;x&quot;)))</code></pre></aside>
+ 
 </section>
 
 <section class="slide" data-title="Exit check">
@@ -1556,7 +1544,7 @@ eval ((name, value) :: env) bound</code></pre></button></div>
   <div class="rule"></div>
   <p class="big">Map, filter, fold, and AST traversals are all variations of the same idea: <span class="em">follow the data structure.</span></p>
  </div>
- <aside class="notes"><strong>Presenter note</strong>Close by tying together the three core ideas: local bindings, patterns, and structural recursion. Stress that map/filter/fold and AST traversals are all instances of following datatype structure.</aside>
+ 
 </section>
 
 <div class="overview" id="overview"><h2>Slide overview</h2><div class="ogrid" id="ogrid"></div></div>
@@ -1566,7 +1554,7 @@ eval ((name, value) :: env) bound</code></pre></button></div>
  const slides=[...document.querySelectorAll('.slide')], counter=document.getElementById('counter'),
  progress=document.getElementById('progress'), overview=document.getElementById('overview'),
  ogrid=document.getElementById('ogrid');
- let index=0, presenterWin=null;
+ let index=0;
 
  function currentFragments(){
    return [...slides[index].querySelectorAll('.fragment')];
@@ -1620,8 +1608,6 @@ eval ((name, value) :: env) bound</code></pre></button></div>
    counter.textContent=`${index+1} / ${slides.length}`;
    progress.style.width=`${((index+1)/slides.length)*100}%`;
    document.title=`${slides[index].dataset.title || 'OCaml Tutorial'} · COMS W4115`;
-   document.querySelectorAll('.notes').forEach(n=>n.classList.remove('show'));
-   updatePresenterNotes();
    fitActiveSlide();
    if(hash) history.replaceState(null,'',`#${index+1}`);
  }
@@ -1638,69 +1624,6 @@ eval ((name, value) :: env) bound</code></pre></button></div>
    show(index-1);
  }
 
- function notesForSlide(i){
-   const note=slides[i].querySelector('.notes');
-   if(slides[i]===stackSlide) return note.innerHTML+'<p><b>Current animation step '+stackStep+'/8:</b> '+stackCaptions[stackStep]+'</p>';
-   return note ? note.innerHTML : '<span style="color:#7a8794">No presenter notes for this slide.</span>';
- }
-
- function presenterHtml(){
-   const title=slides[index].dataset.title || 'Slide';
-   const note=notesForSlide(index);
-   const nextTitle=index+1<slides.length ? (slides[index+1].dataset.title || 'Next slide') : 'End of deck';
-   return `<!doctype html>
-<html>
-<head>
-<meta charset="utf-8">
-<title>Presenter Notes · ${title}</title>
-<style>
-html,body{margin:0;background:#f6f7f9;color:#17212b;font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
-body{padding:24px}
-.meta{font-size:13px;color:#667789;margin-bottom:8px}
-h1{font-size:28px;line-height:1.15;margin:0 0 18px}
-.notes{display:block!important;position:static!important;width:auto!important;max-height:none!important;overflow:visible!important;
-padding:18px 20px;background:#fff8df;border:1px solid #e7d49a;border-radius:14px;
-box-shadow:none;font-size:17px;line-height:1.55;color:#4f431f}
-.notes strong{display:block;margin-bottom:8px}
-.next{margin-top:18px;padding:14px 16px;background:white;border:1px solid #d9dee7;border-radius:12px}
-.next .label{font-size:12px;text-transform:uppercase;letter-spacing:.08em;color:#6b7c8c;font-weight:800}
-.next .title{font-size:18px;font-weight:750;margin-top:4px}
-.hint{margin-top:16px;font-size:12px;color:#7c8b99}
-</style>
-</head>
-<body>
-<div class="meta">Slide ${index+1} of ${slides.length}</div>
-<h1>${title}</h1>
-<div class="notes">${note}</div>
-<div class="next"><div class="label">Next</div><div class="title">${nextTitle}</div></div>
-<div class="hint">This window follows the presentation automatically.</div>
-</body>
-</html>`;
- }
-
- function updatePresenterNotes(){
-   if(!presenterWin || presenterWin.closed) return;
-   presenterWin.document.open();
-   presenterWin.document.write(presenterHtml());
-   presenterWin.document.close();
- }
-
- function togglePresenterNotes(){
-   if(presenterWin && !presenterWin.closed){
-     presenterWin.close();
-     presenterWin=null;
-     return;
-   }
-   presenterWin=window.open('', 'ocaml-presenter-notes',
-     'popup=yes,width=520,height=720,resizable=yes,scrollbars=yes');
-   if(!presenterWin){
-     alert('The presenter-notes window was blocked by the browser. Allow pop-ups for this file and press N again.');
-     return;
-   }
-   updatePresenterNotes();
-   presenterWin.focus();
- }
-
  document.fonts?.ready.then(fitActiveSlide);
  window.addEventListener('resize', fitActiveSlide);
  document.addEventListener('fullscreenchange', fitActiveSlide);
@@ -1714,7 +1637,6 @@ box-shadow:none;font-size:17px;line-height:1.55;color:#4f431f}
    else if(e.key==='Home')show(0);
    else if(e.key==='End')show(slides.length-1);
    else if(e.key.toLowerCase()==='o')overview.classList.toggle('show');
-   else if(e.key.toLowerCase()==='n'){togglePresenterNotes();}
    else if(e.key.toLowerCase()==='f'){if(!document.fullscreenElement)document.documentElement.requestFullscreen?.();else document.exitFullscreen?.();}
  });
  document.querySelectorAll('.question').forEach(q=>{
@@ -1788,7 +1710,6 @@ box-shadow:none;font-size:17px;line-height:1.55;color:#4f431f}
    document.getElementById('stack-back').disabled=stackStep===0;
    document.getElementById('stack-next').disabled=stackStep===8;
    fitActiveSlide();
-   updatePresenterNotes();
  }
  function stepStack(delta){
    pauseStack();
