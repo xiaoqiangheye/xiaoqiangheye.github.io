@@ -352,6 +352,7 @@ table.grid.sm2 th,table.grid.sm2 td{height:30px;min-width:46px;font-size:17px;pa
 #se-tr tr.anim,#se-cmp tr.anim{animation:itin .4s ease both}
 .flog .anim{animation:itin .4s ease both}
 @media (prefers-reduced-motion: reduce){*,*::before{animation:none!important;transition:none!important}}
+html.fs .nav,html.fs .notes{display:none!important}html.fs .vp{padding-block:0}
 </style>
 
 <div class="vp" id="vp"><div class="stagebox" id="stagebox"><div class="stage" id="stage">
@@ -652,6 +653,7 @@ table.grid.sm2 th,table.grid.sm2 td{height:30px;min-width:46px;font-size:17px;pa
   <select id="jump" aria-label="Jump to slide"></select>
   <button id="next" aria-label="Next step">▶</button>
   <button id="nbtn" title="Presenter notes (N)">Notes</button>
+  <button id="fsbtn" title="Full screen (F)">Full screen</button>
 </nav>
 
 <script>
@@ -668,7 +670,7 @@ const sub=n=>String(n).split('').map(c=>'₀₁₂₃₄₅₆₇₈₉'[c]).joi
 slides.forEach((s,i)=>{
   s.insertAdjacentHTML('beforeend',`<div class="foot">COMS W4115 · COLUMBIA UNIVERSITY</div><div class="snum"><span class="sdots"></span><span>${i+1} / ${N}</span></div>`);
   const o=document.createElement('option');o.value=i;o.textContent=`${i+1}. ${(s.querySelector('h1,h2')||{}).textContent||''}`.replace(/\s+/g,' ');document.getElementById('jump').appendChild(o);});
-function fit(){const w=vp.clientWidth,h=vp.clientHeight-20;const k=Math.max(.1,Math.min(w/1600,h/900));stage.style.transform=`scale(${k})`;box.style.width=1600*k+'px';box.style.height=900*k+'px';}
+function fit(){const w=vp.clientWidth,h=vp.clientHeight-(document.documentElement.classList.contains('fs')?0:20);const k=Math.max(.1,Math.min(w/1600,h/900));stage.style.transform=`scale(${k})`;box.style.width=1600*k+'px';box.style.height=900*k+'px';}
 function scaleK(){return stage.getBoundingClientRect().width/1600;}
 // fragment slides
 slides.forEach((s,i)=>{const fr=[...s.querySelectorAll('[data-step]')];if(!fr.length)return;const max=Math.max(...fr.map(f=>+f.dataset.step));
@@ -698,7 +700,7 @@ document.getElementById('jump').onchange=e=>go(+e.target.value);
 document.addEventListener('keydown',e=>{if(e.target.tagName==='SELECT')return;
   if(['ArrowRight','PageDown',' '].includes(e.key)){stopPlay();fwd();e.preventDefault();}
   if(['ArrowLeft','PageUp'].includes(e.key)){stopPlay();back();e.preventDefault();}});
-window.addEventListener('resize',fit);
+window.addEventListener('resize',fit);function toggleFS(){const d=document;try{if(d.fullscreenElement||d.webkitFullscreenElement){(d.exitFullscreen||d.webkitExitFullscreen).call(d);}else{const r=(d.documentElement.requestFullscreen||d.documentElement.webkitRequestFullscreen);const p=r&&r.call(d.documentElement);if(p&&p.catch)p.catch(()=>{});}}catch(e){}}document.getElementById('fsbtn').onclick=toggleFS;document.addEventListener('keydown',e=>{if(e.target.tagName==='SELECT')return;if(e.key==='f'||e.key==='F'){toggleFS();e.preventDefault();}});['fullscreenchange','webkitfullscreenchange'].forEach(ev=>document.addEventListener(ev,()=>{document.documentElement.classList.toggle('fs',!!(document.fullscreenElement||document.webkitFullscreenElement));setTimeout(fit,50);}));
 function showF(root,k){root.querySelectorAll('[data-f]').forEach(el=>{const f=+el.dataset.f;el.classList.toggle('on',f<=k);el.classList.toggle('now',f===k);});}
 function capSet(el,html,anim){el.innerHTML=html;if(anim){el.classList.remove('flash');void el.offsetWidth;el.classList.add('flash');}}
 function mk(p,t,a){const e=document.createElementNS('http://www.w3.org/2000/svg',t);for(const k in a)e.setAttribute(k,a[k]);p.appendChild(e);return e;}
