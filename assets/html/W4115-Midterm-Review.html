@@ -1,0 +1,1269 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>W4115 Midterm Review</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400..900&display=swap">
+<style>
+/* Layout: the lecture decks' 1600×900 white stage (padding 44/84/58), scaled to fit; single light theme to match the course slides. */
+:root{
+  color-scheme:light;
+  --accent:#b62645; --accent-dark:#851a33; --accent-pale:#f7e7eb; --accent-wash:#fcf4f6; --added:#f8e7ec; --hot:#f5dce5;
+  --ink:#111318; --muted:#626a77; --quiet:#9aa0aa; --line:#dfe1e6; --paper:#ffffff; --panel:#f5f6f8; --outer:#e8eaee; --edge:#747d8b;
+  --code:#151821; --code-ink:#f7f7fa; --kw:#ff8fad; --num:#ffd580; --cmt:#8e95a3;
+  --good:#16705a; --good-pale:#e7f5ef; --warn:#9a5a08; --warn-pale:#fff2dc; --bad:#b3261e; --bad-pale:#fdebea;
+  --f-sans:"Inter","Helvetica Neue",Helvetica,Arial,sans-serif;
+  --f-mono:"SFMono-Regular",Consolas,"Liberation Mono",Menlo,monospace;
+}
+html,body{height:100%}
+body{background:var(--outer);color:var(--ink);font-family:var(--f-sans);display:flex;flex-direction:column;box-sizing:border-box;overflow:hidden;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:0}
+.vp{flex:1;min-height:0;display:grid;place-items:center;padding-block:10px}
+.stagebox{position:relative}
+.stage{position:absolute;left:0;top:0;width:1600px;height:900px;transform-origin:0 0;background:var(--paper);overflow:hidden;box-shadow:0 12px 40px rgba(17,19,24,.12)}
+.nav{display:flex;align-items:center;gap:8px;justify-content:center;flex-wrap:wrap;padding-block:6px calc(8px + env(safe-area-inset-bottom,0px))}
+.nav button,.nav select{font:700 14px var(--f-sans);color:var(--ink);background:var(--paper);border:2px solid var(--line);border-radius:0;padding:6px 12px;cursor:pointer}
+.nav select{max-width:min(380px,58vw)}
+.nav button:hover,.nav select:hover{border-color:var(--accent)}
+button:focus-visible,select:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+
+/* ---- slide frame (matches lecture: eyebrow → h2 → body; footer link bottom-left; number + chevrons bottom-right) ---- */
+.slide{position:absolute;inset:0;padding:44px 84px 58px;display:none;flex-direction:column;box-sizing:border-box}
+.slide.on{display:flex;animation:slidein .4s ease}
+@keyframes slidein{from{opacity:0;transform:translateX(18px)}to{opacity:1;transform:none}}
+.eyebrow{font:800 20px/1.2 var(--f-sans);letter-spacing:.13em;color:var(--accent);margin:0 0 18px}
+h1,h2,h3{font-family:var(--f-sans);letter-spacing:-.035em;margin:0;text-wrap:balance}
+h1{font-size:102px;font-weight:780;line-height:.98;max-width:13ch;margin-bottom:28px}
+h2{font-size:56px;font-weight:750;line-height:1.06;margin-bottom:26px}
+h3{font-size:26px;font-weight:750;letter-spacing:-.02em;margin-bottom:8px}
+p{margin:0;line-height:1.42}
+.lead{font-size:31px;line-height:1.4;color:var(--muted);max-width:52ch}
+.meta{font:680 22px var(--f-sans);color:var(--quiet);letter-spacing:.04em;margin-top:30px}
+.body{flex:1;min-height:0;display:flex;flex-direction:column;gap:22px;font-size:23px}
+.row{display:flex;flex-direction:row;gap:28px;min-height:0}
+.col{display:flex;flex-direction:column;gap:14px;min-width:0}
+.cols{display:grid;gap:28px;min-height:0}
+.c2{grid-template-columns:1fr 1fr}.c3{grid-template-columns:repeat(3,1fr)}.c21{grid-template-columns:1.3fr 1fr}.c12{grid-template-columns:1fr 1.3fr}
+.panel{background:var(--panel);padding:18px 22px;min-width:0}
+.rulecard{border-top:3px solid var(--line);padding-top:14px;min-width:0}
+.rulecard.hot{border-color:var(--accent)}
+.answer{border-left:5px solid var(--accent);background:var(--accent-wash);padding:14px 20px;min-width:0}
+.label{font:800 18px/1.2 var(--f-sans);letter-spacing:.06em;color:var(--accent-dark);margin-bottom:10px;text-transform:uppercase}
+.muted{color:var(--muted)}
+.small{font-size:20px}
+ul.pts{margin:0;padding-left:24px;display:flex;flex-direction:column;gap:9px;line-height:1.38}
+ul.pts li::marker{color:var(--accent)}
+code,.mono{font-family:var(--f-mono);font-size:.9em}
+pre{font:400 21px/1.5 var(--f-mono);background:var(--code);color:var(--code-ink);padding:16px 22px;margin:0;overflow-x:auto;white-space:pre}
+pre .k{color:var(--kw)} pre .n{color:var(--num)} pre .c{color:var(--cmt)}
+.gram{font:400 22px/1.75 var(--f-mono);background:var(--panel);padding:14px 20px}
+.gram .rn{color:var(--muted);margin-right:14px}
+.dot{color:var(--accent-dark);font-weight:900}
+.hl{color:var(--accent-dark);font-weight:750}
+.warn{color:var(--bad);font-weight:750}
+table.t{border-collapse:collapse;width:100%}
+table.t th,table.t td{border-bottom:2px solid var(--line);padding:9px 12px;text-align:left;vertical-align:top}
+table.t.tight th,table.t.tight td{padding:5px 10px}
+table.t th{font:800 17px var(--f-sans);letter-spacing:.06em;text-transform:uppercase;color:var(--accent-dark);background:var(--panel)}
+.foot{position:absolute;left:84px;bottom:22px;font:700 16px var(--f-sans);letter-spacing:.1em;color:var(--quiet)}
+.snum{position:absolute;right:150px;bottom:22px;font:700 16px var(--f-sans);letter-spacing:.08em;color:var(--quiet);text-decoration:underline;text-underline-offset:5px;display:flex;gap:14px;align-items:center}
+.sdots{display:flex;gap:5px}
+.sdots i{width:9px;height:9px;background:var(--line);display:block}
+.sdots i.on{background:var(--accent)}
+.chev{position:absolute;bottom:10px;width:48px;height:48px;border:0;background:none;color:var(--accent);font:300 52px/40px var(--f-sans);cursor:pointer;z-index:20;padding:0}
+.chev.l{right:78px}.chev.r{right:26px}
+.chev:disabled{opacity:.25;cursor:default}
+.prog{position:absolute;left:0;right:0;bottom:0;height:8px;background:var(--accent-pale);z-index:19}
+.prog span{display:block;height:100%;background:var(--accent);transition:width .35s}
+/* section-break slides, as in the lecture decks */
+.slide.accent{background:var(--accent);color:#fff;justify-content:center;padding-bottom:70px}
+.slide.accent .eyebrow{color:#fff}
+.slide.accent .foot,.slide.accent .snum{color:rgba(255,255,255,.62)}
+.slide.accent h2{font-size:84px;max-width:15ch;line-height:1}
+.slide.accent .lead{color:rgba(255,255,255,.86);max-width:46ch}
+.slide.title{justify-content:center;padding-bottom:70px}
+
+/* build steps */
+[data-step]{opacity:0;transform:translateY(14px);transition:opacity .45s ease,transform .45s ease}
+[data-step].shown{opacity:1;transform:none}
+.fx{opacity:0;transition:opacity .4s ease,transform .4s ease}
+.fx.on{opacity:1}
+div.fx,li.fx,tr.fx,span.fx{transform:translateY(8px)} div.fx.on,li.fx.on,tr.fx.on,span.fx.on{transform:none}
+
+/* choices (lecture .choice-button) */
+.mcq{display:flex;flex-direction:column;gap:12px;min-width:0}
+.mcq .q{font-size:25px;line-height:1.38}
+.opts{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:10px;counter-reset:o}
+.opt{counter-increment:o;width:100%;display:flex;gap:16px;align-items:center;text-align:left;font:720 21px/1.32 var(--f-sans);color:var(--ink);background:var(--paper);
+  border:2px solid var(--line);border-radius:0;padding:11px 16px;min-height:58px;cursor:pointer;transition:border-color .12s,background .12s,color .12s,transform .12s}
+.opt code{font-weight:400}
+.opt::before{content:counter(o,upper-alpha);font:820 16px var(--f-sans);border:2px solid currentColor;min-width:26px;height:26px;display:grid;place-items:center;flex:none;color:var(--accent-dark)}
+.opt:hover{border-color:var(--accent);transform:translateY(-1px)}
+.opt.right{border-color:var(--good);background:var(--good-pale);color:var(--good)}
+.opt.right::before{content:"✓";color:var(--good)}
+.opt.wrong{border-color:var(--bad);background:var(--bad-pale);color:var(--bad);animation:shake .3s}
+.opt.wrong::before{content:"✗";color:var(--bad)}
+@keyframes shake{25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
+.why{font-size:21px;line-height:1.42;border-left:5px solid var(--accent);background:var(--accent-wash);padding:12px 18px}
+.why[hidden]{display:none}
+.qbar{display:flex;gap:12px}
+.btn{font:720 19px var(--f-sans);border:2px solid var(--accent);background:var(--paper);color:var(--accent);border-radius:0;padding:9px 16px;cursor:pointer;transition:transform .12s,background .12s}
+.btn:hover{transform:translateY(-1px)}
+.btn.pri{background:var(--accent);color:#fff}
+.btn.sec{border-color:var(--line);color:var(--muted)}
+.btn[disabled]{background:#eef0f3;border-color:#c9ced6;color:#515966;cursor:default;transform:none}
+.stepn{font:700 17px var(--f-sans);letter-spacing:.06em;color:var(--quiet)}
+.qtag{font:800 17px var(--f-sans);letter-spacing:.12em;color:var(--accent)}
+.dctl{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.cap{font-size:22px;line-height:1.42;border-left:5px solid var(--accent);background:var(--accent-wash);padding:12px 18px;min-height:96px;box-sizing:border-box}
+.cap.flash{animation:capin .4s ease}
+@keyframes capin{from{opacity:.2;transform:translateX(-8px)}to{opacity:1;transform:none}}
+
+/* pipeline */
+.pipe{display:flex;align-items:stretch}
+.pipe .node{background:var(--panel);padding:16px 12px;text-align:center;flex:1;min-width:0;border-top:4px solid var(--line)}
+.pipe .node.k{border-color:var(--accent)}
+.pipe .node b{display:block;font:800 23px var(--f-sans);letter-spacing:-.01em}
+.pipe .node span{font:17px var(--f-mono);color:var(--muted)}
+.pipe .arr{width:118px;flex:none;display:flex;flex-direction:column;align-items:center;justify-content:center;font:800 15px var(--f-sans);letter-spacing:.06em;color:var(--accent)}
+.pipe .arr::after{content:"⟶";font-size:30px;line-height:1;color:var(--edge)}
+
+/* automata / trees */
+svg text{font-family:var(--f-mono)}
+.fsm .st circle{fill:var(--paper);stroke:var(--edge);stroke-width:2}
+.fsm .st text{fill:var(--ink);font-family:var(--f-sans);font-weight:700}
+.fsm .st .ring{fill:none;stroke:var(--edge);stroke-width:1.6;opacity:0;transition:opacity .4s}
+.fsm .st.final .ring{opacity:1}
+.fsm .st.lit circle.o{fill:var(--hot);stroke:var(--accent);stroke-width:3}
+.fsm .st.sel circle.o{stroke:var(--accent);stroke-width:3.5}
+.fsm .ed path{fill:none;stroke:var(--edge);stroke-width:1.8}
+.fsm .ed text{fill:var(--ink);font-size:15px;font-weight:700;paint-order:stroke;stroke:var(--paper);stroke-width:6px;stroke-linejoin:round}
+.fsm .ed.lit path{stroke:var(--accent);stroke-width:3}
+.fsm .ed.lit text{fill:var(--accent-dark)}
+.auto .st{opacity:0;transform:scale(.5);transform-box:fill-box;transform-origin:center;transition:opacity .4s,transform .45s cubic-bezier(.3,1.5,.5,1);cursor:pointer}
+.auto .st.on{opacity:1;transform:none}
+.auto .ed{opacity:0;transition:opacity .4s}
+.auto .ed.on{opacity:1}
+.auto .ed path{stroke-dasharray:var(--len);stroke-dashoffset:var(--len)}
+.auto .ed.on path{stroke-dashoffset:0;transition:stroke-dashoffset .7s ease}
+.auto .ed.fresh path{stroke:var(--accent);stroke-width:3}
+.auto .ed.fresh text{fill:var(--accent-dark)}
+.tree .te{stroke:var(--edge);stroke-width:1.8;opacity:0;transition:opacity .4s}
+.tree .n{opacity:0;transition:opacity .4s}
+.tree .on{opacity:1}
+.tree .n rect{fill:var(--paper);stroke:var(--edge);stroke-width:1.8}
+.tree .n.tm rect{fill:var(--panel);stroke:none}
+.tree .n text{font-size:17px;font-weight:600;fill:var(--ink)}
+.tree .n.tm text{fill:var(--accent-dark)}
+.tree .n.now rect{fill:var(--hot);stroke:var(--accent);stroke-width:3}
+.tree .n.kid rect{stroke:var(--accent);stroke-dasharray:4 3;stroke-width:2.4}
+.tree .n.faded,.tree .te.faded{opacity:.18}
+.tree .n.pop{animation:nodein .5s ease}
+@keyframes nodein{from{transform:translateY(-14px)}to{transform:none}}
+
+/* MiniVM demo */
+.src div{font:22px/1.7 var(--f-mono);padding:0 12px;transition:background .3s,color .3s}
+.src div.cur{background:var(--hot);box-shadow:inset 5px 0 var(--accent)}
+.src div.done{color:var(--quiet)}
+.ilist{list-style:none;margin:0;padding:0;font:21px/1 var(--f-mono);background:var(--panel)}
+.ilist li{padding:7px 14px 7px 40px;position:relative;transition:background .25s,color .25s}
+.ilist li.done{color:var(--quiet)}
+.ilist li.cur{background:var(--hot);color:var(--accent-dark);font-weight:700}
+.ilist li.cur::before{content:"▶";position:absolute;left:14px;color:var(--accent);font-size:15px;top:9px}
+.vstack{display:flex;flex-direction:column-reverse;gap:6px;min-height:330px;padding:10px;background:var(--panel);border-bottom:4px solid var(--ink);box-sizing:border-box}
+.cell{font:700 28px var(--f-mono);text-align:center;padding:10px 0;background:var(--paper);border:2px solid var(--edge);transition:opacity .28s,transform .28s}
+.cell.top{border-color:var(--accent);background:var(--added)}
+.cell.enter{animation:dropin .4s ease}
+.cell.gone{opacity:0;transform:translateX(40px)}
+@keyframes dropin{from{opacity:0;transform:translateY(-36px)}to{opacity:1;transform:none}}
+.sigma{display:flex;flex-direction:column;gap:6px;min-height:110px}
+.bind{font:24px var(--f-mono);background:var(--panel);padding:8px 14px}
+.bind.enter{animation:dropin .4s ease;background:var(--good-pale)}
+.ret{font:800 26px var(--f-sans);color:var(--good);background:var(--good-pale);padding:12px 16px}
+
+/* tables */
+table.grid{border-collapse:collapse;font:22px var(--f-mono);font-variant-numeric:tabular-nums}
+table.grid th,table.grid td{border:2px solid var(--line);text-align:center;padding:0;height:42px;min-width:70px}
+table.grid th{font:800 20px var(--f-sans);background:var(--panel)}
+table.grid .split{border-left:4px solid var(--edge)}
+table.grid td.sh{color:var(--accent-dark);font-weight:700}
+table.grid td.re{color:var(--warn);font-weight:700}
+table.grid td.ac{color:var(--good);font-weight:800}
+table.grid td.go{color:var(--muted)}
+table.grid td.pop{animation:cellin .45s ease}
+table.grid td.focus{background:var(--hot);outline:3px solid var(--accent);outline-offset:-3px}
+table.grid tr.rowhl th,table.grid tr.rowhl td{background:var(--accent-wash)}
+table.grid.small{font-size:16px}
+table.grid.small th,table.grid.small td{height:27px;min-width:48px;font-size:16px}
+@keyframes cellin{from{transform:scale(1.6);opacity:0}to{transform:none;opacity:1}}
+.chips{display:flex;gap:12px;flex-wrap:wrap}
+.chip{font:21px var(--f-mono);padding:7px 14px;background:var(--panel);border:2px solid var(--line);transition:background .3s,border-color .3s}
+.chip.on{background:var(--good-pale);border-color:var(--good)}
+.chip.pulse{animation:pulse .9s ease}
+@keyframes pulse{30%{background:var(--hot);border-color:var(--accent);transform:scale(1.05)}}
+.tok-chip{display:inline-block;font:700 22px var(--f-mono);padding:4px 12px;margin:0 6px 8px 0;background:var(--paper);border:2px solid var(--line)}
+.tok-chip.new{border-color:var(--accent);background:var(--added);animation:cellin .45s ease}
+.sets .srow{display:flex;align-items:center;gap:14px;font:24px var(--f-mono);padding:10px 0;border-bottom:2px solid var(--line)}
+.sets .srow b{min-width:200px;font-weight:700}
+.rlist div{font:22px/1.8 var(--f-mono);padding:0 14px;transition:background .3s}
+.rlist div.cur{background:var(--hot);box-shadow:inset 5px 0 var(--accent)}
+.rlist .sym.cur{background:var(--accent);color:#fff;padding:0 4px}
+.flog div{font-size:20px;line-height:1.5;padding:4px 0;border-bottom:1px solid var(--line)}
+
+/* scope demo */
+.code-lines div{font:23px/1.75 var(--f-mono);padding:0 14px;display:flex;justify-content:space-between;gap:12px;transition:background .3s,color .3s}
+.code-lines div.cur{background:var(--hot);box-shadow:inset 5px 0 var(--accent)}
+.code-lines .tag{font:700 17px var(--f-sans);color:var(--accent-dark);background:var(--accent-pale);padding:0 8px;align-self:center;line-height:1.6}
+.scopes{display:flex;flex-direction:column-reverse;gap:10px}
+.scope{border:2px solid var(--line);background:var(--paper);padding:10px 14px;transition:border-color .3s,opacity .5s,background .3s}
+.scope .sh{font:800 16px var(--f-sans);letter-spacing:.1em;color:var(--muted);text-transform:uppercase;margin-bottom:6px;display:flex;justify-content:space-between}
+.scope .ent{font:23px var(--f-mono);padding:5px 10px;background:var(--panel);margin-top:6px;display:flex;justify-content:space-between}
+.scope.search{border-color:var(--accent)}
+.scope.miss{border-color:var(--bad);border-style:dashed}
+.scope .ent.hit{background:var(--good-pale);box-shadow:inset 5px 0 var(--good)}
+.scope.enter{animation:dropin .45s ease}
+.scope.leaving{opacity:.3;border-style:dashed}
+.ent.enter{animation:dropin .4s ease}
+
+/* lab */
+.qcard{background:var(--paper);border:2px solid var(--line);padding:20px;display:flex;flex-direction:column;gap:14px;min-width:0;box-sizing:border-box}
+.qcard .q{font-size:23px;line-height:1.38}
+.qcard .opt{font-size:19px;min-height:50px;padding:9px 14px}
+.items{font:20px/1.65 var(--f-mono);background:var(--panel);padding:12px 18px;min-height:150px;box-sizing:border-box}
+.items .ttl{font:800 16px var(--f-sans);letter-spacing:.08em;color:var(--accent-dark);text-transform:uppercase;margin-bottom:6px}
+.items .grid2{display:grid;grid-template-columns:1fr 1fr;column-gap:28px}
+.items .it{padding:0 6px}
+.items .it.cl{background:var(--added)}
+.items .it.anim{animation:itin .4s ease both}
+.items .tg{font:700 13px var(--f-sans);color:var(--accent);letter-spacing:.06em;margin-left:8px}
+@keyframes itin{from{opacity:0;transform:translateX(-14px)}to{opacity:1;transform:none}}
+.tape{display:flex;gap:8px}
+.tok{min-width:58px;padding:7px 8px;border:2px solid var(--line);background:var(--paper);text-align:center;font:700 21px var(--f-mono);transition:opacity .3s,border-color .3s,background .3s}
+.tok small{display:block;font:400 14px var(--f-mono);color:var(--muted);height:17px}
+.tok.used{opacity:.3}
+.tok.cur{border-color:var(--accent);background:var(--added)}
+.stack{display:flex;gap:8px;align-items:flex-end;min-height:132px;padding:10px;background:var(--panel)}
+.sk{min-width:74px;max-width:230px;background:var(--added);text-align:center;flex:none;transition:opacity .45s,transform .45s,box-shadow .2s}
+.sk .sym{font:24px var(--f-mono);padding:7px 10px 2px}
+.sk .st{font:800 22px var(--f-sans);color:var(--accent-dark);padding:0 0 6px}
+.sk .ast{font:14px var(--f-mono);color:var(--muted);padding:5px 8px;background:var(--paper);white-space:nowrap;min-height:18px}
+.sk.pop{box-shadow:0 0 0 3px var(--accent)}
+.sk.gone{opacity:0;transform:translateY(-30px)}
+.sk.landing{opacity:0}
+.sk.enterR{animation:skinR .5s ease}
+@keyframes skinR{from{opacity:0;transform:translateY(-34px) scale(.8)}to{opacity:1;transform:none}}
+.ghost{position:absolute;z-index:30;display:grid;place-items:center;border:3px solid var(--accent);background:var(--added);font:700 22px var(--f-mono);pointer-events:none;transition:transform .5s cubic-bezier(.3,.7,.3,1)}
+.log{font:16px/1.55 var(--f-mono);background:var(--panel);padding:8px 12px;overflow-y:auto;font-variant-numeric:tabular-nums}
+.log div{display:grid;grid-template-columns:30px 1fr 84px;gap:8px}
+.log div.last{color:var(--accent-dark);font-weight:700}
+.tabs{display:flex;gap:0;margin-bottom:8px}
+.tabb{font:800 16px var(--f-sans);letter-spacing:.06em;text-transform:uppercase;border:2px solid var(--line);background:var(--paper);color:var(--muted);padding:6px 14px;cursor:pointer}
+.tabb+.tabb{border-left:0}
+.tabb.act{border-color:var(--accent);background:var(--accent-pale);color:var(--accent-dark)}
+.banner{font:800 23px var(--f-sans);color:var(--good);background:var(--good-pale);padding:12px 16px}
+
+.notes{flex:none;max-height:26vh;overflow:auto;background:#fffbea;border:2px solid #eadfae;margin:0 auto 4px;width:min(1240px,100%);box-sizing:border-box;padding:10px 18px;font:16px/1.45 var(--f-sans);color:var(--ink)}
+.notes p{margin:5px 0}
+.notes b{color:var(--accent-dark);margin-right:6px}
+.notes .nt-h{font:800 12px var(--f-sans);letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.notes .nt-next b{color:var(--good)}
+#nbtn.on{background:var(--accent);color:#fff;border-color:var(--accent)}
+
+.opt .xwhy{display:block;font:500 16px/1.35 var(--f-sans);color:var(--bad);margin-top:5px}
+.opt .xwhy code{font-size:.92em}
+.opt .xwhy.ok{color:var(--good);font-weight:500}
+.qcard.solved .opt{font-size:17px;padding:7px 12px;min-height:0;gap:12px}
+.qcard.solved .opt .xwhy{font-size:15.5px}
+.qcard.solved .opts{gap:7px}
+
+.presenter{font:750 34px var(--f-sans);letter-spacing:-.01em;color:var(--ink);margin-top:34px}
+
+.fsm .ed text{font-size:19px}
+.tree .n text{font-size:20px}
+table.grid.sm2 th,table.grid.sm2 td{height:36px;min-width:52px;font-size:20px;padding:0 10px}
+table.grid.small th,table.grid.small td{height:31px;min-width:50px;font-size:18px}
+.items{font-size:22px}
+.cfbox{font-size:19px}
+.rbox{font-size:19px}
+.flog div{font-size:21px}
+#th-log div{font-size:21px}
+.qcard .q{font-size:24px}
+.qcard .opt{font-size:20px}
+.sk .sym{font-size:26px}
+#pt th,#pt td{height:26px;font-size:17px}
+#low-tab td,#low-tab th{padding:3px 10px}
+#stk{min-height:112px}
+
+.qcard .dctl .btn[disabled]{visibility:hidden}
+.opt .ot{flex:1;min-width:0}
+.zone{transition:opacity .35s ease,outline-color .35s ease;outline:3px solid transparent;outline-offset:5px}
+.slide.focusing .zone{opacity:.25}
+.slide.focusing .zone.focus{opacity:1;outline-color:var(--accent)}
+.pd{display:inline-flex;gap:7px;align-items:center}
+.pd i{width:11px;height:11px;border-radius:50%;background:var(--line);display:block}
+.pd i.qq{border-radius:2px}
+.pd i.d{background:var(--accent)}
+.pd i.c{box-shadow:0 0 0 2px var(--paper),0 0 0 4px var(--accent)}
+.intro{display:block;font-size:22px;line-height:1.5}
+
+.gopt{display:inline-grid;grid-template-columns:auto auto 1fr;column-gap:12px;row-gap:2px;font:400 19px/1.45 var(--f-mono)}
+.gopt.big{font-size:21px;display:grid}
+.rxt td.rxok{color:var(--good);font-weight:700}
+.rxt td.rxbad{color:var(--bad);font-weight:800;background:var(--bad-pale)}
+.rxt td.pop{animation:cellin .4s ease both}
+.opt.nextbtn{border-color:var(--accent);background:var(--accent-wash);color:var(--accent-dark)}
+.opt.nextbtn::before{content:"→";color:var(--accent)}
+#cg-der div{font:20px/1.7 var(--f-mono);padding:0 14px}
+
+.cfitems{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.cfbox{background:var(--panel);padding:8px 12px;font:17px/1.55 var(--f-mono)}
+.cfbox.anim{animation:itin .45s ease both}
+.cfbox.hot{box-shadow:inset 4px 0 var(--bad)}
+.cfbox .cft{font:800 15px var(--f-sans);color:var(--accent-dark);letter-spacing:.04em}
+.cfbox .cft span{font-weight:600;color:var(--muted)}
+.cfbox.ghostbox{display:grid;place-items:center;color:var(--quiet);font:800 26px var(--f-sans);min-height:90px;border:2px dashed var(--line);background:none}
+table.grid td.conf{color:var(--bad);font-weight:800;background:var(--bad-pale)}
+table.grid td.res{outline:3px solid var(--good);outline-offset:-3px}
+#th-log div{font-size:19px}
+
+.hint{font-size:20px;line-height:1.42;border-left:5px solid var(--quiet);background:var(--panel);padding:10px 16px}
+.hint[hidden]{display:none}
+.mcq .q p{margin-bottom:6px}
+.mcq .q pre{font-size:19px;padding:10px 16px}
+.opts.two{display:grid;grid-template-columns:1fr 1fr}
+.toks{display:flex;flex-wrap:wrap;gap:8px;min-height:44px}
+.toks .tok-chip{margin:0;border-color:var(--accent);background:var(--added)}
+.toks .tok-chip.anim{animation:cellin .4s ease both}
+.rbox{border-left:4px solid var(--accent);background:var(--panel);padding:8px 12px;font:17px/1.55 var(--f-mono)}
+.rbox.anim{animation:itin .45s ease both}
+.rbox .rt{font:800 13px var(--f-sans);letter-spacing:.1em;color:var(--accent-dark);display:block}
+.rbox .bar{border-top:2px solid var(--ink);margin-top:3px;padding-top:3px;display:inline-block}
+.rbox.bad{border-color:var(--bad)} .rbox.bad .rt{color:var(--bad)}
+.fsm .st circle.kring{fill:none;stroke:#747d8b;stroke-width:1.6}
+.ktxt{font:800 15px var(--f-sans);fill:#851a33}
+table.grid.sm2 th,table.grid.sm2 td{height:30px;min-width:46px;font-size:17px;padding:0 8px}
+.reqline{font-size:20px;padding:7px 0;border-bottom:1px solid var(--line)}
+.reqline.anim{animation:itin .4s ease both}
+#se-tr td,#se-cmp td{font-family:var(--f-mono)}
+#se-tr tr.anim,#se-cmp tr.anim{animation:itin .4s ease both}
+.flog .anim{animation:itin .4s ease both}
+@media (prefers-reduced-motion: reduce){*,*::before{animation:none!important;transition:none!important}}
+</style>
+
+<div class="vp" id="vp"><div class="stagebox" id="stagebox"><div class="stage" id="stage">
+<section class="slide title" data-tag="Midterm review">
+  <p class="eyebrow">COMS W4115 · MIDTERM REVIEW</p>
+  <h1>Midterm <span style="color:var(--accent)">Review</span></h1>
+  <p class="lead">We rebuild the pieces of a compiler by hand: an NFA, a DFA, a scanner, an SLR parser, and IR generation.</p>
+  <p class="presenter">Wei Qiang</p>
+  <p class="meta" style="margin-top:6px">TA · COMS W4115 · Lectures 01–12 · Midterm Wed Nov 4 · Columbia University</p>
+</section>
+
+<section class="slide" data-tag="Scope"><style>
+.sc{flex:1;display:flex;flex-direction:column;gap:14px;border-top-width:5px}
+.sc .label{margin:0;font-size:20px}.sc-l{color:#747d8b;font-weight:700;margin-left:6px}
+.sc-ls{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:10px}
+.sc-ls li{font:21px/1.3 var(--f-sans);display:flex;gap:10px}.sc-ls b{font:700 18px/1.55 var(--f-mono);color:var(--accent);flex:none}
+.sc-sk{font:19px/1.45 var(--f-sans);margin:0;padding-top:12px;border-top:1px solid var(--line);flex:1}
+.sc-t{font:800 17px/1.3 var(--f-sans);letter-spacing:.06em;text-transform:uppercase;color:var(--accent);margin:0}
+.sc-t.off{color:#747d8b}
+.sc-foot{font:20px/1.4 var(--f-sans);display:flex;gap:40px;padding:14px 20px;background:var(--panel)}
+</style>
+<p class="eyebrow">MIDTERM · WED NOV 4</p><h2>What the midterm covers: Lectures 01–12</h2>
+<div class="body col" style="gap:24px"><div class="row" style="gap:28px;align-items:stretch;flex:1"><div class="rulecard sc"><div class="label">Foundations <span class="sc-l">L01–05</span></div><ul class="sc-ls"><li><b>L01</b><span>Programs, languages, and translators</span></li><li><b>L02</b><span>A language is a contract</span></li><li><b>L03</b><span>OCaml for language implementers</span></li><li><b>L04</b><span>How does a language run?</span></li><li><b>L05</b><span>Compiling MiniC</span></li></ul><p class="sc-sk">Syntax vs. semantics, ASTs as OCaml variants, an interpreter that threads state, and compiling to stack code.</p><p class="sc-t off">Not practiced today · see HW 1</p></div><div class="rulecard sc hot"><div class="label">Scanning <span class="sc-l">L06</span></div><ul class="sc-ls"><li><b>L06</b><span>Regex, automata, and lexer decisions</span></li></ul><p class="sc-sk">Thompson NFA, ε-closure and subset construction, token kinds, longest match, priority, and backing up.</p><p class="sc-t">Today · Problems 1–2</p></div><div class="rulecard sc hot"><div class="label">Parsing <span class="sc-l">L07–10</span></div><ul class="sc-ls"><li><b>L07</b><span>Grammars and ambiguity</span></li><li><b>L08</b><span>Shift, reduce, and lookahead</span></li><li><b>L09</b><span>Building an SLR parser</span></li><li><b>L10</b><span>SLR tables and conflicts</span></li></ul><p class="sc-sk">Writing grammars, derivations and ambiguity, FIRST and FOLLOW, LR(0) items, SLR tables, parse traces, and conflicts.</p><p class="sc-t">Today · Problems 3–6</p></div><div class="rulecard sc hot"><div class="label">Semantics and IR <span class="sc-l">L11–12</span></div><ul class="sc-ls"><li><b>L11</b><span>Names, scope, and semantic analysis</span></li><li><b>L12</b><span>From AST to intermediate code</span></li></ul><p class="sc-sk">Scopes and shadowing, typing rules, result/code rules, fresh temporaries, and lowering in postorder.</p><p class="sc-t">Today · Problems 7–10</p></div></div><div class="sc-foot"><span><b>Not on the midterm:</b> Lecture 13 onward (control flow, stack frames).</span><span><b>HW 2</b> (scanning and parsing) is due Mon Nov 9.</span></div></div></section>
+
+<section class="slide accent" data-tag="Part I"><p class="eyebrow">PART I · LECTURE 06</p><h2>Scanning</h2><p class="lead">Regular expression to NFA, NFA to DFA, and a DFA that scans tokens.</p></section>
+
+<section class="slide" data-tag="Thompson"><p class="eyebrow">PROBLEM 1 · PART 1 · THOMPSON CONSTRUCTION</p><h2>From <span style="font-family:var(--f-mono);font-size:.85em">a ( b | c )*</span> to an NFA</h2><div class="body row" style="gap:24px"><div class="qcard" style="width:500px;flex:none"><div style="display:flex;justify-content:space-between"><span class="qtag" id="th-tag"></span><span class="stepn" id="th-n"></span></div><div class="q" id="th-q"></div><ol class="opts" id="th-opts"></ol><p class="why" id="th-why" hidden></p><div class="dctl" style="margin-top:auto"><button class="btn sec" id="th-back">◀ Back</button><button class="btn sec" id="th-rev">Reveal</button><button class="btn pri" id="th-next" disabled>Next ▶</button><button class="btn sec" id="th-reset">Restart</button></div></div><div class="col" style="flex:1;gap:12px;min-width:0"><div class="zone" data-z="nfa"><div class="label">NFA</div><svg id="nfa-th" class="fsm" viewBox="0 0 700 300" width="100%" style="height:330px" aria-label="Thompson NFA for a (b | c)*"></svg></div>
+  <div class="row" style="gap:20px;flex:none;align-items:flex-start">
+    <div class="col zone" data-z="log" style="flex:1;gap:4px"><div class="label">Fragments built</div><div class="flog" id="th-log"></div></div>
+    <div class="col zone" data-z="bad" id="th-bad" style="flex:1;gap:4px;visibility:hidden"><div class="label">Shortcut star, a* b* with merged endpoints</div>
+      <svg class="fsm" viewBox="0 0 320 130" width="100%" style="height:120px" aria-label="Broken shortcut construction accepting ba">
+        <defs><marker id="mkb" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#747d8b"/></marker></defs>
+        <g class="ed"><path d="M4 65H22" marker-end="url(#mkb)"/></g>
+        <g class="ed"><path d="M66 65H136" marker-end="url(#mkb)"/><text x="101" y="58" text-anchor="middle">a</text></g>
+        <g class="ed" id="be-mp"><path d="M140 82C120 120,70 120,52 84" marker-end="url(#mkb)"/><text x="96" y="122" text-anchor="middle">ε</text></g>
+        <g class="ed"><path d="M52 46C70 8,120 8,140 46" marker-end="url(#mkb)"/><text x="96" y="16" text-anchor="middle">ε</text></g>
+        <g class="ed"><path d="M182 65H252" marker-end="url(#mkb)"/><text x="217" y="58" text-anchor="middle">b</text></g>
+        <g class="ed" id="be-tm"><path d="M256 82C236 120,186 120,168 84" marker-end="url(#mkb)"/><text x="212" y="122" text-anchor="middle">ε</text></g>
+        <g class="ed"><path d="M168 46C186 8,236 8,256 46" marker-end="url(#mkb)"/><text x="212" y="16" text-anchor="middle">ε</text></g>
+        <g class="st" id="bp"><circle class="o" cx="44" cy="65" r="20"/><text x="44" y="71" text-anchor="middle" font-size="16">p</text></g>
+        <g class="st" id="bm"><circle class="o" cx="160" cy="65" r="20"/><text x="160" y="71" text-anchor="middle" font-size="16">m</text></g>
+        <g class="st" id="bt"><circle class="o" cx="276" cy="65" r="20"/><circle class="kring" cx="276" cy="65" r="15"/><text x="276" y="71" text-anchor="middle" font-size="16">t</text></g>
+      </svg><p class="small" id="th-bad-cap" style="color:var(--bad)"></p></div>
+  </div></div></div></section>
+
+<section class="slide" data-tag="Subset"><p class="eyebrow">PROBLEM 1 · PART 2 · SUBSET CONSTRUCTION</p><h2>From the NFA to a DFA</h2><div class="body row" style="gap:24px"><div class="qcard" style="width:500px;flex:none"><div style="display:flex;justify-content:space-between"><span class="qtag" id="ss-tag"></span><span class="stepn" id="ss-n"></span></div><div class="q" id="ss-q"></div><ol class="opts" id="ss-opts"></ol><p class="why" id="ss-why" hidden></p><div class="dctl" style="margin-top:auto"><button class="btn sec" id="ss-back">◀ Back</button><button class="btn sec" id="ss-rev">Reveal</button><button class="btn pri" id="ss-next" disabled>Next ▶</button><button class="btn sec" id="ss-reset">Restart</button></div></div><div class="col" style="flex:1;gap:12px;min-width:0"><div class="zone" data-z="nfa"><div class="label">NFA · current set highlighted</div><svg id="nfa-ss" class="fsm" viewBox="0 0 700 300" width="100%" style="height:290px" aria-label="Thompson NFA for a (b | c)*"></svg></div>
+  <div class="row" style="gap:22px;align-items:flex-start;flex:none">
+    <div class="zone" data-z="table"><table class="grid sm2" id="ss-t">
+      <tr><th>DFA</th><th>NFA set</th><th>a</th><th>b</th><th>c</th></tr>
+      <tr class="fx" data-f="1"><th>A</th><td>{0}</td><td class="fx" data-f="2">B</td><td>–</td><td>–</td></tr>
+      <tr class="fx" data-f="2"><th>B ✓</th><td>{1, 2, 3, 4, 6, 9}</td><td>–</td><td class="fx" data-f="3">C</td><td class="fx" data-f="4">D</td></tr>
+      <tr class="fx" data-f="3"><th>C ✓</th><td>{3, 4, 5, 6, 8, 9}</td><td>–</td><td class="fx" data-f="5">C</td><td class="fx" data-f="5">D</td></tr>
+      <tr class="fx" data-f="4"><th>D ✓</th><td>{3, 4, 6, 7, 8, 9}</td><td>–</td><td class="fx" data-f="5">C</td><td class="fx" data-f="5">D</td></tr>
+    </table></div>
+    <div class="zone" data-z="dfa" style="flex:1"><svg id="dfa-ss" class="fsm" viewBox="0 0 400 260" width="100%" style="flex:1;height:280px" aria-label="DFA from subset construction">
+      <defs><marker id="mk3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#747d8b"/></marker></defs>
+      <g class="ed fx" data-f="1"><path d="M4 125H22" marker-end="url(#mk3)"/></g>
+      <g class="ed fx" data-f="2"><path d="M70 125H140" marker-end="url(#mk3)"/><text x="105" y="116" text-anchor="middle">a</text></g>
+      <g class="ed fx" data-f="3"><path d="M186 113L273 66" marker-end="url(#mk3)"/><text x="222" y="80" text-anchor="middle">b</text></g>
+      <g class="ed fx" data-f="4"><path d="M186 137L273 184" marker-end="url(#mk3)"/><text x="222" y="176" text-anchor="middle">c</text></g>
+      <g class="ed fx" data-f="5"><path d="M287 32C272 -8,328 -8,313 32" marker-end="url(#mk3)"/><text x="300" y="12" text-anchor="middle">b</text></g>
+      <g class="ed fx" data-f="5"><path d="M290 79L290 171" marker-end="url(#mk3)"/><text x="278" y="128" text-anchor="middle">c</text></g>
+      <g class="ed fx" data-f="5"><path d="M310 171L310 79" marker-end="url(#mk3)"/><text x="324" y="128" text-anchor="middle">b</text></g>
+      <g class="ed fx" data-f="5"><path d="M287 218C272 258,328 258,313 218" marker-end="url(#mk3)"/><text x="300" y="252" text-anchor="middle">c</text></g>
+      <g class="st fx" data-f="1" id="sd-A"><circle class="o" cx="46" cy="125" r="24"/><text x="46" y="131" text-anchor="middle" font-size="17">A</text></g>
+      <g class="st fx" data-f="2" id="sd-B"><circle class="o" cx="164" cy="125" r="24"/><circle class="kring" cx="164" cy="125" r="19"/><text x="164" y="131" text-anchor="middle" font-size="17">B</text></g>
+      <g class="st fx" data-f="3" id="sd-C"><circle class="o" cx="300" cy="55" r="24"/><circle class="kring" cx="300" cy="55" r="19"/><text x="300" y="61" text-anchor="middle" font-size="17">C</text></g>
+      <g class="st fx" data-f="4" id="sd-D"><circle class="o" cx="300" cy="195" r="24"/><circle class="kring" cx="300" cy="195" r="19"/><text x="300" y="201" text-anchor="middle" font-size="17">D</text></g>
+    </svg></div>
+  </div></div></div></section>
+
+<section class="slide" data-tag="Scanner lab">
+  <p class="eyebrow">PROBLEM 2 · A SCANNER WITH TOKEN KINDS</p>
+  <h2>Subset construction and scanning</h2>
+  <div class="body row" style="gap:24px">
+    <div class="qcard" style="width:500px;flex:none"><div style="display:flex;justify-content:space-between"><span class="qtag" id="sl-tag"></span><span class="stepn" id="sl-n"></span></div><div class="q" id="sl-q"></div><ol class="opts" id="sl-opts"></ol><p class="why" id="sl-why" hidden></p><div class="dctl" style="margin-top:auto"><button class="btn sec" id="sl-back">◀ Back</button><button class="btn sec" id="sl-rev">Reveal</button><button class="btn pri" id="sl-next" disabled>Next ▶</button><button class="btn sec" id="sl-reset">Restart</button></div></div>
+    <div class="col" style="flex:1;gap:10px">
+      <div class="gram zone" data-z="rules" style="font-size:20px;padding:10px 18px;flex:none"><span style="font-family:var(--f-sans);font-weight:700">Priority:</span> &nbsp;X : a a &nbsp;&gt;&nbsp; Y : a b* a &nbsp;&gt;&nbsp; Z : a &nbsp;&gt;&nbsp; W : b &nbsp;&nbsp;<span class="muted" style="font-family:var(--f-sans)">Longest match first.</span></div>
+      <div class="row" style="gap:18px;flex:none">
+        <div class="col zone" data-z="nfa" style="flex:1;gap:2px"><div class="label">NFA</div><svg id="nfa2" class="fsm" viewBox="0 0 330 300" width="100%" style="height:280px" aria-label="NFA for the four token rules">
+            <defs><marker id="mk2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#747d8b"/></marker></defs>
+            <g class="ed"><path d="M6 150H20" marker-end="url(#mk2)"/></g>
+            <g class="ed"><path d="M55 136L136 52" marker-end="url(#mk2)"/><text x="86" y="86" text-anchor="middle">a</text></g>
+            <g class="ed"><path d="M170 38H248" marker-end="url(#mk2)"/><text x="209" y="30" text-anchor="middle">a</text></g>
+            <g class="ed"><path d="M59 146L130 131" marker-end="url(#mk2)"/><text x="100" y="128" text-anchor="middle">a</text></g>
+            <g class="ed"><path d="M141 111C128 76,172 76,159 111" marker-end="url(#mk2)"/><text x="150" y="78" text-anchor="middle">b</text></g>
+            <g class="ed"><path d="M170 128H248" marker-end="url(#mk2)"/><text x="209" y="120" text-anchor="middle">a</text></g>
+            <g class="ed"><path d="M57 160L132 197" marker-end="url(#mk2)"/><text x="88" y="194" text-anchor="middle">a</text></g>
+            <g class="ed"><path d="M50 167L137 255" marker-end="url(#mk2)"/><text x="82" y="228" text-anchor="middle">b</text></g>
+            <g class="st" id="nq0"><circle class="o" cx="40" cy="150" r="19"/><text x="40" y="156" text-anchor="middle" font-size="20">0</text></g>
+            <g class="st" id="nq1"><circle class="o" cx="150" cy="38" r="19"/><text x="150" y="44" text-anchor="middle" font-size="20">1</text></g>
+            <g class="st final" id="nq2"><circle class="o" cx="270" cy="38" r="19"/><circle class="ring" cx="270" cy="38" r="14"/><text x="270" y="44" text-anchor="middle" font-size="20">2</text></g>
+            <g class="st" id="nq3"><circle class="o" cx="150" cy="128" r="19"/><text x="150" y="134" text-anchor="middle" font-size="20">3</text></g>
+            <g class="st final" id="nq4"><circle class="o" cx="270" cy="128" r="19"/><circle class="ring" cx="270" cy="128" r="14"/><text x="270" y="134" text-anchor="middle" font-size="20">4</text></g>
+            <g class="st final" id="nq5"><circle class="o" cx="150" cy="208" r="19"/><circle class="ring" cx="150" cy="208" r="14"/><text x="150" y="214" text-anchor="middle" font-size="20">5</text></g>
+            <g class="st final" id="nq6"><circle class="o" cx="150" cy="270" r="19"/><circle class="ring" cx="150" cy="270" r="14"/><text x="150" y="276" text-anchor="middle" font-size="20">6</text></g>
+            <text class="ktxt" x="298" y="44">X</text><text class="ktxt" x="298" y="134">Y</text><text class="ktxt" x="178" y="214">Z</text><text class="ktxt" x="178" y="276">W</text>
+          </svg></div>
+        <div class="col zone" data-z="dfa" style="flex:1.25;gap:2px"><div class="label">DFA</div><svg id="dfa2" class="fsm" viewBox="0 0 420 260" width="100%" style="height:280px" aria-label="DFA built step by step">
+          <g class="ed"><path d="M8 100H26" marker-end="url(#mk2)"/></g>
+          <g class="ed fx" data-f="1"><path d="M76 100H124" marker-end="url(#mk2)"/><text x="100" y="91" text-anchor="middle">a</text></g>
+          <g class="ed fx" data-f="3"><path d="M171 88L257 47" marker-end="url(#mk2)"/><text x="206" y="58" text-anchor="middle">a</text></g>
+          <g class="ed fx" data-f="4"><path d="M171 112L257 153" marker-end="url(#mk2)"/><text x="206" y="150" text-anchor="middle">b</text></g>
+          <g class="ed fx" data-f="5"><path d="M268 187C255 238,305 238,292 187" marker-end="url(#mk2)"/><text x="280" y="246" text-anchor="middle">b</text></g>
+          <g class="ed fx" data-f="5"><path d="M304 165H364" marker-end="url(#mk2)"/><text x="334" y="156" text-anchor="middle">a</text></g>
+          <g class="ed fx" data-f="6"><path d="M68 118L132 196" marker-end="url(#mk2)"/><text x="88" y="168" text-anchor="middle">b</text></g>
+          <g class="st" id="dq0"><circle class="o" cx="52" cy="100" r="24"/><text x="52" y="106" text-anchor="middle" font-size="19">D0</text></g>
+          <g class="st fx" data-f="1" id="dq1"><circle class="o" cx="148" cy="100" r="24"/><circle class="kring fx" data-f="2" cx="148" cy="100" r="19"/><text x="148" y="106" text-anchor="middle" font-size="19">D1</text></g>
+          <g class="st fx" data-f="3" id="dq2"><circle class="o" cx="280" cy="35" r="24"/><circle class="kring" cx="280" cy="35" r="19"/><text x="280" y="41" text-anchor="middle" font-size="19">D2</text></g>
+          <g class="st fx" data-f="4" id="dq3"><circle class="o" cx="280" cy="165" r="24"/><text x="280" y="171" text-anchor="middle" font-size="19">D3</text></g>
+          <g class="st fx" data-f="5" id="dq4"><circle class="o" cx="388" cy="165" r="24"/><circle class="kring" cx="388" cy="165" r="19"/><text x="388" y="171" text-anchor="middle" font-size="19">D4</text></g>
+          <g class="st fx" data-f="6" id="dq5"><circle class="o" cx="148" cy="215" r="24"/><circle class="kring" cx="148" cy="215" r="19"/><text x="148" y="221" text-anchor="middle" font-size="19">D5</text></g>
+          <text class="ktxt fx" data-f="2" x="148" y="66" text-anchor="middle">Z</text>
+          <text class="ktxt fx" data-f="3" x="314" y="40">X</text>
+          <text class="ktxt fx" data-f="5" x="388" y="207" text-anchor="middle">Y</text>
+          <text class="ktxt fx" data-f="6" x="180" y="221">W</text>
+        </svg></div>
+      </div>
+      <div class="row" style="gap:22px;flex:none;align-items:flex-start">
+        <div class="zone" data-z="table"><table class="grid sm2" id="sl-t">
+          <tr><th>DFA</th><th>NFA set</th><th>a</th><th>b</th><th>kind</th></tr>
+          <tr><th>D0</th><td>{0}</td><td class="fx" data-f="1">D1</td><td class="fx" data-f="6">D5</td><td>–</td></tr>
+          <tr class="fx" data-f="1"><th>D1</th><td>{1, 3, 5}</td><td class="fx" data-f="3">D2</td><td class="fx" data-f="4">D3</td><td class="fx" data-f="2">Z</td></tr>
+          <tr class="fx" data-f="3"><th>D2</th><td>{2, 4}</td><td>–</td><td>–</td><td>X</td></tr>
+          <tr class="fx" data-f="4"><th>D3</th><td>{3}</td><td class="fx" data-f="5">D4</td><td class="fx" data-f="5">D3</td><td>–</td></tr>
+          <tr class="fx" data-f="5"><th>D4</th><td>{4}</td><td>–</td><td>–</td><td>Y</td></tr>
+          <tr class="fx" data-f="6"><th>D5</th><td>{6}</td><td>–</td><td>–</td><td>W</td></tr>
+        </table></div>
+        <div class="col zone" data-z="scans" style="flex:1;gap:4px"><div class="label">Scans</div><div class="flog" id="sl-out"></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide accent" data-tag="Part II"><p class="eyebrow">PART II · LECTURES 07–10</p><h2>Parsing</h2><p class="lead">Writing a grammar, FIRST and FOLLOW with ε, then an SLR parser: items, closure, GOTO, the table, and a parse.</p></section>
+
+<section class="slide" data-tag="CFG"><p class="eyebrow">PROBLEM 3 · CONTEXT-FREE GRAMMARS</p><h2>A grammar for array literals</h2><div class="body row" style="gap:24px"><div class="qcard" style="width:500px;flex:none"><div style="display:flex;justify-content:space-between"><span class="qtag" id="cg-tag"></span><span class="stepn" id="cg-n"></span></div><div class="q" id="cg-q"></div><ol class="opts" id="cg-opts"></ol><p class="why" id="cg-why" hidden></p><div class="dctl" style="margin-top:auto"><button class="btn sec" id="cg-back">◀ Back</button><button class="btn sec" id="cg-rev">Reveal</button><button class="btn pri" id="cg-next" disabled>Next ▶</button><button class="btn sec" id="cg-reset">Restart</button></div></div><div class="col" style="flex:1;gap:12px;min-width:0"><div class="row" style="gap:20px;flex:none">
+    <div class="col" style="flex:1;gap:8px"><div class="zone" data-z="gram"><div class="label">Grammar</div><div class="gram" id="cg-gram" style="font-size:21px;min-height:64px"></div></div>
+      <div class="zone" data-z="der"><div class="label">Leftmost derivation of [ 1 , 2 , 3 ]</div><div class="rlist panel" id="cg-der" style="padding:6px 0;min-height:60px"></div></div></div>
+    <div class="col zone" data-z="tree" style="flex:1.1;gap:4px"><div class="label">Parse tree</div><svg id="cg-tree" class="tree" viewBox="0 0 480 300" width="100%" style="height:280px" aria-label="Parse tree for [1, 2, 3]"></svg></div>
+  </div>
+  <div class="row zone" data-z="bad" style="gap:16px;flex:none;align-items:center" id="cg-badrow"><div class="label" style="width:270px;margin:0;line-height:1.5">Grammar A also derives the invalid <code style="font-size:20px">[ , 1 ]</code></div><svg id="cg-bad" class="tree" viewBox="0 0 420 215" width="100%" style="height:150px;flex:1" aria-label="Parse tree of an invalid literal"></svg></div></div></div></section>
+
+<section class="slide" data-tag="FIRST/FOLLOW ε"><p class="eyebrow">PROBLEM 4 · FIRST, FOLLOW AND ε-RULES</p><h2>Nullable symbols in an SLR parser</h2><div class="body row" style="gap:24px"><div class="qcard" style="width:500px;flex:none"><div style="display:flex;justify-content:space-between"><span class="qtag" id="fe-tag"></span><span class="stepn" id="fe-n"></span></div><div class="q" id="fe-q"></div><ol class="opts" id="fe-opts"></ol><p class="why" id="fe-why" hidden></p><div class="dctl" style="margin-top:auto"><button class="btn sec" id="fe-back">◀ Back</button><button class="btn sec" id="fe-rev">Reveal</button><button class="btn pri" id="fe-next" disabled>Next ▶</button><button class="btn sec" id="fe-reset">Restart</button></div></div><div class="col" style="flex:1;gap:12px;min-width:0"><div class="gram" style="font-size:21px;flex:none"><span class="rn">0</span>S′ → S &nbsp; <span class="rn">1</span>S → A B c &nbsp; <span class="rn">2</span>A → a &nbsp; <span class="rn">3</span>A → ε &nbsp; <span class="rn">4</span>B → b &nbsp; <span class="rn">5</span>B → ε</div>
+  <table class="t tight zone" data-z="sets" id="fe-sets" style="font-size:20px;flex:none"><tr><th>nonterminal</th><th>nullable</th><th>FIRST</th><th>FOLLOW</th></tr>
+    <tr><td><b>S</b></td><td class="fx" data-f="1">no</td><td class="fx" data-f="2">{ a, b, c }</td><td class="fx" data-f="3">{ $ }</td></tr>
+    <tr><td><b>A</b></td><td class="fx" data-f="1">yes</td><td class="fx" data-f="2">{ a, ε }</td><td class="fx" data-f="3">{ b, c }</td></tr>
+    <tr><td><b>B</b></td><td class="fx" data-f="1">yes</td><td class="fx" data-f="2">{ b, ε }</td><td class="fx" data-f="3">{ c }</td></tr></table>
+  <div class="row" style="gap:20px;flex:none;align-items:flex-start">
+    <div class="col fx zone" data-z="tab" data-f="3" style="gap:4px;flex:none"><div class="label">SLR table (given)</div><div id="fe-tab"></div></div>
+    <div class="col zone" data-z="trace" style="flex:1;gap:8px">
+      <div class="label">Input</div><div class="tape" id="fe-tape"></div>
+      <div class="label">Stack</div><div class="stack" id="fe-stk" style="min-height:96px"></div>
+      <div class="flog" id="fe-log"></div>
+    </div>
+  </div></div></div></section>
+
+<section class="slide" data-tag="SLR problem">
+  <p class="eyebrow">PROBLEM 5 · SLR PARSER</p>
+  <h2>Build an SLR parser for parenthesized sums</h2>
+  <div class="body">
+    <div class="cols c2">
+      <div class="col">
+        <div class="gram" style="font-size:26px;line-height:1.8"><span class="rn">0</span>S′ → E<br><span class="rn">1</span>E&nbsp; → E + T<br><span class="rn">2</span>E&nbsp; → T<br><span class="rn">3</span>T&nbsp; → ( E )<br><span class="rn">4</span>T&nbsp; → id</div>
+        <p>Input <code>a + ( b + c )</code>, scanned as <code>id + ( id + id ) $</code>. The parser should build <code>Add(a, Add(b, c))</code>.</p>
+      </div>
+      <div class="col" style="gap:16px">
+        <div class="rulecard hot" data-step="1"><div class="label">Part 1</div><p>Build the LR(0) automaton: closure of I₀, then GOTO until no new state appears.</p></div>
+        <div class="rulecard hot" data-step="2"><div class="label">Part 2</div><p>Compute FOLLOW sets and fill the SLR ACTION and GOTO table.</p></div>
+        <div class="rulecard hot" data-step="3"><div class="label">Part 3</div><p>Run the parser on the input: every shift, reduce, and GOTO.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-tag="SLR lab · Part 1">
+  <p class="eyebrow">PROBLEM 5 · PART 1</p>
+  <h2>Building the LR(0) automaton</h2>
+  <div class="body row" style="gap:26px">
+    <div class="qcard" style="width:520px;flex:none">
+      <div style="display:flex;justify-content:space-between"><span class="qtag" id="cq-tag"></span><span class="stepn" id="cq-n"></span></div>
+      <p class="q" id="cq-q"></p>
+      <ol class="opts" id="cq-opts"></ol>
+      <p class="why" id="cq-why" hidden></p>
+      <div class="dctl" style="margin-top:auto"><button class="btn sec" id="cq-back">◀ Back</button><button class="btn sec" id="cq-rev">Reveal</button><button class="btn pri" id="cq-next" disabled>Next ▶</button><button class="btn sec" id="cq-reset">Restart</button></div>
+    </div>
+    <div class="col" style="flex:1;gap:10px">
+      <div class="gram" style="font-size:21px;padding:8px 16px;flex:none"><span class="rn">0</span>S′ → E &nbsp;&nbsp; <span class="rn">1</span>E → E + T &nbsp;&nbsp; <span class="rn">2</span>E → T &nbsp;&nbsp; <span class="rn">3</span>T → ( E ) &nbsp;&nbsp; <span class="rn">4</span>T → id</div><svg id="fsm" class="fsm auto" viewBox="0 0 720 400" width="100%" style="height:380px" aria-label="LR(0) automaton built step by step"></svg>
+      <div class="items" id="cq-items"></div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-tag="SLR lab · Part 2">
+  <p class="eyebrow">PROBLEM 5 · PART 2</p>
+  <h2>FOLLOW sets and the SLR table</h2>
+  <div class="body row" style="gap:30px">
+    <div class="qcard" style="width:520px;flex:none">
+      <div style="display:flex;justify-content:space-between"><span class="qtag" id="tq-tag"></span><span class="stepn" id="tq-n"></span></div>
+      <p class="q" id="tq-q"></p>
+      <ol class="opts" id="tq-opts"></ol>
+      <p class="why" id="tq-why" hidden></p>
+      <div class="dctl" style="margin-top:auto"><button class="btn sec" id="tq-back">◀ Back</button><button class="btn sec" id="tq-rev">Reveal</button><button class="btn pri" id="tq-next" disabled>Next ▶</button><button class="btn sec" id="tq-reset">Restart</button></div>
+    </div>
+    <div class="col" style="flex:1;gap:16px">
+      <div class="gram" style="font-size:21px;padding:8px 16px;flex:none"><span class="rn">0</span>S′ → E &nbsp;&nbsp; <span class="rn">1</span>E → E + T &nbsp;&nbsp; <span class="rn">2</span>E → T &nbsp;&nbsp; <span class="rn">3</span>T → ( E ) &nbsp;&nbsp; <span class="rn">4</span>T → id</div><div class="chips zone" data-z="chips"><span class="chip" id="fe">FOLLOW(E) = ?</span><span class="chip" id="ft">FOLLOW(T) = ?</span></div>
+      <div id="tq-table" class="zone" data-z="table"></div>
+      <p class="small muted"><b style="color:var(--accent-dark)">s</b> shift, push state · <b style="color:var(--warn)">r</b> reduce by rule · <b style="color:var(--good)">acc</b> accept · blank = error · right of the bar: GOTO</p>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-tag="SLR lab · Part 3">
+  <p class="eyebrow">PROBLEM 5 · PART 3</p>
+  <h2>Parsing a + ( b + c )</h2>
+  <div class="body row" style="gap:26px"><div class="qcard" style="width:500px;flex:none">
+      <div style="display:flex;justify-content:space-between"><span class="qtag" id="pq-tag"></span><span class="stepn" id="pq-n"></span></div>
+      <p class="q" id="pq-q"></p>
+      <ol class="opts" id="pq-opts"></ol>
+      <p class="why" id="pq-why" hidden></p>
+      <div class="dctl" style="margin-top:auto"><button class="btn sec" id="pq-back">◀ Back</button><button class="btn sec" id="pq-rev">Reveal</button><button class="btn pri" id="pq-play" style="display:none">Replay all</button><button class="btn sec" id="pq-reset">Restart</button></div>
+    </div><div class="col" style="flex:1;gap:12px">
+      <div class="gram" style="font-size:21px;padding:8px 16px;flex:none"><span class="rn">0</span>S′ → E &nbsp;&nbsp; <span class="rn">1</span>E → E + T &nbsp;&nbsp; <span class="rn">2</span>E → T &nbsp;&nbsp; <span class="rn">3</span>T → ( E ) &nbsp;&nbsp; <span class="rn">4</span>T → id</div><div><div class="label">Input</div><div class="tape" id="tape"></div></div>
+      <div><div class="label">Stack · symbol / state / AST</div><div class="stack" id="stk"></div></div>
+      <div style="display:flex;gap:18px;flex:1;min-height:0">
+        <div class="col" style="flex:1;gap:0">
+          <div class="tabs"><button class="tabb act" data-tab="tree">Parse tree</button><button class="tabb" data-tab="log">Trace</button></div>
+          <svg id="ptree" class="tree" viewBox="0 0 500 220" width="100%" style="height:205px" aria-label="Parse tree growing bottom-up"></svg>
+          <div class="log" id="log" style="height:205px;box-sizing:border-box" hidden></div>
+        </div>
+        <div class="col" style="flex:none;gap:0"><div class="label">Table</div><div id="ptab"></div></div>
+      </div>
+    </div>
+    
+  </div>
+</section>
+
+<section class="slide" data-tag="Conflict"><p class="eyebrow">PROBLEM 6 · SLR CONFLICTS</p><h2>An SLR table with a conflict</h2><div class="body row" style="gap:24px"><div class="qcard" style="width:500px;flex:none"><div style="display:flex;justify-content:space-between"><span class="qtag" id="cf-tag"></span><span class="stepn" id="cf-n"></span></div><div class="q" id="cf-q"></div><ol class="opts" id="cf-opts"></ol><p class="why" id="cf-why" hidden></p><div class="dctl" style="margin-top:auto"><button class="btn sec" id="cf-back">◀ Back</button><button class="btn sec" id="cf-rev">Reveal</button><button class="btn pri" id="cf-next" disabled>Next ▶</button><button class="btn sec" id="cf-reset">Restart</button></div></div><div class="col" style="flex:1;gap:12px;min-width:0"><div class="gram" style="font-size:21px;flex:none"><span class="rn">0</span>E′ → E &nbsp;&nbsp; <span class="rn">1</span>E → E + E &nbsp;&nbsp; <span class="rn">2</span>E → id</div>
+  <div class="row" style="gap:20px;flex:none;align-items:flex-start">
+    <div class="col zone" data-z="items" style="flex:1.25;gap:6px"><div class="label">LR(0) states</div><div id="cf-items" class="cfitems"></div></div>
+    <div class="col" style="flex:1;gap:10px">
+      <div class="chips zone" data-z="fol" style="margin-bottom:6px"><span class="chip" id="cf-fol">FOLLOW(E) = ?</span></div>
+      <table class="grid sm2 zone" data-z="table" id="cf-t"><tr><th>state</th><th>id</th><th>+</th><th>$</th><th class="split">E</th></tr></table>
+      <svg id="cf-tree" class="tree zone" data-z="tree" viewBox="0 0 360 180" width="100%" style="height:200px" aria-label="AST of a + b + c"></svg>
+    </div>
+  </div></div></div></section>
+
+<section class="slide accent" data-tag="Part III"><p class="eyebrow">PART III · LECTURES 11–12</p><h2>Semantic analysis and IR generation</h2><p class="lead">Scope and type checking, result and code attributes, rules with several children, and a new operator from syntax to IR.</p></section>
+
+<section class="slide" data-tag="Semantic analysis"><p class="eyebrow">PROBLEM 7 · NAMES, SCOPE AND TYPES</p><h2>Resolving names and checking types</h2><div class="body row" style="gap:24px"><div class="qcard" style="width:500px;flex:none"><div style="display:flex;justify-content:space-between"><span class="qtag" id="sa-tag"></span><span class="stepn" id="sa-n"></span></div><div class="q" id="sa-q"></div><ol class="opts" id="sa-opts"></ol><p class="why" id="sa-why" hidden></p><div class="dctl" style="margin-top:auto"><button class="btn sec" id="sa-back">◀ Back</button><button class="btn sec" id="sa-rev">Reveal</button><button class="btn pri" id="sa-next" disabled>Next ▶</button><button class="btn sec" id="sa-reset">Restart</button></div></div><div class="col" style="flex:1;gap:12px;min-width:0"><div class="row" style="gap:22px;flex:none;align-items:flex-start">
+    <div class="col zone" data-z="code" style="flex:1.15;gap:4px"><div class="label">Program</div><div class="code-lines panel" id="sa-code" style="padding:8px 0"></div></div>
+    <div class="col zone" data-z="stack" style="flex:1;gap:4px"><div class="label">Symbol table · innermost on top</div><div class="scopes" id="sa-stack"></div></div>
+  </div>
+  <div class="col zone" data-z="types" style="gap:4px;flex:none"><div class="label">Type checking</div><div class="flog" id="sa-types"></div></div></div></div></section>
+
+<section class="slide" data-tag="Lowering"><p class="eyebrow">PROBLEM 8 · RESULT AND CODE</p><h2>Lowering a declaration</h2><div class="body row" style="gap:24px"><div class="qcard" style="width:500px;flex:none"><div style="display:flex;justify-content:space-between"><span class="qtag" id="lw-tag"></span><span class="stepn" id="lw-n"></span></div><div class="q" id="lw-q"></div><ol class="opts" id="lw-opts"></ol><p class="why" id="lw-why" hidden></p><div class="dctl" style="margin-top:auto"><button class="btn sec" id="lw-back">◀ Back</button><button class="btn sec" id="lw-rev">Reveal</button><button class="btn pri" id="lw-next" disabled>Next ▶</button><button class="btn sec" id="lw-reset">Restart</button></div></div><div class="col" style="flex:1;gap:12px;min-width:0"><pre style="font-size:20px;flex:none"><span class="k">int</span> total = (price + <span class="n">2</span>) * count - fee(price);</pre>
+  <div class="row" style="gap:20px;flex:none" id="d-low">
+    <div class="col zone" data-z="tree" style="flex:1;gap:4px"><div class="label">Checked AST · postorder</div><svg viewBox="-35 0 480 290" width="100%" class="tree" id="low-tree" style="height:310px" aria-label="Checked expression tree visited in postorder"></svg></div>
+    <div class="col zone" data-z="tab" style="flex:1.15;gap:4px"><div class="label">result / code</div><table class="t tight" id="low-tab" style="font-size:18px"><tr><th>Subtree</th><th>result</th><th>emits</th></tr></table></div>
+  </div>
+  <div class="cap" id="low-cap" hidden></div>
+  <div class="zone" data-z="ir"><div class="label">IR</div><pre id="low-ir" style="min-height:128px;font-size:19px;line-height:1.4;flex:none"></pre></div></div></div></section>
+
+<section class="slide" data-tag="Two children"><p class="eyebrow">PROBLEM 9 · A RULE WITH TWO CHILDREN</p><h2>Adding <span style="font-family:var(--f-mono);font-size:.82em">dist2(e1, e2)</span></h2><div class="body row" style="gap:24px"><div class="qcard" style="width:500px;flex:none"><div style="display:flex;justify-content:space-between"><span class="qtag" id="d2-tag"></span><span class="stepn" id="d2-n"></span></div><div class="q" id="d2-q"></div><ol class="opts" id="d2-opts"></ol><p class="why" id="d2-why" hidden></p><div class="dctl" style="margin-top:auto"><button class="btn sec" id="d2-back">◀ Back</button><button class="btn sec" id="d2-rev">Reveal</button><button class="btn pri" id="d2-next" disabled>Next ▶</button><button class="btn sec" id="d2-reset">Restart</button></div></div><div class="col" style="flex:1;gap:12px;min-width:0"><div class="row" style="gap:20px;flex:none">
+    <div class="col zone" data-z="ast" style="flex:1;gap:4px"><div class="label">Checked AST</div><svg id="d2-ast" class="tree" viewBox="0 0 380 200" width="100%" style="height:210px" aria-label="AST of dist2(x + 1, y)"></svg></div>
+    <div class="col zone" data-z="naive" style="flex:1.2;gap:4px"><div class="label">Desugared shortcut</div><svg id="d2-naive" class="tree" viewBox="0 0 520 190" width="100%" style="height:210px" aria-label="Desugared tree with duplicated children"></svg></div>
+  </div>
+  <div class="row" style="gap:20px;flex:none;align-items:flex-start">
+    <div class="col zone" data-z="rules" style="flex:1.2;gap:8px"><div class="label">Rules</div><div id="d2-rules" class="col" style="gap:8px"></div></div>
+    <div class="col zone" data-z="ir" style="flex:1;gap:4px"><div class="label">IR</div><pre id="d2-ir" style="min-height:110px;font-size:19px;line-height:1.45"></pre></div>
+  </div></div></div></section>
+
+<section class="slide" data-tag="Extension lab">
+  <p class="eyebrow">PROBLEM 10 · A NEW OPERATOR FROM SYNTAX TO IR</p>
+  <h2>Adding <span style="font-family:var(--f-mono);font-size:.82em">e |&gt; f</span> to MiniC</h2>
+  <div class="body row" style="gap:26px">
+    <div class="qcard" style="width:500px;flex:none"><div style="display:flex;justify-content:space-between"><span class="qtag" id="pl-tag"></span><span class="stepn" id="pl-n"></span></div><div class="q" id="pl-q"></div><ol class="opts" id="pl-opts"></ol><p class="why" id="pl-why" hidden></p><div class="dctl" style="margin-top:auto"><button class="btn sec" id="pl-back">◀ Back</button><button class="btn sec" id="pl-rev">Reveal</button><button class="btn pri" id="pl-next" disabled>Next ▶</button><button class="btn sec" id="pl-reset">Restart</button></div></div>
+    <div class="col" style="flex:1;gap:12px">
+      <div class="zone" data-z="toks"><div class="label">Tokens</div><div id="pl-toks" class="toks"></div></div>
+      <div class="row" style="gap:22px;flex:1;min-height:0">
+        <div class="col" style="flex:1;gap:6px"><div class="zone" data-z="ast"><div class="label">AST</div><svg id="pl-ast" class="tree" viewBox="0 0 420 240" width="100%" style="height:250px" aria-label="AST of the pipe example"></svg></div>
+          <div class="zone" data-z="ir"><div class="label">IR</div><pre id="pl-ir" style="min-height:92px;font-size:19px;line-height:1.4"></pre></div></div>
+        <div class="col zone" data-z="rules" style="flex:1.15;gap:8px"><div class="label">Rules so far</div><div id="pl-rules" class="col" style="gap:8px"></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide accent" data-tag="Questions"><p class="eyebrow">COMS W4115 · MIDTERM · WED NOV 4 · LECTURES 01–12</p><h2>Questions?</h2><p class="lead">Homework 2 (scanning and parsing) is due Mon Nov 9.</p></section>
+
+<div class="prog"><span id="progbar"></span></div>
+<button class="chev l" id="chl" aria-label="Previous slide" title="Previous slide">‹</button>
+<button class="chev r" id="chr" aria-label="Next slide" title="Next slide">›</button>
+</div></div></div>
+<div id="notes" class="notes" hidden></div>
+<nav class="nav">
+  <button id="prev" aria-label="Previous step">◀</button>
+  <select id="jump" aria-label="Jump to slide"></select>
+  <button id="next" aria-label="Next step">▶</button>
+  <button id="nbtn" title="Presenter notes (N)">Notes</button>
+</nav>
+
+<script>
+/* =============== deck + build steps =============== */
+const stage=document.getElementById('stage'),box=document.getElementById('stagebox'),vp=document.getElementById('vp');
+const slides=[...stage.querySelectorAll('.slide')],N=slides.length;
+const steppers={};
+(function(){let pn=0;slides.forEach(s=>{const e=s.querySelector('.eyebrow');if(!e)return;
+  if(s.classList.contains('prob')){pn++;e.textContent='QUESTION '+pn+' · '+e.textContent;}
+  else if(s.classList.contains('sol')){e.textContent='SOLUTION · QUESTION '+pn+' · '+e.textContent;}});})();let cur=0,step=0,playT=null;
+const sleep=ms=>new Promise(r=>setTimeout(r,ms));
+const esc=s=>String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;');
+const sub=n=>String(n).split('').map(c=>'₀₁₂₃₄₅₆₇₈₉'[c]).join('');
+slides.forEach((s,i)=>{
+  s.insertAdjacentHTML('beforeend',`<div class="foot">COMS W4115 · COLUMBIA UNIVERSITY</div><div class="snum"><span class="sdots"></span><span>${i+1} / ${N}</span></div>`);
+  const o=document.createElement('option');o.value=i;o.textContent=`${i+1}. ${(s.querySelector('h1,h2')||{}).textContent||''}`.replace(/\s+/g,' ');document.getElementById('jump').appendChild(o);});
+function fit(){const w=vp.clientWidth,h=vp.clientHeight-20;const k=Math.max(.1,Math.min(w/1600,h/900));stage.style.transform=`scale(${k})`;box.style.width=1600*k+'px';box.style.height=900*k+'px';}
+function scaleK(){return stage.getBoundingClientRect().width/1600;}
+// fragment slides
+slides.forEach((s,i)=>{const fr=[...s.querySelectorAll('[data-step]')];if(!fr.length)return;const max=Math.max(...fr.map(f=>+f.dataset.step));
+  steppers[i]={count:max,render:k=>fr.forEach(f=>f.classList.toggle('shown',+f.dataset.step<=k))};});
+function updateUI(){try{renderNotes()}catch(e){}const st=steppers[cur],s=slides[cur];
+  const d=s.querySelector('.sdots');d.innerHTML=st?Array.from({length:st.count},(_,j)=>`<i class="${j<step?'on':''}"></i>`).join(''):'';
+  document.getElementById('progbar').style.width=((cur+(st?step/(st.count+1):0)+1)/N*100)+'%';
+  document.getElementById('jump').value=cur;document.getElementById('chl').disabled=cur===0;
+  document.getElementById('chr').disabled=cur===N-1;
+  if(st&&st.demo){const c=s.querySelector('.dctl');c.querySelector('.stepn').textContent=`${step} / ${st.count}`;
+    c.querySelector('[data-d=prev]').disabled=step===0;c.querySelector('[data-d=next]').disabled=step>=st.count;
+    c.querySelector('[data-d=play]').textContent=playT?'Pause':'Play';}}
+function go(i,atEnd){stopPlay();cur=Math.max(0,Math.min(N-1,i));slides.forEach((s,j)=>s.classList.toggle('on',j===cur));
+  const st=steppers[cur];step=st&&atEnd?st.count:0;if(st)st.render(step,false);updateUI();
+  try{history.replaceState(null,'','#s'+(cur+1))}catch(e){}}
+function qAdvance(){const s=slides[cur];const q=s.querySelector('.qcard');if(!q)return false;
+  const nx=q.querySelector('[id$="-next"]'),rv=q.querySelector('[id$="-rev"]'),why=q.querySelector('.why');
+  if(nx){if(!nx.disabled){nx.click();return true;}if(rv&&!rv.disabled&&why&&why.hidden&&!q.classList.contains('solved')){rv.click();return true;}return false;}
+  if(q.querySelector('#pq-rev')){if(typeof phase!=='undefined'&&phase!=='done'){revealP();return true;}}return false;}
+function fwd(local){if(!local&&qAdvance())return true;const st=steppers[cur];if(st&&step<st.count){step++;st.render(step,true);updateUI();return true;}if(!local)go(cur+1);return false;}
+function back(local){const st=steppers[cur];if(st&&step>0){step--;st.render(step,false);updateUI();return;}if(!local&&cur>0)go(cur-1,true);}
+function stopPlay(){if(playT){clearInterval(playT);playT=null;}}
+const DEMOS={};function registerDemo(id,count,render){DEMOS[id]=render;}
+document.getElementById('prev').onclick=()=>{stopPlay();back()};document.getElementById('next').onclick=()=>{stopPlay();fwd()};
+document.getElementById('chl').onclick=()=>{stopPlay();go(cur-1)};document.getElementById('chr').onclick=()=>{stopPlay();go(cur+1)};
+document.getElementById('jump').onchange=e=>go(+e.target.value);
+document.addEventListener('keydown',e=>{if(e.target.tagName==='SELECT')return;
+  if(['ArrowRight','PageDown',' '].includes(e.key)){stopPlay();fwd();e.preventDefault();}
+  if(['ArrowLeft','PageUp'].includes(e.key)){stopPlay();back();e.preventDefault();}});
+window.addEventListener('resize',fit);
+function showF(root,k){root.querySelectorAll('[data-f]').forEach(el=>{const f=+el.dataset.f;el.classList.toggle('on',f<=k);el.classList.toggle('now',f===k);});}
+function capSet(el,html,anim){el.innerHTML=html;if(anim){el.classList.remove('flash');void el.offsetWidth;el.classList.add('flash');}}
+function mk(p,t,a){const e=document.createElementNS('http://www.w3.org/2000/svg',t);for(const k in a)e.setAttribute(k,a[k]);p.appendChild(e);return e;}
+function drawTree(svg,nodes,edgeByParent){const by={};nodes.forEach(n=>by[n.id]=n);
+  nodes.forEach(n=>{if(n.p!=null){const p=by[n.p];mk(svg,'line',{x1:p.x,y1:p.y+17,x2:n.x,y2:n.y-17,class:'te','data-id':edgeByParent?n.p:n.id});}});
+  nodes.forEach(n=>{const g=mk(svg,'g',{class:'n'+(n.tm?' tm':''),'data-id':n.id});const w=Math.max(40,n.label.length*12.2+22);
+    mk(g,'rect',{x:n.x-w/2,y:n.y-17,width:w,height:34});const t=mk(g,'text',{x:n.x,y:n.y+7,'text-anchor':'middle'});t.textContent=n.label;});}
+function treeShow(svg,vis,now,extra){svg.querySelectorAll('[data-id]').forEach(e=>{const id=e.dataset.id;const on=vis.has(id);const was=e.classList.contains('on');
+  e.classList.toggle('on',on);if(e.tagName==='g'){e.classList.toggle('now',now.has(id));e.classList.toggle('faded',!!(extra&&extra.faded&&extra.faded.has(id)));if(on&&!was&&extra&&extra.anim){e.classList.remove('pop');void e.getBBox();e.classList.add('pop');}}
+  else e.classList.toggle('faded',!!(extra&&extra.faded&&extra.faded.has(id)));});}
+
+/* =============== MCQs =============== */
+document.querySelectorAll('.mcq').forEach(m=>{const ans=+m.dataset.ans,bs=[...m.querySelectorAll('.opt')],why=m.querySelector('.why');
+  const hb=m.querySelector('.hintb'),hp=m.querySelector('.hint');
+  if(hb)hb.onclick=()=>{if(!m.classList.contains('solved'))hp.hidden=!hp.hidden;};
+  const solve=()=>{bs[ans].classList.add('right');m.classList.add('solved');why.hidden=false;if(hp)hp.hidden=true;if(hb)hb.disabled=true;};
+  bs.forEach((b,i)=>b.onclick=()=>{if(m.classList.contains('solved'))return;if(i===ans)solve();else{b.classList.remove('wrong');void b.offsetWidth;b.classList.add('wrong');}});
+  m.querySelector('.reveal').onclick=solve;});
+
+/* =============== DEMO: lowering =============== */
+(function(){const NODES=[
+  {id:'sub',label:'−',x:270,y:30},{id:'mul',label:'*',x:140,y:100,p:'sub'},{id:'call',label:'call fee',x:400,y:100,p:'sub'},
+  {id:'add',label:'+',x:80,y:170,p:'mul'},{id:'cnt',label:'count#1',x:210,y:170,p:'mul',tm:1},{id:'p2',label:'price#1',x:400,y:170,p:'call',tm:1},
+  {id:'p1',label:'price#1',x:40,y:245,p:'add',tm:1},{id:'two',label:'2',x:130,y:245,p:'add',tm:1}];
+  const ORDER=[null,['p1','price','price#1','—','CId: the result is the slot itself; no code.'],['two','2','2','—','CInt: a constant result, no code.'],
+   ['add','price + 2','t1','t1 = price#1 + 2','CBinop: both children’s code (none), then one instruction into a <b>fresh</b> t1.'],
+   ['cnt','count','count#1','—','CId again: no code.'],['mul','(…) * count','t2','t2 = t1 * count#1','Left code first, then t2 = t1 * count#1. t1 is still intact because t2 is fresh.'],
+   ['p2','price (arg)','price#1','—','The call’s argument: a slot, no code.'],['call','fee(price)','t3','t3 = call fee(price#1)','CCall: argument code, then the call into t3. The body of fee is not copied.'],
+   ['sub','… − fee(price)','t4','t4 = t2 - t3','The left subtree’s code was emitted before the call: left-to-right order. Then t4 = t2 − t3.'],
+   ['decl','int total = …','—','total#1 = t4','CDecl: E.code ++ [total#1 = t4]. Five three-address instructions; no nesting anywhere.']];
+  const svg=document.getElementById('low-tree'),tab=document.getElementById('low-tab'),ir=document.getElementById('low-ir'),cap=document.getElementById('low-cap');drawTree(svg,NODES);
+  ORDER.slice(1).forEach((o,i)=>tab.insertAdjacentHTML('beforeend',`<tr class="fx" data-f="${i+1}"><td>${esc(o[1])}</td><td><code>${o[2]}</code></td><td><code>${esc(o[3])}</code></td></tr>`));
+  function render(k,anim){const vis=new Set(NODES.map(n=>n.id));const now=new Set(k&&ORDER[k][0]!=='decl'?[ORDER[k][0]]:[]);
+    const done=new Set(ORDER.slice(1,k+1).map(o=>o[0]));treeShow(svg,vis,now,{faded:new Set(NODES.filter(n=>!done.has(n.id)&&!now.has(n.id)&&k>0).map(n=>n.id))});
+    if(k===0)treeShow(svg,vis,new Set(),{});showF(tab,k);
+    const lines=ORDER.slice(1,k+1).filter(o=>o[3]!=='—').map(o=>o[3]);ir.innerHTML=lines.map((l,i)=>`<div class="${anim&&i===lines.length-1&&ORDER[k][3]!=='—'?'fx on':''}" style="${i===lines.length-1&&ORDER[k][3]!=='—'?'color:var(--num)':''}">${esc(l)}</div>`).join('')||'<span style="color:var(--cmt)">// nothing emitted yet</span>';
+    capSet(cap,k?ORDER[k][4]:'Walk the checked tree in <b>postorder</b>: children before parents, left before right. Each node gets a result and code.',anim);}
+  registerDemo('d-low',ORDER.length-1,render);})();
+
+/* =============== SLR shared data =============== */
+const RULES=[["S′",["E"]],["E",["E","+","T"]],["E",["T"]],["T",["(","E",")"]],["T",["id"]]];
+const STATES=[[[0,0],[1,0],[2,0],[3,0],[4,0]],[[0,1],[1,1]],[[2,1]],[[3,1],[1,0],[2,0],[3,0],[4,0]],[[4,1]],[[1,2],[3,0],[4,0]],[[3,2],[1,1]],[[1,3]],[[3,3]]];
+const EDGES=[[0,"E",1],[0,"T",2],[0,"(",3],[0,"id",4],[1,"+",5],[3,"E",6],[3,"T",2],[3,"(",3],[3,"id",4],[5,"T",7],[5,"(",3],[5,"id",4],[6,")",8],[6,"+",5]];
+const TERMS=["id","+","(",")","$"],NTS=["E","T"],FOLLOW={E:["+",")","$"],T:["+",")","$"]};
+const ACT={},GO={};for(let s=0;s<9;s++){ACT[s]={};GO[s]={};}
+function put(s,a,v){ACT[s][a]=ACT[s][a]&&ACT[s][a]!==v?ACT[s][a]+"/"+v:v;}
+EDGES.forEach(([f,x,t])=>NTS.includes(x)?GO[f][x]=t:put(f,x,"s"+t));
+STATES.forEach((its,s)=>its.forEach(([r,d])=>{if(d===RULES[r][1].length){if(r===0)put(s,"$","acc");else FOLLOW[RULES[r][0]].forEach(a=>put(s,a,"r"+r));}}));
+function item([r,d]){const[l,rhs]=RULES[r];const L=rhs.slice(0,d).map(esc).join(' '),R=rhs.slice(d).map(esc).join(' ');return `${l} → ${L}${L?' ':''}<span class="dot">•</span>${R?' ':''}${R}`;}
+function ruleStr(r){return `${RULES[r][0]} → ${RULES[r][1].join(' ')}`;}
+function optList(el,opts,onPick){el.innerHTML='';opts.forEach((o,i)=>{const li=document.createElement('li'),b=document.createElement('button');b.className='opt';b.innerHTML='<span class="ot">'+o+'</span>';b.onclick=()=>onPick(i,b);li.appendChild(b);el.appendChild(li);});return [...el.querySelectorAll('.opt')];}
+function nudge(b){b.classList.remove('wrong');void b.offsetWidth;b.classList.add('wrong');}
+function dotify(s){return /<code|<span|<b>/.test(s)?s:esc(s).replace(/•/g,'<span class="dot">•</span>');}
+
+/* =============== LAB 1: automaton =============== */
+const POS={0:[60,200],1:[220,60],2:[220,340],3:[220,200],4:[560,340],5:[420,60],6:[420,200],7:[620,60],8:[620,200]};
+const LBL={"0-id":.42,"3-id":.66,"5-id":.64,"3-T":.42};
+const svgA=document.getElementById('fsm');
+const defs=mk(svgA,'defs',{});[['ar','#747d8b'],['arA','#b62645']].forEach(([id,c])=>{const m=mk(defs,'marker',{id,viewBox:'0 0 10 10',refX:9,refY:5,markerWidth:7,markerHeight:7,orient:'auto'});mk(m,'path',{d:'M0 0L10 5L0 10z',fill:c});});
+mk(svgA,'path',{d:'M4 200H30',stroke:'#747d8b','stroke-width':1.8,fill:'none','marker-end':'url(#ar)'});
+const edgeEl={};
+EDGES.forEach(([f,x,t])=>{const g=mk(svgA,'g',{class:'ed'});const a=POS[f],b=POS[t];let d,lx,ly;
+  if(f===t){d=`M${a[0]-12} ${a[1]-27} C${a[0]-46} ${a[1]-94}, ${a[0]+46} ${a[1]-94}, ${a[0]+12} ${a[1]-27}`;lx=a[0];ly=a[1]-84;}
+  else{const dx=b[0]-a[0],dy=b[1]-a[1],L=Math.hypot(dx,dy),ux=dx/L,uy=dy/L;d=`M${a[0]+ux*28} ${a[1]+uy*28}L${b[0]-ux*31} ${b[1]-uy*31}`;const tt=LBL[f+'-'+x]||.5;lx=a[0]+dx*tt-uy*13;ly=a[1]+dy*tt+ux*13+5;}
+  const p=mk(g,'path',{d,'marker-end':'url(#ar)'});const tx=mk(g,'text',{x:lx,y:ly,'text-anchor':'middle'});tx.textContent=x;edgeEl[f+x+t]={g,p};});
+const stEl={};
+for(let s=0;s<9;s++){const[x,y]=POS[s];const g=mk(svgA,'g',{class:'st'});mk(g,'circle',{class:'o',cx:x,cy:y,r:27});mk(g,'circle',{class:'ring',cx:x,cy:y,r:22});
+  const t=mk(g,'text',{x,y:y+8,'text-anchor':'middle','font-size':22});t.textContent='I'+sub(s);g.onclick=()=>{if(g.classList.contains('on'))showItems(s,false)};stEl[s]=g;}
+const accT=mk(svgA,'text',{x:252,y:100,'font-size':16,'font-weight':700,fill:'#16705a',opacity:0});accT.textContent='acc on $';
+requestAnimationFrame(()=>Object.values(edgeEl).forEach(e=>{try{e.p.style.setProperty('--len',e.p.getTotalLength()+5)}catch(_){}}));
+const itemsBox=document.getElementById('cq-items');
+function showItems(s,anim){Object.values(stEl).forEach(g=>g.classList.remove('sel'));
+  if(s==null){itemsBox.innerHTML='<div class="ttl">Item sets</div><span class="muted" style="font-family:var(--f-sans)">Answer the question to reveal I₀. Click any state to inspect its items.</span>';return;}
+  stEl[s].classList.add('sel');const its=STATES[s];const kern=its.filter(([r,d])=>d>0||r===0),cl=its.filter(([r,d])=>!(d>0||r===0));
+  let i=0;const row=(it,c)=>`<div class="it ${c?'cl':''} ${anim?'anim':''}" style="${anim?`animation-delay:${0*(i++)}ms`:''}">${item(it)}${c?'<span class="tg">CLOSURE</span>':''}</div>`;
+  itemsBox.innerHTML=`<div class="ttl">I${sub(s)} · ${kern.length} kernel${cl.length?` + ${cl.length} from closure`:''}</div><div class="grid2">${kern.map(k=>row(k,0)).join('')}${cl.map(k=>row(k,1)).join('')}</div>`;}
+const CSTEPS=[
+ {p:'Start from the seed item <code>S′ → <span class="dot">•</span> E</code>. Closure: whenever the dot is before a nonterminal, add all of its rules with the dot at the start.',o:[],a:0,w:'',its:[[0,0]],st:[],ed:[],f:null},
+ {p:'The dot is before E, so add every E-rule with the dot at the start: <code>E → <span class="dot">•</span> E + T</code> and <code>E → <span class="dot">•</span> T</code>.',o:[],a:0,w:'',its:[[0,0],[1,0],[2,0]],st:[],ed:[],f:null},
+ {q:'<code>E → <span class="dot">•</span> T</code> puts the dot before T. What does closure add next?',o:['<code>T → • ( E )</code> and <code>T → • id</code>','Nothing: closure is done','<code>E → • E + T</code> again','<code>T → ( • E )</code>'],a:0,x:[null,'The dot before T still pulls in every T-rule.','Each item is added once, and it is already in I₀.','Closure adds rules with the dot at the start, not moved dots.'],w:'Every T-rule enters with the dot at the start.',its:[[0,0],[1,0],[2,0],[3,0],[4,0]],st:[],ed:[],f:null},
+ {p:'<code>E → <span class="dot">•</span> E + T</code> also has the dot before E, but the E-rules are already in I₀ and each item enters once. Closure stops: I₀ has <b>5 items</b>.',o:[],a:0,w:'',st:[0],ed:[],f:0},
+ {x:["<code>E → • E + T</code> also has E after the dot, so it moves too.", null, "<code>T → • ( E )</code> has <code>(</code> after the dot, not E.", "The dot must move past E in both items."],q:'GOTO(I₀, E): items with E after the dot, dot moved. Which state results?',o:['{ S′ → E • }','{ S′ → E •, E → E • + T }','{ E → E • + T, T → • ( E ) }','{ S′ → E •, E → • E + T }'],a:1,w:'Two items had E after the dot. Neither new dot precedes a nonterminal, so closure adds nothing: I₁.',st:[1],ed:[[0,'E',1]],f:1},
+ {p:'GOTO(I₀, T) = I₂ = { E → T • }: a completed item, so a future reduce state.',q:'GOTO(I₀, T) = ?',o:['{ E → T • }','{ E → T •, E → E + T • }','{ E → T •, T → • id }','Empty'],a:0,w:'Only <code>E → <span class="dot">•</span> T</code> moves. I₂ is a completed item: a future reduce state.',st:[2],ed:[[0,'T',2]],f:2},
+ {x:["The dot before E needs closure.", "Closure adds both E-rules and both T-rules.", null, "There is no S′ item here: 1 + 4 = 5."],q:'GOTO(I₀, <code>(</code>) starts from <code>T → ( <span class="dot">•</span> E )</code>. After closure, how many items?',o:['1','3','5','6'],a:2,w:'Dot before E again: both E-rules, then both T-rules. 1 + 4 = 5. I₃ looks like I₀ without the S′ item.',st:[3],ed:[[0,'(',3]],f:3},
+ {p:'GOTO(I₀, id) = I₄ = { T → id • }.',q:'GOTO(I₀, id) = ?',o:['{ T → id • }','{ T → • id }','{ T → id •, E → T • }','I₂'],a:0,w:'Only <code>T → <span class="dot">•</span> id</code> moves: I₄.',st:[4],ed:[[0,'id',4]],f:4},
+ {x:["After the move the dot sits before T, a nonterminal.", null, "The dot is before T, so T-rules enter, not E-rules.", "Only T follows the dot; E-rules are not needed."],q:'GOTO(I₁, +) begins with <code>E → E + <span class="dot">•</span> T</code>. What does closure add?',o:['Nothing: + is a terminal','T → • ( E ) and T → • id','E → • E + T and E → • T','All four E- and T-rules'],a:1,w:'The dot now precedes T, so only T-rules join. I₅ has 3 items.',st:[5],ed:[[1,'+',5]],f:5},
+ {x:[null, "Each result equals an existing set (I₂, I₃, I₄), so nothing is new.", "Each result equals an existing set (I₂, I₃, I₄), so nothing is new.", "Each result equals an existing set (I₂, I₃, I₄), so nothing is new."],q:'From I₃, compute GOTO on T, <code>(</code> and id. How many <b>new</b> states?',o:['0: they are I₂, I₃, I₄','1','2','3'],a:0,w:'Same item sets as before, so reuse. The <code>(</code> edge loops to I₃: the state does not count parentheses; the stack does.',st:[],ed:[[3,'T',2],[3,'(',3],[3,'id',4]],f:3},
+ {x:["I₃ has no S′ item, so this set differs from I₁.", null, "The dot moves past E only, not past <code>)</code>.", "<code>S′ → • E</code> is not in I₃."],q:'GOTO(I₃, E) = ?',o:['I₁','New I₆ = { T → ( E • ), E → E • + T }','{ T → ( E ) • }','{ S′ → E •, E → E • + T }'],a:1,w:'I₃ has no S′ item, so this is not I₁. Equal states need equal item sets.',st:[6],ed:[[3,'E',6]],f:6},
+ {x:["I₂ holds <code>E → T •</code>; this set holds <code>E → E + T •</code>.", null, "The dot moved, so the item set changed.", "<code>E → E + • T</code> has T after the dot."],q:'GOTO(I₅, T) = ?',o:['I₂: the edge is labelled T','New I₇ = { E → E + T • }','I₅ again','Empty'],a:1,w:'The dot moved inside <code>E → E + <span class="dot">•</span> T</code>: a different completed item from <code>E → T <span class="dot">•</span></code>. Compare item sets, not edge labels.',st:[7],ed:[[5,'T',7],[5,'(',3],[5,'id',4]],f:7},
+ {x:["Its closure equals I₅ exactly, so I₅ is reused.", null, "I₁ is GOTO(I₀, E).", "I₈ is GOTO(I₆, ) )."],q:'GOTO(I₆, <code>)</code>) is the new I₈ = { T → ( E ) • }. Where does GOTO(I₆, +) go?',o:['A new state { E → E + • T }','I₅: same item set as GOTO(I₁, +)','I₁','I₈'],a:1,w:'Moving the dot gives <code>E → E + <span class="dot">•</span> T</code>, whose closure is exactly I₅. Done: 9 states, 14 edges.',st:[8],ed:[[6,')',8],[6,'+',5]],f:8},
+ {x:["I₁'s completed item S′ → E • means accept, not reduce.", null, "Misses I₇ = { E → E + T • }.", "I₂, I₄ and I₈ hold completed items too."],q:'Which states will receive <b>reduce</b> entries?',o:['I₁, I₂, I₄, I₇, I₈','I₂, I₄, I₇, I₈','I₂, I₄, I₈','I₇ only'],a:1,w:'Completed <code>A → β <span class="dot">•</span></code> means reduce. I₁’s <code>S′ → E <span class="dot">•</span></code> becomes <b>accept</b> on $, not a reduce. Double circles mark completed states.',st:[],ed:[],f:null,fin:true}];
+let cs=0,csDone=false;const cq=k=>document.getElementById('cq-'+k);
+function applyC(k,fresh){Object.values(stEl).forEach(g=>g.classList.remove('on','final'));Object.values(edgeEl).forEach(e=>{e.g.classList.remove('on','fresh');e.p.setAttribute('marker-end','url(#ar)')});accT.setAttribute('opacity',0);
+  for(let i=0;i<k;i++){const S=CSTEPS[i];S.st.forEach(s=>stEl[s].classList.add('on'));S.ed.forEach(([f,x,t])=>{const e=edgeEl[f+x+t];e.g.classList.add('on');if(fresh&&i===k-1){e.g.classList.add('fresh');e.p.setAttribute('marker-end','url(#arA)')}});
+    if(S.fin){[1,2,4,7,8].forEach(s=>stEl[s].classList.add('final'));accT.setAttribute('opacity',1);}}
+  let f=null;for(let i=k-1;i>=0;i--){if(CSTEPS[i].f!=null){f=CSTEPS[i].f;break;}}showItems(f,fresh&&k>0&&CSTEPS[k-1].st.length>0);if(f===null&&!CSTEPS.slice(0,k).some(s=>s.fin)){let its=[[0,0]],prev=[[0,0]];for(let i=k-1;i>=0;i--){if(CSTEPS[i].its){its=CSTEPS[i].its;for(let j=i-1;j>=0;j--){if(CSTEPS[j].its){prev=CSTEPS[j].its;break;}}break;}}stEl[0].classList.add('on');stEl[0].classList.add('sel');const isNew=t=>k>0&&!prev.some(q=>q[0]===t[0]&&q[1]===t[1]);itemsBox.innerHTML='<div class="ttl">I₀ · '+(its.length===1?'seed item':'closure so far')+'</div><div class="grid2">'+its.map(t=>'<div class="it '+(isNew(t)?'cl anim':'')+'">'+item(t)+(isNew(t)?'<span class="tg">ADDED</span>':'')+'</div>').join('')+'</div>';}}
+function renderC(){const S=CSTEPS[cs];cq('q').closest('.qcard').classList.remove('solved');csDone=false;cq('tag').textContent='STEP '+(cs+1)+(S.p?'':' · QUESTION');cq('n').textContent=`${cs+1} / ${CSTEPS.length}`;cq('q').innerHTML=S.p||S.q;cq('why').hidden=true;cq('next').disabled=true;
+  cq('opts').bs=optList(cq('opts'),S.o.map(dotify),(i,b)=>{if(csDone)return;if(i===S.a)solveC();else{nudge(b);if(S.x)addX(b,S.x[i]);}});applyC(cs,false);cq('rev').disabled=!!S.p;if(S.p){cq('opts').innerHTML='';solveC();}}
+function solveC(){const S=CSTEPS[cs];csDone=true;if(!S.p){cq('opts').bs[S.a].classList.add('right');}cq('why').innerHTML=S.w+(cs===CSTEPS.length-1?' <b>Automaton complete.</b>':'');cq('why').hidden=!!S.p&&cs<CSTEPS.length-1;if(!S.p&&S.x)showAll(cq('opts'),S,cq('why'));cq('next').disabled=cs>=CSTEPS.length-1;applyC(cs+1,true);}
+cq('rev').onclick=()=>{if(!csDone)solveC()};cq('next').onclick=()=>{if(cs<CSTEPS.length-1){cs++;renderC();}};
+cq('back').onclick=()=>{if(csDone&&!CSTEPS[cs].p)renderC();else if(cs>0){cs--;renderC();if(!CSTEPS[cs].p)solveC();}};cq('reset').onclick=()=>{cs=0;renderC();};
+renderC();
+
+/* =============== LAB 2: table =============== */
+function tableHTML(cls,id){let h=`<table class="grid ${cls}" id="${id}"><tr><th>state</th>${TERMS.map(t=>`<th>${esc(t)}</th>`).join('')}${NTS.map((n,i)=>`<th class="${i?'':'split'}">${n}</th>`).join('')}</tr>`;
+  for(let s=0;s<9;s++)h+=`<tr data-s="${s}"><th>${s}</th>`+TERMS.map(t=>`<td data-k="${s}|${t}"></td>`).join('')+NTS.map((n,i)=>`<td class="${i?'':'split'}" data-k="${s}|${n}"></td>`).join('')+'</tr>';return h+'</table>';}
+function fillCell(tbl,s,a,anim){const td=tbl.querySelector(`td[data-k="${s}|${a}"]`);const v=NTS.includes(a)?(GO[s][a]??''):(ACT[s][a]||'');td.textContent=v;
+  td.classList.remove('sh','re','ac','go','pop','focus');if(v!==''){td.classList.add(NTS.includes(a)?'go':v[0]==='s'?'sh':v[0]==='r'?'re':'ac');if(anim){void td.offsetWidth;td.classList.add('pop');}}}
+function fillRow(tbl,s,anim,delay){[...TERMS,...NTS].forEach((a,i)=>anim?setTimeout(()=>fillCell(tbl,s,a,true),(delay||0)+i*70):fillCell(tbl,s,a,false));}
+function fillAll(tbl,anim){for(let s=0;s<9;s++)fillRow(tbl,s,anim,s*170);}
+document.getElementById('tq-table').innerHTML=tableHTML('','tq-t');const TT=document.getElementById('tq-t');
+const TSTEPS=[
+ {x:["Misses ) from T → ( E ).", null, "Nothing puts ( right after E.", "Misses + from E → E + T."],q:'FOLLOW(E) = ?',o:['{ +, $ }','{ +, ), $ }','{ +, (, ), $ }','{ ), $ }'],a:1,w:'<code>$</code> from S′ → E; <code>+</code> from E → E + T; <code>)</code> from T → ( E ). Nothing puts <code>(</code> after an E.',chip:'fe'},
+ {p:'FOLLOW(T) = FOLLOW(E) = { +, ), $ }: T ends both E-rules, and nothing else follows T.',q:'FOLLOW(T) = ?',o:['{ +, ), $ }','{ * }','{ ), $ }','{ id, ( }'],a:0,w:'T ends both E-rules, so FOLLOW(E) ⊆ FOLLOW(T); nothing else follows T.',chip:'ft'},
+ {x:["s8 belongs to I₆; I₂ has no ) edge.", null, ") ∈ FOLLOW(E), so the completed E → T • reduces.", "Rule 4 is T → id; I₂ holds E → T •."],q:'ACTION[2, )] = ?',o:['s8','r2','error','r4'],a:1,w:'I₂ = { E → T • } and ) ∈ FOLLOW(E): reduce by rule 2. r2 means rule 2, not state 2. Watch row 2 fill from FOLLOW(E).',cell:[2,')'],row:2,pulse:'fe'},
+ {p:'ACTION[6, )] = s8: shifts come straight from terminal edges (I₆ –)→ I₈).',q:'ACTION[6, )] = ?',o:['r3','s8','r1','acc'],a:1,w:'I₆ has an edge on ) to I₈. Shifts come straight from terminal edges.',cell:[6,')'],row:6},
+ {x:[null, "+ is in FOLLOW(E), from E → E + T.", "SLR has no preference: a cell with both actions is a conflict.", "There is no precedence declaration here."],q:'+ ∈ FOLLOW(E), yet ACTION[6, +] is s5, not a reduce. Why?',o:['I₆ has no completed item; reduces come only from completed items','+ ∉ FOLLOW(E) after all','SLR prefers shift whenever both are possible','A %left declaration chose shift'],a:0,w:'FOLLOW decides where a completed item reduces; it never creates a reduce on its own. In I₆ = { T → ( E • ), E → E • + T } the dot is inside both rules, so only the + edge applies.',cell:[6,'+'],row:6},
+ {p:'ACTION[1, $] = acc: I₁ holds S′ → E •. On + the same state shifts to 5.',q:'ACTION[1, $] = ?',o:['r2','acc','s5','error'],a:1,w:'I₁ holds S′ → E • : accept at end of input. On + it shifts to 5.',cell:[1,'$'],row:1},
+ {x:["( ∉ FOLLOW(T), so there is no reduce in that column.", "I₄ has no edges, so it cannot shift.", null, "I₄ holds T → id •, which is rule 4, not 3."],q:'ACTION[4, (] = ?',o:['r4','s3','error','r3'],a:2,w:'I₄ reduces only on FOLLOW(T) = { +, ), $ }. <code>(</code> is not there and I₄ has no edges: <code>id (</code> is a syntax error. Now the remaining rows fill in.',cell:[4,'('],row:4,pulse:'ft'},
+ {x:[null, "I₆ has no completed item, so it only shifts.", "I₂ has only one completed item.", "s5 and acc sit in different columns (+ and $)."],q:'The table is complete. Does it have a conflict?',o:['No: every cell holds at most one action','Yes: shift/reduce in state 6','Yes: reduce/reduce in state 2','Yes: state 1 shifts and accepts'],a:0,w:'Each state has at most one completed item, and its FOLLOW set never overlaps its shift symbols. State 1 uses different columns for s5 and acc. The grammar is SLR(1).'}];
+let ts=0,tsDone=false;const tq=k=>document.getElementById('tq-'+k);
+function chipSet(id,on){const c=document.getElementById(id);c.textContent=(id==='fe'?'FOLLOW(E)':'FOLLOW(T)')+(on?' = { +, ), $ }':' = ?');c.classList.toggle('on',on);}
+function applyT(k){TT.querySelectorAll('td').forEach(td=>{td.textContent='';td.className=td.classList.contains('split')?'split':''});chipSet('fe',k>0);chipSet('ft',k>1);
+  for(let i=0;i<k;i++)if(TSTEPS[i].row!=null)fillRow(TT,TSTEPS[i].row,false);if(k>=TSTEPS.length-1)fillAll(TT,false);}
+function renderT(){const S=TSTEPS[ts];tq('q').closest('.qcard').classList.remove('solved');tsDone=false;tq('tag').textContent='STEP '+(ts+1)+(S.p?'':' · QUESTION');focusZ(document.getElementById('tq-q').closest('.slide'),S.chip?['chips']:['table']);tq('n').textContent=`${ts+1} / ${TSTEPS.length}`;tq('q').innerHTML=S.p||S.q;tq('why').hidden=true;tq('next').disabled=true;
+  applyT(ts);if(S.cell){const td=TT.querySelector(`td[data-k="${S.cell[0]}|${S.cell[1]}"]`);td.classList.add('focus');td.textContent='?';}
+  tq('opts').bs=optList(tq('opts'),S.o.map(esc),(i,b)=>{if(tsDone)return;if(i===S.a)solveT();else{nudge(b);if(S.x)addX(b,S.x[i]);}});tq('rev').disabled=!!S.p;if(S.p){tq('opts').innerHTML='';solveT();}}
+function solveT(){const S=TSTEPS[ts];tsDone=true;if(!S.p){tq('opts').bs[S.a].classList.add('right');}tq('why').innerHTML=S.w+(ts===TSTEPS.length-1?' <b>Table complete.</b>':'');tq('why').hidden=!!S.p;if(!S.p&&S.x)showAll(tq('opts'),S,tq('why'));tq('next').disabled=ts>=TSTEPS.length-1;
+  if(S.chip){chipSet(S.chip,true);const c=document.getElementById(S.chip);c.classList.remove('pulse');void c.offsetWidth;c.classList.add('pulse');}
+  if(S.pulse){const c=document.getElementById(S.pulse);c.classList.remove('pulse');void c.offsetWidth;c.classList.add('pulse');}
+  if(S.row!=null){TT.querySelector(`td[data-k="${S.cell[0]}|${S.cell[1]}"]`).textContent='';fillRow(TT,S.row,true);setTimeout(()=>{const td=TT.querySelector(`td[data-k="${S.cell[0]}|${S.cell[1]}"]`);td.classList.add('focus')},560);}
+  if(ts===TSTEPS.length-2)fillAll(TT,false);}
+tq('rev').onclick=()=>{if(!tsDone)solveT()};tq('next').onclick=()=>{if(ts<TSTEPS.length-1){ts++;renderT();}};
+tq('back').onclick=()=>{if(tsDone&&!TSTEPS[ts].p)renderT();else if(ts>0){ts--;renderT();if(!TSTEPS[ts].p)solveT();}};tq('reset').onclick=()=>{ts=0;renderT();};
+renderT();
+
+/* =============== LAB 3: parse =============== */
+const INPUT=[["id","a"],["+"],["("],["id","b"],["+"],["id","c"],[")"],["$"]];
+let uid=1;const SN=[],TN=[];
+(function(){let stack=[{sym:'',state:0,ast:'',id:0}],pos=0;
+  for(let g=0;g<60;g++){const s=stack[stack.length-1].state,a=INPUT[pos][0],act=ACT[s][a]||'error';const sn={stack:stack.map(o=>({...o})),pos,s,a,act};
+    if(act[0]==='s'){const t=+act.slice(1);sn.t=t;const nid='t'+TN.length;TN.push({id:nid,label:INPUT[pos][1]||a,tm:1,kids:[],h:0,c:SN.length,leaf:pos});stack=[...stack,{sym:a,state:t,ast:INPUT[pos][1]||'',id:uid++,nid}];pos++;}
+    else if(act[0]==='r'){const r=+act.slice(1),[A,rhs]=RULES[r],k=rhs.length,pop=stack.slice(-k),rest=stack.slice(0,-k),ex=rest[rest.length-1].state,gt=GO[ex][A];
+      const ast=r===1?`Add(${pop[0].ast}, ${pop[2].ast})`:r===3?pop[1].ast:pop[0].ast;const nid='t'+TN.length;const kids=pop.map(p=>p.nid);
+      TN.push({id:nid,label:A,kids,h:1+Math.max(...kids.map(k=>TN.find(n=>n.id===k).h)),c:SN.length});
+      Object.assign(sn,{r,A,k,ex,gt,ast,newId:uid,nid,kids});stack=[...rest,{sym:A,state:gt,ast,id:uid++,nid}];}
+    SN.push(sn);if(act==='acc'||act==='error')break;}
+  SN.final=stack;
+  const byId={};TN.forEach(n=>byId[n.id]=n);TN.forEach(n=>{if(n.leaf!=null)n.x=32+n.leaf*62;});
+  TN.forEach(n=>{if(n.leaf==null)n.x=n.kids.reduce((s,k)=>s+byId[k].x,0)/n.kids.length;n.y=200-n.h*34;});
+  TN.forEach(n=>n.kids.forEach(k=>byId[k].p=n.id));})();
+const ptree=document.getElementById('ptree');drawTree(ptree,TN.map(n=>({id:n.id,label:n.label,x:n.x,y:n.y,p:n.p,tm:n.tm})),true);
+document.getElementById('ptab').innerHTML=tableHTML('small','pt');const PT=document.getElementById('pt');fillAll(PT,false);
+const tape=document.getElementById('tape'),stk=document.getElementById('stk'),logEl=document.getElementById('log');
+tape.innerHTML=INPUT.map((t,i)=>`<div class="tok" data-i="${i}">${esc(t[0])}<small>${t[1]||''}</small></div>`).join('');
+document.querySelectorAll('.tabb').forEach(b=>b.onclick=()=>{document.querySelectorAll('.tabb').forEach(x=>x.classList.toggle('act',x===b));ptree.style.display=b.dataset.tab==='tree'?'':'none';logEl.hidden=b.dataset.tab!=='log';});
+const pq=k=>document.getElementById('pq-'+k);
+let ps=0,phase='action',busy=false,playing=false;
+function drawStack(stack,enterId,cls){stk.innerHTML=stack.map(o=>`<div class="sk ${o.id===enterId?cls:''}" data-id="${o.id}"><div class="sym">${o.id===0?'⊥':esc(o.sym)}</div><div class="st">${o.state}</div><div class="ast">${esc(o.ast||'')}</div></div>`).join('');}
+function drawTape(pos){tape.querySelectorAll('.tok').forEach((t,i)=>{t.classList.toggle('used',i<pos);t.classList.toggle('cur',i===pos);});}
+function drawLog(n){let h='';for(let i=0;i<n;i++){const s=SN[i];h+=`<div class="${i===n-1?'last':''}"><span>${i+1}</span><span>[${s.stack.map(o=>o.state).join(' ')}] · ${esc(s.a)}</span><span>${s.act}${s.r?` → ${s.gt}`:''}</span></div>`;}
+  logEl.innerHTML=h||'';logEl.scrollTop=1e5;}
+function drawPT(n,kidsOf,anim){const vis=new Set(TN.filter(t=>t.c<n).map(t=>t.id));const now=new Set(n>0?TN.filter(t=>t.c===n-1).map(t=>t.id):[]);
+  treeShow(ptree,vis,now,{anim});if(kidsOf)ptree.querySelectorAll('g[data-id]').forEach(g=>g.classList.toggle('kid',kidsOf.includes(g.dataset.id)));else ptree.querySelectorAll('g.kid').forEach(g=>g.classList.remove('kid'));}
+function hlTable(s,a){PT.querySelectorAll('tr').forEach(tr=>tr.classList.remove('rowhl'));PT.querySelectorAll('td').forEach(td=>td.classList.remove('focus'));if(s==null)return;
+  PT.querySelector(`tr[data-s="${s}"]`).classList.add('rowhl');const td=PT.querySelector(`td[data-k="${s}|${a}"]`);if(td)td.classList.add('focus');}
+function seeded(arr,seed){const a=[...arr];for(let i=a.length-1;i>0;i--){seed=(seed*9301+49297)%233280;const j=Math.floor(seed/233280*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+function actionOpts(i,sn){const c=sn.act;const pool=c[0]==='s'?['r1','r2','r3','r4',...['s3','s4','s5','s8'].filter(x=>x!==c)]:c[0]==='r'?['s3','s4','s5','s8',...['r1','r2','r3','r4'].filter(x=>x!==c)]:['r1','r2','s5'];
+  const pick=[c];seeded(pool,i+7).forEach(x=>{if(pick.length<3&&!pick.includes(x))pick.push(x)});pick.push(c==='acc'?'error':'error');return seeded([...new Set(pick)],i+3);}
+function gotoOpts(i,sn){return seeded(sn.A==='E'?[1,6,2,7]:[2,7,1,6],i+11);}
+function fly(fromEl,toEl,label){const st=stage.getBoundingClientRect(),k=scaleK();const a=fromEl.getBoundingClientRect(),b=toEl.getBoundingClientRect();const g=document.createElement('div');g.className='ghost';g.textContent=label;
+  Object.assign(g.style,{left:(a.left-st.left)/k+'px',top:(a.top-st.top)/k+'px',width:a.width/k+'px',height:a.height/k+'px'});stage.appendChild(g);
+  requestAnimationFrame(()=>requestAnimationFrame(()=>{g.style.transform=`translate(${(b.left-a.left)/k}px,${(b.top-a.top)/k}px)`;g.style.width=b.width/k+'px';}));return sleep(560).then(()=>g.remove());}
+function renderP(){const sn=SN[ps];pq('tag').textContent=phase==='goto'?`STEP ${ps+1} · GOTO`:`STEP ${ps+1}`;pq('n').textContent=`${ps+1} / ${SN.length}`;pq('why').hidden=true;
+  drawTape(sn.pos);drawLog(ps);hlTable(sn.s,sn.a);
+  pq('tag').textContent+=(phase==='action'&&sn.act[0]==='r')||(phase==='action'&&sn.act==='acc')?' · QUESTION':'';pq('opts').xr=[];const one=(txt,q)=>{pq('q').innerHTML=q;pq('opts').bs=optList(pq('opts'),[txt],(i,b)=>pick(true,b));pq('opts').bs[0].classList.add('nextbtn');pq('opts').correct=0;};
+  if(phase==='action'){drawStack(sn.stack);drawPT(ps,null,false);
+    if(sn.act[0]==='s'){one(`Shift <code>${esc(sn.a)}</code>, push state ${sn.t}`,`Top state <b>${sn.s}</b>, lookahead <code>${esc(sn.a)}</code>: ACTION = <b>${sn.act}</b>.`);return;}
+    pq('q').innerHTML=`Top state <b>${sn.s}</b>, lookahead <code>${esc(sn.a)}</code>. ACTION[${sn.s}, ${esc(sn.a)}] = ?`;
+    const opts=actionOpts(ps,sn);pq('opts').bs=optList(pq('opts'),opts,(i,b)=>pick(opts[i]===sn.act,b));pq('opts').correct=opts.indexOf(sn.act);pq('opts').xr=opts.map(o=>o===sn.act?null:o==='error'?`ACTION[${sn.s}, ${esc(sn.a)}] is ${sn.act}, not blank.`:o==='acc'?'Accept needs state 1 with lookahead $.':o[0]==='s'?`State ${sn.s} has no <code>${esc(sn.a)}</code>-edge.`:`I${sub(sn.s)} has no completed item for rule ${o.slice(1)} (<code>${esc(ruleStr(+o.slice(1)))}</code>).`);}
+  else{hlTable(sn.ex,sn.A);one(`GOTO[${sn.ex}, ${sn.A}] = ${sn.gt}: push (${sn.A}, ${sn.gt})`,`Popped ${sn.k} pair${sn.k>1?'s':''} for <code>${esc(ruleStr(sn.r))}</code>, exposing state <b>${sn.ex}</b>.`);}}
+function explainAction(sn){if(sn.act[0]==='s')return `State ${sn.s} has an edge on <code>${esc(sn.a)}</code> to ${sn.t}: push (${esc(sn.a)}, ${sn.t}) and advance the input.`;
+  if(sn.act==='acc')return `State 1 holds <code>S′ → E <span class="dot">•</span></code> and the input is at <code>$</code>: accept.`;
+  return `I${sub(sn.s)} holds <code>${item([sn.r,RULES[sn.r][1].length])}</code> and <code>${esc(sn.a)}</code> ∈ FOLLOW(${sn.A}): reduce by rule ${sn.r}. Pop ${sn.k} pair${sn.k>1?'s':''}; the input does not move.`;}
+async function pick(ok,b){if(busy)return;const xr=pq('opts').xr||[],bs0=pq('opts').bs||[];if(!ok){nudge(b);addX(b,xr[bs0.indexOf(b)]);return;}busy=true;xr.forEach((t,j)=>{if(t)addX(bs0[j],t)});const sn=SN[ps];pq('opts').bs.forEach(x=>x.onclick=null);b.classList.add('right');
+  if(phase==='action'){pq('why').innerHTML=explainAction(sn);pq('why').hidden=false;
+    if(sn.act[0]==='s'){await sleep(420);const nx=SN[ps+1];const src=tape.querySelector(`[data-i="${sn.pos}"]`);const newId=nx.stack[nx.stack.length-1].id;
+      drawStack(nx.stack,newId,'landing');drawTape(nx.pos);const dst=stk.lastElementChild;src.classList.add('used');await fly(src,dst,sn.a);dst.classList.remove('landing');
+      drawLog(ps+1);drawPT(ps+1,null,true);await sleep(260);ps++;phase='action';busy=false;renderP();}
+    else if(sn.act[0]==='r'){[...stk.querySelectorAll('.sk')].slice(-sn.k).forEach(e=>e.classList.add('pop'));drawPT(ps,sn.kids,false);await sleep(650);phase='goto';busy=false;renderP();
+      [...stk.querySelectorAll('.sk')].slice(-sn.k).forEach(e=>e.classList.add('pop'));drawPT(ps,sn.kids,false);}
+    else{drawLog(ps+1);finishP();busy=false;}}
+  else{pq('why').innerHTML=`GOTO[${sn.ex}, ${sn.A}] = ${sn.gt}: push (${sn.A}, ${sn.gt})${sn.r===1?` with the new node <code>${esc(sn.ast)}</code>`:sn.r===3?'; the parentheses vanish from the AST':'; the AST passes through'}. <span class="muted">GOTO on ${sn.A}: ${Object.keys(GO).filter(s=>GO[s][sn.A]!=null).map(s=>`${s}→${GO[s][sn.A]}`).join(', ')}.</span>`;pq('why').hidden=false;
+    [...stk.querySelectorAll('.sk')].slice(-sn.k).forEach(e=>e.classList.add('gone'));await sleep(480);
+    const nx=SN[ps+1];drawStack(nx.stack,sn.newId,'enterR');drawLog(ps+1);drawPT(ps+1,null,true);await sleep(620);ps++;phase='action';busy=false;renderP();}}
+function finishP(){const top=SN.final[SN.final.length-1];pq('q').innerHTML=`<div class="banner">Accepted in ${SN.length} steps · AST <code>${esc(top.ast)}</code></div>`;pq('opts').innerHTML='';
+  pq('why').innerHTML+=` ${SN.filter(s=>s.act[0]==='s').length} shifts, ${SN.filter(s=>s.act[0]==='r').length} reductions. T → id sent T to state 2 when the pop exposed 0 or 3, and to 7 when it exposed 5.`;pq('why').hidden=false;hlTable(null);phase='done';stopP();drawPT(SN.length,null,false);}
+function revealP(){if(busy||phase==='done')return Promise.resolve();return pick(true,pq('opts').bs[pq('opts').correct]);}
+function stopP(){playing=false;pq('play').textContent='Replay all';}
+pq('rev').onclick=revealP;
+pq('play').onclick=async()=>{if(playing){stopP();return;}if(phase==='done')resetP();playing=true;pq('play').textContent='Pause';while(playing&&phase!=='done'){if(busy){await sleep(100);continue;}await revealP();await sleep(500);}};
+function resetP(){stopP();busy=false;ps=0;phase='action';renderP();}
+pq('reset').onclick=resetP;
+pq('back').onclick=()=>{if(busy)return;stopP();if(phase==='goto'||phase==='done')phase='action';else if(ps>0){ps--;phase='action';}renderP();};
+renderP();
+
+function addX(b,t,ok){if(!b||!t||b.querySelector('.xwhy'))return;const s=document.createElement('span');s.className='xwhy'+(ok?' ok':'');s.innerHTML=t;(b.querySelector('.ot')||b).appendChild(s);}
+function showAll(el,S,why){const bs=el.bs||[];bs.forEach((bb,j)=>addX(bb,j===S.a?S.w:S.x[j],j===S.a));if(why)why.hidden=true;const q=el.closest('.qcard');if(q)q.classList.add('solved');}
+function focusZ(sl,zs){if(!sl)return;zs=zs||[];sl.classList.toggle('focusing',zs.length>0);sl.querySelectorAll('.zone').forEach(z=>z.classList.toggle('focus',zs.includes(z.dataset.z)));}
+const INTRO={
+ th:'Build the Thompson NFA for <code>a ( b | c )*</code>, one operator at a time. Every fragment has exactly one entry and one exit.',
+ ss:'Convert the NFA from Part 1 into a DFA. Each DFA state is an ε-closed set of NFA states; the start state is the closure of { 0 }.',
+ sl:'Four token rules share one NFA. Build the DFA, give each accepting state its token kind, then scan three inputs with longest match.',
+ cg:'Integer arrays may be empty: <code>[ ]</code>, <code>[ 1 ]</code>, <code>[ 1 , 2 , 3 ]</code>. Commas only separate elements, so <code>[ , 1 ]</code>, <code>[ 1 , ]</code> and <code>[ 1 , , 2 ]</code> are invalid. Write the grammar, then derive <code>[ 1 , 2 , 3 ]</code>.',
+ fe:'Compute nullable, FIRST and FOLLOW for this grammar, then use its SLR table to parse <code>b c</code>.',
+ cf:'Build the LR(0) states for <code>E → E + E | id</code>, fill in the SLR table, find the conflict, and resolve it with precedence.',
+ lw:'Lower the declaration to three-address IR. Walk the checked AST in postorder; every node gets a <b>result</b> and <b>code</b>.',
+ d2:'<code>dist2(e1, e2)</code> computes <code>(e1 − e2) * (e1 − e2)</code> and evaluates each argument exactly once, left to right. Give its typing and result/code rules, then lower <code>dist2(x + 1, y)</code> with <code>x#1</code>, <code>y#1</code>.',
+ pl:'<code>e |&gt; f</code> calls the one-argument function <code>f</code> on <code>e</code>. It is left-associative and binds more loosely than <code>+</code>. Take <code>x + 1 |&gt; double |&gt; inc</code> through every phase: tokens, AST, grammar, typing, IR.',
+ se:'MiniC evaluates binary operands left to right. Compare what <code>print(x + bump())</code> must print with what the class rule\'s IR computes.'};
+function stepQuiz(p,steps,apply){let i=-1,done=false;const $=k=>document.getElementById(p+'-'+k);const sl=$('q').closest('.slide');
+  function dots(){$('n').innerHTML='<span class="pd">'+steps.map((s,j)=>`<i class="${s.p?'':'qq'} ${j<i||(j===i&&done)?'d':''} ${j===i?'c':''}"></i>`).join('')+'</span>';}
+  function render(){done=false;$('q').closest('.qcard').classList.remove('solved');$('why').hidden=true;$('next').textContent='Next ▶';
+    if(i<0){$('tag').textContent='THE PROBLEM';$('q').innerHTML=`<span class="intro">${INTRO[p]||''}</span>`;$('opts').innerHTML='';$('opts').bs=[];$('rev').disabled=true;$('next').disabled=false;$('next').textContent='Start ▶';dots();focusZ(sl,[]);apply(0,false);return;}
+    const S=steps[i];focusZ(sl,S.z||[]);$('next').disabled=true;
+    if(S.p){$('tag').textContent='STEP '+(i+1);$('q').innerHTML=S.p;$('opts').innerHTML='';$('opts').bs=[];done=true;$('rev').disabled=true;$('next').disabled=i>=steps.length-1;dots();apply(i+1,true);return;}
+    $('tag').textContent='STEP '+(i+1)+' · QUESTION';$('rev').disabled=false;$('q').innerHTML=S.q;
+    $('opts').bs=optList($('opts'),S.o,(j,b)=>{if(done)return;if(j===S.a)solve();else{nudge(b);if(S.x)addX(b,S.x[j]);}});dots();apply(i,false);}
+  function solve(){const S=steps[i];done=true;$('opts').bs[S.a].classList.add('right');$('why').innerHTML=S.w;$('why').hidden=false;if(S.x)showAll($('opts'),S,$('why'));$('next').disabled=i>=steps.length-1;dots();apply(i+1,true);}
+  $('rev').onclick=()=>{if(!done&&i>=0)solve()};$('next').onclick=()=>{if(i<steps.length-1){i++;render();}};
+  $('back').onclick=()=>{if(i<0)return;if(done&&!steps[i].p)render();else{i--;render();if(i>=0&&!steps[i].p)solve();}};$('reset').onclick=()=>{i=-1;render();};render();}
+
+INTRO.sa='Resolve every name to the declaration it means (written <code>name#k</code>) and type-check each line. The symbol table is a stack of scopes: <code>{</code> pushes one, <code>}</code> pops it.';
+
+/* =============== Thompson NFA for a ( b | c )* =============== */
+const NPOS={0:[40,150],1:[125,150],2:[210,150],3:[295,150],4:[380,80],5:[480,80],6:[380,220],7:[480,220],8:[565,150],9:[660,150]};
+const NEDGES=[[0,1,'a',1],[4,5,'b',2],[6,7,'c',2],[3,4,'ε',3],[3,6,'ε',3],[5,8,'ε',3],[7,8,'ε',3],
+  [2,3,'ε',4],[8,3,'ε',4,'M565 124C540 14,320 14,295 124',430,40],[8,9,'ε',4],[2,9,'ε',4,'M210 176C240 300,630 300,660 176',435,276],[1,2,'ε',5]];
+function buildNFA(svg,mid){const d=mk(svg,'defs',{});[[mid,'#747d8b'],[mid+'A','#b62645']].forEach(([id,c])=>{const m=mk(d,'marker',{id,viewBox:'0 0 10 10',refX:9,refY:5,markerWidth:7,markerHeight:7,orient:'auto'});mk(m,'path',{d:'M0 0L10 5L0 10z',fill:c});});
+  const st={},ed=[];const start=mk(svg,'g',{class:'ed'});mk(start,'path',{d:'M0 150H14','marker-end':`url(#${mid})`});
+  NEDGES.forEach(([f,t,l,grp,path,lx,ly])=>{const g=mk(svg,'g',{class:'ed'});let d0=path;if(!d0){const a=NPOS[f],b=NPOS[t],dx=b[0]-a[0],dy=b[1]-a[1],L=Math.hypot(dx,dy),ux=dx/L,uy=dy/L;
+      d0=`M${a[0]+ux*25} ${a[1]+uy*25}L${b[0]-ux*27} ${b[1]-uy*27}`;lx=(a[0]+b[0])/2-uy*14;ly=(a[1]+b[1])/2+ux*14+6;if(dy===0)ly=a[1]-10;}
+    const p=mk(g,'path',{d:d0,'marker-end':`url(#${mid})`});const tx=mk(g,'text',{x:lx,y:ly,'text-anchor':'middle'});tx.textContent=l;ed.push({g,p,grp,f,t});});
+  for(let i=0;i<10;i++){const[x,y]=NPOS[i];const g=mk(svg,'g',{class:'st'});mk(g,'circle',{class:'o',cx:x,cy:y,r:24});const r=mk(g,'circle',{class:'kring',cx:x,cy:y,r:19});r.style.opacity=i===9?1:0;
+    const t=mk(g,'text',{x,y:y+7,'text-anchor':'middle','font-size':21});t.textContent=i;st[i]={g,ring:r};}
+  return {st,ed,start};}
+
+(function(){const svg=document.getElementById('nfa-th');const N=buildNFA(svg,'mkth');const log=document.getElementById('th-log');
+  const GRP_ST={1:[0,1],2:[4,5,6,7],3:[3,8],4:[2,9],5:[]};
+  const LOG={1:'<code>a</code>: 0 –a→ 1',2:'<code>b</code>: 4 –b→ 5 &nbsp;·&nbsp; <code>c</code>: 6 –c→ 7',3:'<code>b | c</code>: new entry 3, new exit 8, four ε-edges',
+    4:'<code>( b | c )*</code>: new entry 2, new exit 9; loop 8 → 3; skip 2 → 9',5:'<code>a ( b | c )*</code>: ε-edge 1 → 2. Start 0, accept 9.'};
+  requestAnimationFrame(()=>N.ed.forEach(e=>{try{e.p.style.setProperty('--len',e.p.getTotalLength()+5)}catch(_){}}));
+  svg.classList.add('auto');
+  const STEPMAP=[[],[1],[2],[3],[4],[],[5]];
+  function apply(k,anim){const all=STEPMAP.slice(0,k+1).flat(),fresh=anim?STEPMAP[k]:[];
+    for(let i=0;i<10;i++){const on=Object.keys(GRP_ST).some(g=>all.includes(+g)&&GRP_ST[g].includes(i));N.st[i].g.classList.toggle('on',on);}
+    N.st[9].ring.style.opacity=all.includes(5)?1:0;N.start.classList.toggle('on',all.includes(1));
+    N.ed.forEach(e=>{const on=all.includes(e.grp);e.g.classList.toggle('on',on);const fr=on&&fresh.includes(e.grp);e.g.classList.toggle('fresh',fr);e.p.setAttribute('marker-end',`url(#mkth${fr?'A':''})`);});
+    log.innerHTML=all.map(g=>`<div class="${anim&&fresh.includes(g)?'anim':''}">${LOG[g]}</div>`).join('');
+    document.getElementById('th-bad').style.visibility=k>=5?'visible':'hidden';
+    ['be-mp','be-tm'].forEach(id=>document.getElementById(id).classList.toggle('lit',k>=5));
+    document.getElementById('th-bad-cap').innerHTML=k>=5?'Accepts <b>ba</b>: p → m –b→ t, back through m to p (red edges), then –a→ m → t':'';}
+  stepQuiz('th',[
+   {p:'Symbol <code>a</code>: a new entry 0 and a new exit 1, joined by one <code>a</code>-edge.',z:['nfa','log']},
+   {p:'Symbols <code>b</code> and <code>c</code> get the same kind of fragment: 4 –b→ 5 and 6 –c→ 7.',z:['nfa','log']},
+   {x:[null, "Thompson never merges endpoints: once fragments are glued, merged states can create extra paths.", "An NFA edge reads one symbol; <code>b|c</code> is a regular expression, not a symbol.", "That builds <code>bc</code> (concatenation): it accepts <code>bc</code>, not <code>b</code> or <code>c</code> alone."],q:'Join the two fragments as <code>b | c</code>. How does Thompson\'s union work?',o:['A new entry with ε-edges to both entries; both exits ε-edge to a new exit','Merge the two entries into one state and the two exits into one state','Draw one edge labelled <code>b|c</code>','An ε-edge from the exit of <code>b</code> to the entry of <code>c</code>'],a:0,z:['nfa'],
+    w:'Union adds entry 3 and exit 8 with four ε-edges, so the result still has one entry and one exit. Option D would build <code>bc</code>.'},
+   {x:[null, "No way to skip the loop: the empty string (zero repetitions) is rejected.", "This reuses the inner endpoints instead of adding new ones (see the next step).", "Only skips: it accepts ε but never <code>b</code> or <code>c</code>."],q:'Apply <code>*</code> to the union (entry 3, exit 8). Which ε-edges does the star add?',o:['New entry → 3, new entry → new exit, 8 → 3, 8 → new exit','Only 8 → 3','8 → 3 and 3 → 8','Only new entry → new exit'],a:0,z:['nfa'],
+    w:'Entry 2 and exit 9 are new. 2 → 9 allows zero repetitions; 8 → 3 allows more than one.'},
+   {x:[null, "The skip edge 3 → 8 still accepts the empty string.", "Back edges are allowed: the star itself needs 8 → 3.", "It changes the language: <code>a*b*</code> built this way accepts <code>ba</code>."],q:'Why does the star get a <b>new</b> entry and exit? Suppose we reused the inner ones: ε 8 → 3 to repeat and ε 3 → 8 to skip.',o:['Alone it works, but the endpoints gain extra edges, so gluing fragments later creates unwanted paths','The empty string would no longer be accepted','ε-edges may not point backwards','It makes no difference; it is only a convention'],a:0,z:['bad'],
+    w:'Fragments keep no edges into the entry and none out of the exit. Without that, <code>a*b*</code> accepts <code>ba</code>.'},
+   {p:'Concatenate: an ε-edge from the exit of <code>a</code> (1) to the entry of the star (2). The NFA has 10 states, start 0, accept 9.',z:['nfa','log']}
+  ],apply);})();
+
+/* =============== Subset construction =============== */
+(function(){const svg=document.getElementById('nfa-ss');const N=buildNFA(svg,'mkss');const sl=document.querySelector('[data-tag="Subset"]');
+  N.start.classList.add('on');
+  const LIT=[[],[0],[1,2,3,4,6,9],[3,4,5,6,8,9],[3,4,6,7,8,9],[],[]],PEND={1:[1],2:[5]},F=[0,1,2,3,4,5,5];
+  function lit(set){for(let i=0;i<10;i++)N.st[i].g.classList.toggle('lit',set.includes(i));}
+  function apply(k,anim){showF(sl,F[k]);sl.querySelectorAll('.now').forEach(e=>e.classList.remove('now'));
+    lit(!anim&&PEND[k]?PEND[k]:LIT[k]);['B','C','D'].forEach(x=>document.getElementById('sd-'+x).classList.toggle('lit',k>=6));}
+  stepQuiz('ss',[
+   {p:'Start state: A = ε-closure({ 0 }) = { 0 }. No ε-edges leave state 0.',z:['nfa','table']},
+   {x:[null, "Stops too early: 2 has ε-edges to 3 and 9.", "Misses 3 → 4, 3 → 6 and 2 → 9.", "Misses 2 → 3, and then 3 → 4 and 3 → 6."],q:'move(A, <code>a</code>) = { 1 } (highlighted). What is ε-closure({ 1 })?',o:['{ 1, 2, 3, 4, 6, 9 }','{ 1, 2 }','{ 1, 2, 3 }','{ 1, 2, 9 }'],a:0,z:['nfa','table'],
+    w:'1 → 2 → 3 → 4 and 6, and 2 → 9 by the skip edge. It contains accept state 9, so B accepts.'},
+   {x:[null, "8 also has ε-edges to 3 and 9.", "Misses the loop 8 → 3, then 3 → 4 and 3 → 6.", "Misses 8 → 9, and 3 → 4 and 3 → 6."],q:'move(B, <code>b</code>) = { 5 } (highlighted). What is ε-closure({ 5 })?',o:['{ 3, 4, 5, 6, 8, 9 }','{ 5, 8 }','{ 5, 8, 9 }','{ 3, 5, 8 }'],a:0,z:['nfa','table'],
+    w:'5 → 8, then 8 → 9 and the loop 8 → 3 → 4, 6. A new set: state C, accepting.'},
+   {p:'move(B, <code>c</code>) = { 7 }, and its closure { 3, 4, 6, 7, 8, 9 } is new: state D, accepting.',z:['nfa','table']},
+   {x:[null, "On <code>b</code> both reach { 5 }, whose closure is C, not B.", "From C, <code>c</code> reaches { 7 }, whose closure is D, so C does not loop on <code>c</code>.", "The sets equal C and D, so they are reused, not new."],q:'Where do <code>b</code> and <code>c</code> go from C and from D?',o:['From both: <code>b</code> → C and <code>c</code> → D','From both: <code>b</code> → B and <code>c</code> → B','C loops on both letters; D loops on both','Each step creates a new state'],a:0,z:['table','dfa'],
+    w:'C and D both contain 4 and 6, so <code>b</code> reaches { 5 } → C and <code>c</code> reaches { 7 } → D. No new sets appear.'},
+   {p:'Done: 4 states. B, C and D accept because they contain NFA state 9.',z:['dfa']}
+  ],apply);})();
+
+/* =============== Scanner with token kinds =============== */
+(function(){const sl=document.querySelector('[data-tag="Scanner lab"]');const out=document.getElementById('sl-out');
+  const LIT=[[0],[1,3,5],[1,3,5],[2,4],[3],[3,4],[6]];
+  const SCANS={7:{s:'abba',path:[0,1,3,4],t:'D0 → D1 → D3 → D3 → D4',o:'Y(abba)'},8:{s:'abb',path:[0,1,3],t:'D0 → D1 → D3 → D3, back up to D1',o:'Z(a) &nbsp;W(b) &nbsp;W(b)'},9:{s:'aaa',path:[0,1,2],t:'D0 → D1 → D2, stuck on a',o:'X(aa) &nbsp;Z(a)'}};
+  function litN(set){for(let i=0;i<7;i++)document.getElementById('nq'+i).classList.toggle('lit',set.includes(i));}
+  function litD(set){for(let j=0;j<6;j++)document.getElementById('dq'+j).classList.toggle('lit',set.includes(j));}
+  function apply(k,anim){showF(sl,Math.min(k,6));sl.querySelectorAll('.now').forEach(e=>e.classList.remove('now'));
+    litN(k<=6?LIT[k]:[]);litD(SCANS[k]?SCANS[k].path:[]);
+    out.innerHTML=Object.keys(SCANS).filter(n=>k>=+n).map(n=>`<div class="${anim&&k===+n?'anim':''}"><code>${SCANS[n].s}</code> → <b>${SCANS[n].o}</b><br><span class="muted small">${SCANS[n].t}</span></div>`).join('');}
+  stepQuiz('sl',[
+   {x:["0 has three <code>a</code>-edges: to 1, 3 and 5.", null, "0 reaches 6 on <code>b</code>, not <code>a</code>.", "Reaching 2 needs a second <code>a</code>."],q:'D0 = { 0 }. What is move(D0, <code>a</code>)? (There are no ε-edges.)',o:['{ 1 }','{ 1, 3, 5 }','{ 1, 3, 5, 6 }','{ 1, 2 }'],a:1,z:['nfa','table'],
+    w:'Three edges leave 0 on <code>a</code>: to 1, 3 and 5. That set is D1.'},
+   {p:'D1 = { 1, 3, 5 } contains accepting state 5, so it reports <b>Z</b>.',z:['table','dfa']},
+   {x:[null, "X and Y match the same length, and X has higher priority.", "A DFA state reports exactly one token kind.", "Ties are normal; priority resolves them."],q:'move(D1, <code>a</code>) = { 2, 4 }. Both X and Y accept here. Which kind does D2 report?',o:['X','Y','Both X and Y','– (a tie is an error)'],a:0,z:['rules','table'],
+    w:'Both rules match <code>aa</code>, the same length. Priority decides, and X is listed first.'},
+   {p:'move(D1, <code>b</code>) = { 3 }: state D3, not accepting, since <code>ab</code> alone matches no rule.',z:['nfa','table']},
+   {x:[null, "D2 is { 2, 4 }; from 3, <code>a</code> reaches only { 4 }.", "{ 3 } is D3 itself, so <code>b</code> loops back to D3.", "From 3, <code>a</code> reaches 4 (not D1), and <code>b</code> loops on 3."],q:'From D3 = { 3 }, where do <code>a</code> and <code>b</code> go?',o:['<code>a</code> → new D4 = { 4 } (Y); <code>b</code> → D3','<code>a</code> → D2; <code>b</code> → D3','<code>a</code> → new { 4 } (Y); <code>b</code> → new { 3 }','<code>a</code> → D1; <code>b</code> → nothing'],a:0,z:['nfa','table','dfa'],
+    w:'<code>b</code> loops on 3, so D3 → D3. <code>a</code> reaches 4 only: a new state D4 that reports Y.'},
+   {p:'move(D0, <code>b</code>) = { 6 }: state D5 reports W. The DFA is done: 6 states, 4 accepting.',z:['table','dfa']},
+   {p:'Scan <code>abba</code>: D0 → D1 → D3 → D3 → D4, accepting after four characters. One token: <b>Y(abba)</b>.',z:['dfa','scans']},
+   {x:[null, "After Z(a), the rest <code>bb</code> scans as W(b) W(b): no error.", "No rule matches <code>abb</code>: Y needs a final <code>a</code>.", "<code>a</code> alone matches Z, so the scan does not fail at the start."],q:'Scan <code>abb</code>. Output?',o:['<code>Z(a) W(b) W(b)</code>','<code>Z(a)</code>, then an error','<code>Y(abb)</code>','An error at <code>a</code>'],a:0,z:['dfa','scans'],
+    w:'The input ends in D3, which does not accept. Back up to the last accepting position (after <code>a</code>, in D1): emit Z(a), then restart on <code>bb</code>.'},
+   {x:[null, "X and Y tie on <code>aa</code>; X has priority.", "Longest match: <code>aa</code> beats <code>a</code>.", "No rule matches <code>aaa</code>: D2 has no <code>a</code>-edge."],q:'Scan <code>aaa</code>. Output?',o:['<code>X(aa) Z(a)</code>','<code>Y(aa) Z(a)</code>','<code>Z(a) Z(a) Z(a)</code>','<code>X(aaa)</code>'],a:0,z:['dfa','scans'],
+    w:'D2 has no <code>a</code> edge. The last accept was D2 after two characters: emit X(aa), then scan the last <code>a</code> as Z.'}
+  ],apply);})();
+
+/* =============== Grammar for array literals =============== */
+(function(){const gram=document.getElementById('cg-gram'),der=document.getElementById('cg-der'),svg=document.getElementById('cg-tree'),bad=document.getElementById('cg-bad'),row=document.getElementById('cg-badrow');
+  const T=[{id:'A',label:'Arr',x:240,y:25},{id:'l',label:'[',x:60,y:88,p:'A',tm:1},{id:'E1',label:'Elems',x:240,y:88,p:'A'},{id:'r',label:']',x:420,y:88,p:'A',tm:1},
+    {id:'i1',label:'1',x:140,y:155,p:'E1',tm:1},{id:'c1',label:',',x:210,y:155,p:'E1',tm:1},{id:'E2',label:'Elems',x:300,y:155,p:'E1'},
+    {id:'i2',label:'2',x:230,y:220,p:'E2',tm:1},{id:'c2',label:',',x:300,y:220,p:'E2',tm:1},{id:'E3',label:'Elems',x:380,y:220,p:'E2'},{id:'i3',label:'3',x:380,y:282,p:'E3',tm:1}];
+  drawTree(svg,T);
+  drawTree(bad,[{id:'A',label:'Arr',x:210,y:22},{id:'l',label:'[',x:60,y:84,p:'A',tm:1},{id:'E',label:'Elems',x:210,y:84,p:'A'},{id:'r',label:']',x:360,y:84,p:'A',tm:1},
+    {id:'E0',label:'Elems',x:120,y:146,p:'E'},{id:'c',label:',',x:210,y:146,p:'E',tm:1},{id:'i',label:'1',x:290,y:146,p:'E',tm:1},{id:'e',label:'ε',x:120,y:200,p:'E0',tm:1}]);
+  treeShow(bad,new Set(['A','l','E','r','E0','c','i','e']),new Set(['e','c']),{});
+  const LINES=['Arr','⇒ [ <u>Elems</u> ]','⇒ [ INT , <u>Elems</u> ]','⇒ [ INT , INT , <u>Elems</u> ]','⇒ [ INT , INT , INT ]'];
+  const LN=[0,0,2,3,4,5,5];
+  const ADD=[[],[],['A','l','E1','r'],['i1','c1','E2'],['i2','c2','E3'],['i3'],[]];
+  const GB='<span class="gopt big"><span>Arr</span><span>→</span><span>[ ] | [ Elems ]</span><span>Elems</span><span>→</span><span>INT | INT , Elems</span></span>';
+  function apply(k,anim){gram.innerHTML=k>=1?GB:'';
+    der.innerHTML=LINES.slice(0,LN[k]).map((l,i)=>`<div class="${i===LN[k]-1&&k>=2?'cur':''}">${l}</div>`).join('');
+    const vis=new Set(ADD.slice(0,k+1).flat());treeShow(svg,vis,new Set(anim?ADD[k]:[]),{anim});
+    row.style.visibility=k>=6?'visible':'hidden';}
+  const g=r=>'<span class="gopt">'+r.map(([l,x])=>`<span>${l}</span><span>→</span><span>${x}</span>`).join('')+'</span>';
+  stepQuiz('cg',[
+   {x:["Derives <code>[ , 1 ]</code>: Elems ⇒ Elems , INT ⇒ ε , INT.", null, "Cannot derive <code>[ 1 ]</code>: every list ends in a comma, like <code>[ 1 , ]</code>.", "Derives <code>[ , ]</code> and <code>[ 1 , , 2 ]</code>, and is ambiguous."],q:'Which grammar generates exactly the valid literals?',o:[g([['Arr','[ Elems ]'],['Elems','ε | INT | Elems , INT']]),g([['Arr','[ ] | [ Elems ]'],['Elems','INT | INT , Elems']]),g([['Arr','[ Elems ]'],['Elems','INT , Elems | ε']]),g([['Arr','[ Elems ]'],['Elems','Elems , Elems | INT | ε']])],a:1,z:['gram'],
+    w:'<code>Arr</code> handles <code>[ ]</code>, so every comma sits between two INTs.'},
+   {p:'Derive <code>[ 1 , 2 , 3 ]</code>, leftmost first: <code>Arr ⇒ [ Elems ]</code>.',z:['der','tree']},
+   {p:'Expand Elems with <code>Elems → INT , Elems</code>: one element and one comma.',z:['der','tree']},
+   {x:[null, "<code>INT , Elems</code> puts Elems on the right of INT, never on its left.", "Leftmost derivation expands Elems; the first INT is already fixed.", "Using <code>Elems → INT</code> here ends the list with only two elements."],q:'What is the next sentential form?',o:['<code>[ INT , INT , Elems ]</code>','<code>[ INT , Elems , INT ]</code>','<code>[ Elems , INT , INT ]</code>','<code>[ INT , INT ]</code>'],a:0,z:['der','tree'],
+    w:'Expand the leftmost Elems the same way: another element and comma.'},
+   {p:'Finish with <code>Elems → INT</code>: <code>[ INT , INT , INT ]</code>. Two commas, two uses of <code>INT , Elems</code>.',z:['der','tree']},
+   {x:[null, "A grows lists with <code>, INT</code> on the right, so the last symbol is always INT.", "Each comma in A comes with an INT after it, so two commas never touch.", "Every extra INT in A comes with a comma."],q:'Grammar A (<code>Elems → ε | INT | Elems , INT</code>) also derives an invalid literal. Which one?',o:['<code>[ , 1 ]</code>','<code>[ 1 , ]</code>','<code>[ 1 , , 2 ]</code>','<code>[ 1 2 ]</code>'],a:0,z:['bad'],
+    w:'<code>Elems ⇒ Elems , INT ⇒ ε , INT</code>. The ε can only appear at the far left.'}
+  ],apply);})();
+
+/* =============== FIRST / FOLLOW with ε =============== */
+(function(){const sl=document.querySelector('[data-tag="FIRST/FOLLOW ε"]');
+  const TM=['a','b','c','$'],NT=['S','A','B'];
+  const ACT={0:{a:'s3',b:'r3',c:'r3'},1:{$:'acc'},2:{b:'s5',c:'r5'},3:{b:'r2',c:'r2'},4:{c:'s6'},5:{c:'r4'},6:{$:'r1'}},GO={0:{S:1,A:2},2:{B:4}};
+  let h='<table class="grid small" id="fe-t"><tr><th>state</th>'+TM.map(t=>`<th>${t}</th>`).join('')+NT.map((n,i)=>`<th class="${i?'':'split'}">${n}</th>`).join('')+'</tr>';
+  for(let s=0;s<7;s++){h+=`<tr><th>${s}</th>`+TM.map(t=>{const v=ACT[s][t]||'';return `<td data-k="${s}|${t}" class="${v[0]==='s'?'sh':v[0]==='r'?'re':v?'ac':''}">${v}</td>`;}).join('')+NT.map((n,i)=>`<td data-k="${s}|${n}" class="go ${i?'':'split'}">${(GO[s]||{})[n]??''}</td>`).join('')+'</tr>';}
+  document.getElementById('fe-tab').innerHTML=h+'</table>';
+  const tab=document.getElementById('fe-t'),tape=document.getElementById('fe-tape'),stk=document.getElementById('fe-stk'),log=document.getElementById('fe-log');
+  const IN=['b','c','$'];
+  const F=[{st:[['⊥',0]],pos:0},
+    {st:[['⊥',0],['A',2]],pos:0,cell:'0|b',log:'state 0, b: r3 (A → ε), pop 0, GOTO[0, A] = 2'},
+    {st:[['⊥',0],['A',2],['b',5]],pos:1,cell:'2|b',log:'state 2, b: s5'},
+    {st:[['⊥',0],['A',2],['B',4]],pos:1,cell:'5|c',log:'state 5, c: r4 (B → b), pop 1, GOTO[2, B] = 4'},
+    {st:[['⊥',0],['A',2],['B',4],['c',6]],pos:2,cell:'4|c',log:'state 4, c: s6'},
+    {st:[['⊥',0],['S',1]],pos:2,cell:'6|$',log:'state 6, $: r1 (S → A B c), pop 3, GOTO[0, S] = 1'},
+    {st:[['⊥',0],['S',1]],pos:2,cell:'1|$',log:'state 1, $: accept'}];
+  const FR=[0,0,0,0,1,2,3,4,5,6];const PCELL={3:'0|b',5:'5|c'};
+  function apply(k,anim){showF(sl,Math.min(k,3));sl.querySelectorAll('.now').forEach(e=>e.classList.remove('now'));
+    const x=F[FR[k]];tape.innerHTML=IN.map((t,i)=>`<div class="tok ${i<x.pos?'used':''} ${i===x.pos?'cur':''}">${t}</div>`).join('');
+    stk.innerHTML=x.st.map((e,i)=>`<div class="sk ${anim&&i===x.st.length-1&&FR[k]>0?'enterR':''}"><div class="sym">${e[0]}</div><div class="st">${e[1]}</div></div>`).join('');
+    const c=!anim&&PCELL[k]?PCELL[k]:x.cell;tab.querySelectorAll('td').forEach(td=>td.classList.toggle('focus',td.dataset.k===c));
+    const ls=F.slice(1,FR[k]+1);log.innerHTML=ls.slice(-3).map((y,i,arr)=>`<div class="${anim&&i===arr.length-1?'anim':''}">${y.log}</div>`).join('');}
+  const Z1=['sets'],Z2=['tab','trace'];
+  stepQuiz('fe',[
+   {x:[null, "<code>S → A B c</code> always produces <code>c</code>.", "<code>B → ε</code> makes B nullable too.", "<code>A → ε</code> and <code>B → ε</code> are ε-rules."],q:'Which nonterminals are nullable?',o:['A and B','A, B and S','Only A','None'],a:0,z:Z1,w:'A and B each have an ε-rule. S is not: <code>S → A B c</code> always produces <code>c</code>.'},
+   {x:[null, "A can vanish, so <code>b</code> and then <code>c</code> can also start S.", "S cannot vanish: <code>c</code> is always there.", "Both A and B can vanish, so <code>c</code> can come first."],q:'FIRST(S) = ?',o:['{ a, b, c }','{ a }','{ a, b, c, ε }','{ a, b }'],a:0,z:Z1,w:'Look past nullable A to B, and past nullable B to <code>c</code>. S cannot vanish, so no ε.'},
+   {x:[null, "B is nullable, so the <code>c</code> after B also follows A.", "<code>c</code> always comes after A and B, so <code>$</code> cannot follow them.", "ε is never in a FOLLOW set."],q:'FOLLOW(A) and FOLLOW(B) = ?',o:['A: { b, c } &nbsp; B: { c }','A: { b } &nbsp; B: { c }','A: { b, c, $ } &nbsp; B: { c, $ }','A: { b, c, ε } &nbsp; B: { c, ε }'],a:0,z:Z1,
+    w:'After A comes <code>B c</code>: FIRST(B) − ε = { b }, plus <code>c</code> because B is nullable. After B comes only <code>c</code>. ε never enters FOLLOW.'},
+   {x:[null, "s5 belongs to state 2; state 0 has no <code>b</code>-edge.", "A can be empty, so <code>b</code> may come first.", "<code>B → •</code> is not in I₀; B only comes after A."],q:'Parse <code>b c</code>. State 0, lookahead <code>b</code>. What is ACTION[0, b]?',o:['r3: reduce A → ε','s5','Error: the input has no <code>a</code>','r5: reduce B → ε'],a:0,z:Z2,
+    w:'I₀ holds the completed item <code>A → •</code> and b ∈ FOLLOW(A). An ε-rule pops <b>zero</b> pairs; GOTO[0, A] = 2 pushes A. The input does not move.'},
+   {p:'State 2, lookahead <code>b</code>: ACTION = s5. Shift b and push state 5.',z:Z2},
+   {x:[null, "I₅ holds <code>B → b •</code>, not <code>B → •</code>.", "s6 belongs to state 4; state 5 has no edges.", "<code>c</code> ∈ FOLLOW(B), so the reduce applies."],q:'State 5, lookahead <code>c</code>. What happens?',o:['r4: pop 1 pair, GOTO[2, B] = 4','r5: pop 0 pairs','s6','Error'],a:0,z:Z2,
+    w:'I₅ = { B → b • } and c ∈ FOLLOW(B). Popping <code>b</code> exposes state 2, and GOTO[2, B] = 4.'},
+   {p:'State 4, lookahead <code>c</code>: s6.',z:Z2},
+   {p:'State 6, lookahead <code>$</code>: r1 pops three pairs (A, B, c), exposes state 0, and GOTO[0, S] = 1.',z:Z2},
+   {p:'State 1, lookahead <code>$</code>: accept.',z:Z2}
+  ],apply);})();
+
+/* =============== conflict problem =============== */
+(function(){const box=document.getElementById('cf-items'),fol=document.getElementById('cf-fol'),tab=document.getElementById('cf-t'),svg=document.getElementById('cf-tree');
+  const D='<span class="dot">•</span>';
+  const ST=[['I₀','start',['E′ → '+D+' E','E → '+D+' E + E','E → '+D+' id']],['I₁','GOTO(I₀, E)',['E′ → E '+D,'E → E '+D+' + E']],['I₂','GOTO(I₀, id)',['E → id '+D]],
+    ['I₃','GOTO(I₁, +)',['E → E + '+D+' E','E → '+D+' E + E','E → '+D+' id']],['I₄','GOTO(I₃, E)',['E → E + E '+D,'E → E '+D+' + E']]];
+  const ROWS=[['s2','','','1'],['','s3','acc',''],['','r2','r2',''],['s2','','','4'],['','s3 / r1','r1','']];
+  drawTree(svg,[{id:'r',label:'Add',x:180,y:26},{id:'l',label:'Add',x:110,y:90,p:'r'},{id:'c',label:'c',x:250,y:90,p:'r',tm:1},{id:'a',label:'a',x:60,y:154,p:'l',tm:1},{id:'b',label:'b',x:160,y:154,p:'l',tm:1}]);
+  const head=tab.querySelector('tr').outerHTML;
+  function apply(k,anim){const n=k>=2?5:k>=1?4:3;
+    box.innerHTML=ST.slice(0,n).map((s,i)=>`<div class="cfbox ${anim&&i===n-1&&k<=2&&k>0?'anim':''} ${i===4&&k>=4?'hot':''}"><div class="cft">${s[0]} <span>${s[1]}</span></div>${s[2].map(x=>`<div>${x}</div>`).join('')}</div>`).join('')+(n<5?'<div class="cfbox ghostbox">?</div>':'');
+    fol.textContent='FOLLOW(E) = '+(k>=3?'{ +, $ }':'?');fol.classList.toggle('on',k>=3);
+    let h=head;const nr=k>=4?5:k>=3?4:0;
+    for(let i=0;i<nr;i++){h+=`<tr><th>${i}</th>`+ROWS[i].map((v,j)=>{let val=v;if(i===4&&j===1&&k>=5)val='r1';const cls=[val.includes('/')?'conf':val[0]==='s'?'sh':val[0]==='r'?'re':val==='acc'?'ac':'go',j===3?'split':'',anim&&((k===3&&i<4)||(k===4&&i===4))?'pop':'',i===4&&j===1&&k===5?'res':''].join(' ');
+      return `<td class="${cls}">${val}</td>`;}).join('')+'</tr>';}
+    tab.innerHTML=h;treeShow(svg,k>=5?new Set(['r','l','c','a','b']):new Set(),new Set(),{anim:anim&&k===5});}
+  stepQuiz('cf',[
+   {x:[null, "The dot before E pulls in every E-rule.", "Misses <code>E → • E + E</code>: both E-rules enter.", "That is GOTO(I₃, E), after the dot has moved past E."],q:'I₃ = GOTO(I₁, +) has kernel <code>E → E + '+D+' E</code>. What is its full closure?',o:['<code>E → E + • E</code>, <code>E → • E + E</code>, <code>E → • id</code>','<code>E → E + • E</code> only','<code>E → E + • E</code>, <code>E → • id</code>','<code>E → E + E •</code>'],a:0,z:['items'],
+    w:'The dot sits before E, so every E-rule enters with its dot at the start.'},
+   {p:'I₄ = GOTO(I₃, E) = { E → E + E •, E → E • + E }. GOTO(I₃, id) = I₂ and GOTO(I₄, +) = I₃ add no new states.',z:['items']},
+   {p:'FOLLOW(E) = { +, $ }: <code>$</code> from the start symbol, <code>+</code> from <code>E → E + E</code>. Rows I₀–I₃ follow directly.',z:['fol','table']},
+   {x:[null, "acc lives in I₁ (E′ → E •); row 4 has only r1 under $.", "id ∉ FOLLOW(E), and I₄ has no id-edge.", "The + column gets both s3 and r1."],q:'Fill row I₄. Which cell holds two actions?',o:['ACTION[4, +]: s3 and r1','ACTION[4, $]: acc and r1','ACTION[4, id]: s2 and r1','None: the grammar is SLR'],a:0,z:['items','table'],
+    w:'<code>E → E + E •</code> puts r1 under every FOLLOW(E) token: + and $. <code>E → E • + E</code> adds s3 under +. Shift/reduce conflict.'},
+   {x:[null, "Choosing shift is <code>%right</code>: it nests to the right.", "Reducing first closes <code>a + b</code>, so the left side nests.", "Precedence and associativity resolve this shift/reduce conflict."],q:'Declare <code>%left PLUS</code>. What goes in ACTION[4, +], and what AST does <code>a + b + c</code> get?',o:['r1; <code>Add(Add(a, b), c)</code>','s3; <code>Add(a, Add(b, c))</code>','r1; <code>Add(a, Add(b, c))</code>','The conflict remains'],a:0,z:['table','tree'],
+    w:'Equal precedence plus left associativity resolves the tie toward reduce, which closes <code>a + b</code> before shifting the second +.'}
+  ],apply);})();
+
+/* =============== lowering: one node per step =============== */
+(function(){const ZT=['tree','tab'],ZI=['tree','tab','ir'];
+  stepQuiz('lw',[
+   {p:'Postorder starts at the leftmost leaf: <code>price</code>. Its result is the slot <code>price#1</code>; no code.',z:ZT},
+   {p:'Leaf <code>2</code>: a constant result, no code.',z:ZT},
+   {x:[null, "That is the leaf <code>price</code>; the + node must compute a new value.", "No instruction sets t1.", "The result must be the temp holding the sum, not the constant 2."],q:'Now the node <code>price + 2</code>. What are its result and code?',o:['result <code>t1</code>; code <code>[t1 = price#1 + 2]</code>','result <code>price#1</code>; code <code>[]</code>','result <code>t1</code>; code <code>[]</code>','result <code>2</code>; code <code>[t1 = price#1 + 2]</code>'],a:0,z:ZI,
+    w:'Both children have empty code; the binop appends one instruction into a fresh temp.'},
+   {p:'Leaf <code>count</code>: result <code>count#1</code>, no code.',z:ZT},
+   {p:'<code>(price + 2) * count</code> emits <code>t2 = t1 * count#1</code> into a fresh temp, so t1 stays intact.',z:ZI},
+   {p:'The call\'s argument <code>price</code>: result <code>price#1</code>, no code.',z:ZT},
+   {x:[null, "Not an IR form: the call's value must go into a temp so the parent can use it.", "That adds; it never calls <code>fee</code>.", "Lowering emits a call; the body is lowered once, separately."],q:'Now <code>fee(price)</code>. What does it emit?',o:['<code>t3 = call fee(price#1)</code>','<code>call fee(price#1)</code> with no result','<code>t3 = fee + price#1</code>','The body of <code>fee</code>'],a:0,z:ZI,
+    w:'The argument has no code; the call goes into a fresh temp. The function body is not copied.'},
+   {p:'The root subtraction emits <code>t4 = t2 - t3</code>, after both subtrees\' code.',z:ZI},
+   {x:[null, "Forgets the final copy <code>total#1 = t4</code>.", "Slots and constants emit nothing; only four operations and one copy do.", "Counts every AST node; leaves emit no code."],q:'The declaration appends one more instruction. How many IR instructions in total?',o:['5','4','6','9'],a:0,z:['ir'],
+    w:'<code>total#1 = t4</code> completes it: two binops, one call, one subtraction, one copy.'}
+  ],(k,anim)=>DEMOS['d-low'](k,anim));})();
+
+/* =============== dist2 =============== */
+(function(){const ast=document.getElementById('d2-ast'),nv=document.getElementById('d2-naive'),rules=document.getElementById('d2-rules'),ir=document.getElementById('d2-ir');
+  drawTree(ast,[{id:'r',label:'CDist2',x:190,y:28},{id:'a',label:'CBinop +',x:110,y:96,p:'r'},{id:'y',label:'y#1',x:290,y:96,p:'r',tm:1},{id:'x',label:'x#1',x:55,y:166,p:'a',tm:1},{id:'o',label:'1',x:165,y:166,p:'a',tm:1}]);
+  drawTree(nv,[{id:'m',label:'*',x:260,y:26},{id:'s1',label:'−',x:130,y:88,p:'m'},{id:'s2',label:'−',x:390,y:88,p:'m'},{id:'a1',label:'x + 1',x:70,y:152,p:'s1'},{id:'y1',label:'y',x:190,y:152,p:'s1',tm:1},
+    {id:'a2',label:'x + 1',x:330,y:152,p:'s2'},{id:'y2',label:'y',x:450,y:152,p:'s2',tm:1}]);
+  const ALLA=new Set(['r','a','y','x','o']),ALLN=new Set(['m','s1','s2','a1','y1','a2','y2']);
+  const RB=[[2,'<div class="rbox"><span class="rt">TYPING</span>Γ ⊢ e₁ : Int &nbsp; Γ ⊢ e₂ : Int<br><span class="bar">Γ ⊢ dist2(e₁, e₂) : Int</span></div>'],
+    [3,'<div class="rbox"><span class="rt">RESULT / CODE · CDist2(E₁, E₂)</span>t = fresh_temp(); u = fresh_temp()<br>code = E₁.code ++ E₂.code<br>&nbsp;&nbsp;++ [t = E₁.result − E₂.result,<br>&nbsp;&nbsp;&nbsp;&nbsp; u = t * t]<br>result = u</div>']];
+  const IR=['t1 = x#1 + 1','t2 = t1 - y#1','t3 = t2 * t2      <span style="color:var(--cmt)">// = result</span>'];
+  const NIR=[0,0,0,0,1,1,2,3],NOW=[[],[],[],[],['a','x','o'],['y'],['r'],['r']];
+  function apply(k,anim){treeShow(ast,ALLA,new Set(NOW[k]),{});
+    treeShow(nv,k>=1?ALLN:new Set(),k>=1?new Set(['a1','a2','y1','y2']):new Set(),{anim:anim&&k===1});
+    rules.innerHTML=RB.filter(r=>k>=r[0]).map(r=>anim&&k===r[0]?r[1].replace('class="rbox','class="rbox anim'):r[1]).join('');
+    ir.innerHTML=IR.slice(0,NIR[k]).map((l,i)=>`<div style="${i===NIR[k]-1&&anim?'color:var(--num)':''}">${l}</div>`).join('');}
+  stepQuiz('d2',[
+   {x:[null, "<code>(e1 − e2) * (e1 − e2)</code> is still Int.", "The IR evaluates each argument twice; a call inside would run twice.", "Order stays left to right; the problem is repetition."],q:'Shortcut: desugar <code>dist2(e1, e2)</code> into <code>(e1 − e2) * (e1 − e2)</code> before lowering. What goes wrong?',o:['Each argument is evaluated twice','The result type changes','Nothing: the IR is the same','e2 is evaluated before e1'],a:0,z:['naive'],
+    w:'The desugared tree contains each argument twice, so their code runs twice. With a side effect the result changes; without one, the work doubles.'},
+   {p:'Typing: both arguments must be Int, and the result is Int.',z:['rules']},
+   {x:[null, "Reads E₂.result before E₂.code computes it.", "Runs E₂ before E₁: right to left.", "Runs each child's code twice."],q:'Which result/code rule evaluates each argument exactly once, left to right?',o:['<code>E₁.code ++ E₂.code ++ [t = E₁.result − E₂.result, u = t * t]</code>; result u','<code>E₁.code ++ [t = E₁.result − E₂.result] ++ E₂.code ++ [u = t * t]</code>; result u','<code>E₂.code ++ E₁.code ++ [t = E₁.result − E₂.result, u = t * t]</code>; result u','<code>E₁.code ++ E₂.code ++ E₁.code ++ E₂.code ++ [u = t * t]</code>; result u'],a:0,z:['rules'],
+    w:'Run both children\'s code once, in order, then reuse their <b>results</b>: <code>t</code> appears twice in <code>t * t</code>. B reads E₂.result too early, C runs E₂ first, D runs both twice.'},
+   {p:'Apply it to <code>dist2(x + 1, y)</code>. The left child <code>x + 1</code> emits <code>t1 = x#1 + 1</code>.',z:['ast','ir']},
+   {p:'The right child <code>y</code> is a slot: result <code>y#1</code>, no code.',z:['ast','ir']},
+   {p:'<code>t = E₁.result − E₂.result</code> becomes <code>t2 = t1 - y#1</code>.',z:['ast','ir']},
+   {p:'<code>u = t * t</code> becomes <code>t3 = t2 * t2</code>. The result is t3.',z:['ast','ir']}
+  ],apply);})();
+
+/* =============== pipe operator =============== */
+(function(){const TOK=['ID(x)','PLUS','INT_LIT(1)','PIPE','ID(double)','PIPE','ID(inc)'];
+  const AST=[{id:'r',label:'Call(inc)',x:210,y:28},{id:'d',label:'Call(double)',x:210,y:90,p:'r'},{id:'a',label:'Add',x:210,y:152,p:'d'},
+    {id:'x',label:'Id x',x:135,y:214,p:'a',tm:1},{id:'o',label:'IntLit 1',x:290,y:214,p:'a',tm:1}];
+  const svg=document.getElementById('pl-ast');drawTree(svg,AST);
+  const toks=document.getElementById('pl-toks'),rules=document.getElementById('pl-rules'),ir=document.getElementById('pl-ir');
+  const RB=[[3,'<div class="rbox"><span class="rt">GRAMMAR</span>Pipe → Pipe |&gt; ID | Sum<br>Sum &nbsp;→ Sum + Atom | Atom</div>'],
+    [4,'<div class="rbox"><span class="rt">TYPING</span>Γ ⊢ e : τ₁ &nbsp; Γ(f) = Function([τ₁], τ₂)<br><span class="bar">Γ ⊢ e |&gt; f : τ₂</span></div>'],
+    [5,'<div class="rbox bad"><span class="rt">REJECTED</span>x |&gt; isPos |&gt; double &nbsp;· Bool ≠ Int</div>'],
+    [6,'<div class="rbox"><span class="rt">RESULT / CODE · CPipe(E₁, f)</span>result = fresh t<br>code = E₁.code ++ [t = call f(E₁.result)]</div>']];
+  const IR=['t1 = x#1 + 1','t2 = call double(t1)','t3 = call inc(t2)   <span style="color:var(--cmt)">// = result</span>'];
+  const NOW={7:['a','x','o'],8:['d'],9:['r']};
+  function apply(k,anim){toks.innerHTML=k>=1?TOK.map(t=>`<span class="tok-chip ${anim&&k===1?'anim':''}">${t}</span>`).join(''):'';
+    treeShow(svg,k>=2?new Set(AST.map(n=>n.id)):new Set(),new Set(NOW[k]||[]),{anim:anim&&k===2});
+    rules.innerHTML=RB.filter(r=>k>=r[0]).map(r=>anim&&k===r[0]?r[1].replace('class="rbox','class="rbox anim'):r[1]).join('');
+    const n=Math.max(0,k-6);ir.innerHTML=IR.slice(0,n).map((l,i)=>`<div style="${i===n-1&&anim?'color:var(--num)':''}">${l}</div>`).join('');}
+  stepQuiz('pl',[
+   {x:[null, "Longest match: <code>|&gt;</code> is one PIPE token, not <code>|</code> then <code>&gt;</code>.", "There is no CALL token; <code>double</code> is just an ID.", "<code>x</code>, <code>+</code> and <code>1</code> are three tokens."],q:'<b>Scanner.</b> The scanner gains a rule for <code>|&gt;</code>. What token sequence does <code>x + 1 |&gt; double |&gt; inc</code> produce?',
+    o:['<code>ID(x) PLUS INT_LIT(1) PIPE ID(double) PIPE ID(inc)</code>','<code>ID(x) PLUS INT_LIT(1) BAR GT ID(double) BAR GT ID(inc)</code>','<code>ID(x) PLUS INT_LIT(1) PIPE CALL(double) PIPE CALL(inc)</code>','<code>ID(x+1) PIPE ID(double) PIPE ID(inc)</code>'],a:0,z:['toks'],
+    w:'Longest match makes <code>|&gt;</code> one PIPE token. Function names are ordinary identifiers.'},
+   {x:[null, "Makes <code>|&gt;</code> bind tighter than <code>+</code>.", "Right-associative: <code>inc</code> would apply first.", "<code>double</code> gets only <code>1</code>: wrong precedence."],q:'<b>AST.</b> <code>|&gt;</code> is left-associative and binds more loosely than <code>+</code>. Which AST is right?',
+    o:['<code>Call(inc, Call(double, Add(x, 1)))</code>','<code>Add(x, Call(inc, Call(double, 1)))</code>','<code>Call(double, Call(inc, Add(x, 1)))</code>','<code>Call(inc, Add(x, Call(double, 1)))</code>'],a:0,z:['ast'],
+    w:'Looser than <code>+</code>: the whole sum is piped. Left-associative: <code>double</code> applies first, so <code>inc</code> is the root.'},
+   {x:[null, "Right recursion makes <code>|&gt;</code> right-associative.", "Putting Pipe under Sum makes <code>|&gt;</code> bind tighter than <code>+</code>.", "<code>Pipe |&gt; Pipe</code> is ambiguous for <code>a |&gt; f |&gt; g</code>."],q:'<b>Grammar.</b> Which rule gives exactly that shape?',
+    o:['<code>Pipe → Pipe |&gt; ID | Sum</code>','<code>Pipe → Sum |&gt; Pipe | Sum</code>','<code>Sum → Sum + Pipe | Pipe</code>','<code>Pipe → Pipe |&gt; Pipe | ID</code>'],a:0,z:['rules'],
+    w:'Left recursion gives left associativity; Pipe above Sum binds more loosely. B is right-associative, C binds tighter than +, D is ambiguous.'},
+   {x:[null, "Too narrow: it rejects <code>isPos</code>, which returns Bool.", "Swaps the parameter and result types.", "Never checks <code>f</code>, so <code>x |&gt; isPos |&gt; double</code> would pass."],q:'<b>Typing.</b> Which rule should the checker use?',
+    o:['<code>Γ ⊢ e : τ₁, Γ(f) = Function([τ₁], τ₂) ⟹ Γ ⊢ e |&gt; f : τ₂</code>','<code>Γ ⊢ e : Int, Γ(f) = Function([Int], Int) ⟹ Γ ⊢ e |&gt; f : Int</code>','<code>Γ ⊢ e : τ₁, Γ(f) = Function([τ₂], τ₁) ⟹ Γ ⊢ e |&gt; f : τ₂</code>','<code>Γ ⊢ e : τ₁ ⟹ Γ ⊢ e |&gt; f : τ₁</code>'],a:0,z:['rules'],
+    w:'The argument type matches the parameter type; the result is the return type.'},
+   {p:'<b>Checking.</b> With <code>isPos : Function([Int], Bool)</code>, <code>x |&gt; isPos |&gt; double</code> is rejected: a Bool flows into an Int parameter.',z:['rules']},
+   {x:[null, "Not an IR form, and the call's value is lost.", "Uses E₁.result before E₁.code computes it.", "Adds <code>f</code> to the argument instead of calling it."],q:'<b>IR rule.</b> Which result/code rule fits <code>CPipe(E₁, f)</code>?',
+    o:['result = fresh t; code = <code>E₁.code ++ [t = call f(E₁.result)]</code>','result = <code>E₁.result</code>; code = <code>E₁.code ++ [call f(E₁.result)]</code>','result = fresh t; code = <code>[t = call f(E₁.result)] ++ E₁.code</code>','result = fresh t; code = <code>E₁.code ++ [t = f + E₁.result]</code>'],a:0,z:['rules'],
+    w:'Compute the argument first, then call into a fresh temp.'},
+   {p:'<b>Apply.</b> Postorder starts at <code>Add</code>: <code>t1 = x#1 + 1</code>.',z:['ast','ir']},
+   {p:'The inner call: <code>t2 = call double(t1)</code>.',z:['ast','ir']},
+   {p:'The outer call: <code>t3 = call inc(t2)</code>. The result is t3.',z:['ast','ir']}
+  ],apply);})();
+
+/* =============== names, scope and types =============== */
+(function(){const code=document.getElementById('sa-code'),stk=document.getElementById('sa-stack'),ty=document.getElementById('sa-types');
+  const CODE=['int total = 10;','bool ok = true;','{','  int total = 5;','  print(total + 1);','  ok = total < 3;','}','return total;','print(ok + 1);'];
+  const T1=['total#1','Int'],O1=['ok#1','Bool'],T2=['total#2','Int'];
+  const S=[
+   {l:-1,sc:[[]],tag:{}},
+   {l:0,sc:[[T1]],nw:'0:0',tag:{0:'total#1'}},
+   {l:1,sc:[[T1,O1]],nw:'0:1',tag:{1:'ok#1'}},
+   {l:2,sc:[[T1,O1],[]],ns:1,tag:{}},
+   {l:3,sc:[[T1,O1],[T2]],nw:'1:0',tag:{3:'total#2'}},
+   {l:4,sc:[[T1,O1],[T2]],srch:[1],hit:'1:0',tag:{4:'total#2'},ty:'line 5: <code>total#2 : Int</code>, <code>1 : Int</code> ⊢ <code>total + 1 : Int</code> ✓'},
+   {l:5,sc:[[T1,O1],[T2]],srch:[0],miss:[1],hit:'0:1',tag:{5:'ok#1 · total#2'},ty:'line 6: <code>total#2 &lt; 3 : Bool</code>, assigned to <code>ok#1 : Bool</code> ✓'},
+   {l:6,sc:[[T1,O1],[T2]],leave:1,tag:{}},
+   {l:7,sc:[[T1,O1]],srch:[0],hit:'0:0',tag:{7:'total#1'},ty:'line 8: <code>return total#1</code>, an Int ✓'},
+   {l:8,sc:[[T1,O1]],srch:[0],hit:'0:1',tag:{8:'✗ Bool + Int'},bad:8,ty:'line 9: <code>ok#1 : Bool</code>, <code>1 : Int</code>: <code>+</code> needs Int and Int ✗'}];
+  function apply(k,anim,pend){const f=S[k];const tags={};S.slice(0,k+1).forEach(x=>Object.assign(tags,x.tag));const cur=pend!=null?pend:f.l;
+    code.innerHTML=CODE.map((c,i)=>`<div class="${i===cur?'cur':''}"><span>${esc(c).replace(/ /g,'&nbsp;')}</span>${tags[i]?`<span class="tag" style="${i===f.bad?'color:var(--bad);background:var(--bad-pale)':''}">${tags[i]}</span>`:''}</div>`).join('');
+    const live=pend!=null?{}:f;
+    stk.innerHTML=f.sc.map((ents,si)=>{const cls=['scope'];if(live.srch&&live.srch.includes(si))cls.push('search');if(live.miss&&live.miss.includes(si))cls.push('miss');if(anim&&f.ns===si)cls.push('enter');if(f.leave===si)cls.push('leaving');
+      return `<div class="${cls.join(' ')}"><div class="sh"><span>Scope ${si}${si===0?' · function':' · block'}</span><span>${f.leave===si?'popped':live.miss&&live.miss.includes(si)?'miss':''}</span></div>${ents.length?ents.map((e,ei)=>`<div class="ent ${live.hit===si+':'+ei?'hit':''} ${anim&&f.nw===si+':'+ei?'enter':''}"><span>${e[0]}</span><span class="muted">${e[1]}</span></div>`).join(''):'<div class="muted small" style="padding:4px 2px">empty</div>'}</div>`;}).reverse().join('');
+    ty.innerHTML=S.slice(1,k+1).filter(x=>x.ty&&!(pend!=null&&x===f)).map((x,i,a)=>`<div class="${anim&&x===f?'anim':''}">${x.ty}</div>`).join('');}
+  const Z1=['code','stack'],Z2=['code','stack','types'];
+  const STEPS=[
+   {p:'Line 1 declares <code>total</code> in scope 0: binding <b>total#1 : Int</b>.',z:Z1},
+   {p:'Line 2 declares <b>ok#1 : Bool</b> in the same scope.',z:Z1},
+   {p:'Line 3 opens a block: <code>enter_scope</code> pushes an empty scope 1.',z:Z1},
+   {x:[null, "Duplicates are checked only in the current scope, and scope 1 has no <code>total</code>.", "The checker does not run code; it creates a new binding.", "A block may declare a name that also exists outside."],q:'Line 4 declares <code>total</code> again, inside the block. What does the checker do?',o:['Accepts it: a new binding total#2 that shadows total#1','Rejects it as a duplicate declaration','Overwrites total#1 with the value 5','Rejects it: total must be declared before the block'],a:0,z:Z1,
+    w:'<code>declare</code> only checks the <b>current</b> scope for duplicates. Scope 1 has no <code>total</code>, so shadowing is allowed.'},
+   {x:[null, "Lookup stops at the innermost match, total#2.", "Int + Int is Int.", "Lookup returns the first match; nothing is ambiguous."],q:'Line 5 uses <code>total</code>. Which binding does lookup return, and what type does <code>total + 1</code> have?',o:['total#2; Int','total#1; Int','total#2; Bool','Both bindings; ambiguous'],a:0,z:Z2,
+    w:'Lookup starts at the innermost scope and stops at the first match: total#2. Int + Int gives Int.'},
+   {x:[null, "Scope 1 holds only total#2.", "<code>total &lt; 3</code> compares Ints and gives Bool.", "Outer bindings stay visible inside the block."],q:'Line 6: <code>ok = total &lt; 3;</code>. Where is <code>ok</code> found, and is the line well-typed?',o:['In scope 0 (ok#1); yes, Bool is assigned to a Bool','In scope 1; yes','In scope 0; no, total &lt; 3 is an Int','Nowhere: ok is not visible inside the block'],a:0,z:Z2,
+    w:'Scope 1 has no <code>ok</code>, so lookup continues outward and finds ok#1. <code>total#2 &lt; 3</code> compares two Ints and gives Bool, which matches ok#1\'s type.'},
+   {p:'Line 7 closes the block: <code>exit_scope</code> pops scope 1. total#2 is no longer visible, but line 5 keeps its link to it.',z:Z1},
+   {x:[null, "total#2 was popped at <code>}</code>.", "Only scope 1 was popped; total#1 is still in scope 0.", "Lookup returns exactly one binding."],q:'Line 8: <code>return total;</code>. Which binding?',o:['total#1','total#2','Neither: total was popped','Both'],a:0,z:Z2,
+    w:'Only scope 0 remains, so lookup finds total#1.'},
+   {x:[null, "There is no implicit Bool-to-Int conversion.", "ok#1 is in scope 0 and visible here.", "The checker rejects it before the program runs."],q:'Line 9: <code>print(ok + 1);</code>. What does the checker report?',o:['A type error: Bool + Int','Nothing; it prints 2','An unknown name: ok','A runtime error'],a:0,z:Z2,
+    w:'ok#1 is visible and has type Bool. <code>+</code> needs two Ints and there is no implicit Bool-to-Int conversion, so checking fails before the program runs.'}];
+  const S0=STEPS;
+  stepQuiz('sa',S0,(k,anim)=>{const pending=!anim&&k<S0.length&&!S0[k].p&&k>0||(!anim&&k===3);apply(k,anim,(!anim&&S0[k]&&!S0[k].p)?S[k+1].l:null);});})();
+
+const NOTES=[
+ {s:'Welcome. Today we rebuild the pieces of a compiler by hand, the same skills the midterm asks for: NFA and DFA construction, a scanner, grammars, FIRST/FOLLOW, an SLR parser, scope and type checking, and IR generation.',w:'Explain the controls once: steps marked QUESTION are for the class. Give 20–30 seconds, then press → to reveal. Every wrong choice shows why it is wrong.',n:'What the midterm covers.'},
+ {s:'The midterm is Wed Nov 4 and covers Lectures 01–12. Today’s ten problems cover L06–L12. L01–05 have no problem today, so point people to those lecture slides and HW 1.',w:'Lecture 13 onward (control flow, stack frames) is not on the midterm.',n:'Part I: scanning.'},
+ {s:'A scanner is built in three moves: regular expression → Thompson NFA → subset-construction DFA. Then it scans with longest match, using rule priority to break ties.',n:'Build an NFA for a ( b | c )*.'},
+ {s:'Every Thompson fragment has exactly one entry and one exit. Build from the inside out: symbols, then union, then star, then concatenation.',w:'Step 5 is the key moment: why the star needs a new entry and exit. Let the class guess first. The shortcut makes a*b* accept ba.',n:'Convert this NFA to a DFA.'},
+ {s:'A DFA state is an ε-closed set of NFA states. Each step is move, then ε-closure. A set seen before is reused. A set is accepting if it contains NFA state 9.',w:'Students forget the skip edge 2 → 9 and the loop 8 → 3 when they compute closures. B, C and D behave the same; minimization would merge them, but the exam does not ask for it.',n:'The same algorithm, now with token kinds.'},
+ {s:'Same construction, but every accepting state names a token. If two rules accept the same lexeme, priority decides: X beats Y on aa. When scanning, keep reading past accepting states, then back up to the last one.',w:'The common mistake is stopping at the first accepting state. abb is the example: back up to Z(a), then scan bb.',n:'Part II: parsing.'},
+ {s:'From tokens to trees. First design a grammar, then compute FIRST and FOLLOW, then build and run an SLR parser.',n:'Writing a grammar for a list.'},
+ {s:'Handle the empty list one level up (Arr → [ ]), so every comma sits between two elements. Then derive [ 1 , 2 , 3 ] leftmost and watch the tree grow.',w:'Each wrong grammar has a one-line counterexample. Ask the class to find it before revealing: [ , 1 ] for A, [ 1 ] for C, [ , ] for D.',n:'FIRST and FOLLOW with ε, which the SLR parser needs.'},
+ {s:'Order matters: nullable first, then FIRST (look past nullable symbols), then FOLLOW (FIRST of what comes after, plus FOLLOW of the left-hand side if the rest can vanish). ε never goes in FOLLOW.',w:'In the trace, the ε-rule pops zero symbols and the input does not move. That surprises people.',n:'A full SLR parser.'},
+ {s:'Read the grammar out loud and point at the rule numbers; the next three slides refer to them. SLR means Simple LR: LR(0) items, with FOLLOW deciding where reductions go.',n:'Part 1: the LR(0) automaton.'},
+ {s:'Closure: a dot before a nonterminal pulls in all of its rules. GOTO: move the dot past one symbol, then close. The same item set is the same state.',w:'Steps 1–4 derive I₀ from the single seed item; ask the class what each dot pulls in before pressing →. The trap is GOTO(I₅, T): it is a new state I₇, not I₂. Compare item sets, not edge labels. Click any state to show its items.',n:'Fill in the table.'},
+ {s:'Shifts come from terminal edges, GOTO entries from nonterminal edges, reductions go in FOLLOW columns of completed items, and accept goes on $.',w:'Ask why ACTION[6, +] is a shift and not a reduce: FOLLOW only places reductions for completed items, and I₆ has none.',n:'Run the parser.'},
+ {s:'The stack holds symbol/state pairs. A shift pushes; a reduce pops |β| pairs, exposes a state, and pushes the GOTO target. Shifts are one click; reductions are questions.',w:'Point out that the same reduction T → id goes to state 2 or 7 depending on the exposed state. Toggle to the trace view at the end.',n:'What if a cell gets two actions?'},
+ {s:'E → E + E is ambiguous, so ACTION[4, +] gets both s3 and r1. %left PLUS resolves it toward reduce, which makes + left-associative.',w:'Precedence resolves shift/reduce conflicts only. A reduce/reduce conflict needs a grammar fix.',n:'Part III: semantic analysis and IR.'},
+ {s:'After parsing: resolve names and check types on the AST, then lower the checked AST to three-address IR.',n:'Scope and type checking on a small program.'},
+ {s:'The symbol table is a stack of scopes. declare checks only the current scope, so shadowing is fine. lookup goes innermost outward. } pops the scope, but the checked AST keeps its links. There is no implicit Bool/Int conversion.',w:'Line 6 is the one to slow down on: ok misses in scope 1, then is found in scope 0.',n:'Lowering a checked AST to IR.'},
+ {s:'Walk the tree in postorder. Every node gets a result and code. Leaves have empty code; each binop or call gets a fresh temp; the left child\'s code comes before the right child\'s.',w:'Fresh temps matter: reusing one would overwrite a child\'s value before the parent reads it.',n:'Writing a rule for a node with two children.'},
+ {s:'Never duplicate subtrees. Run each child\'s code once, in order, and reuse the results as often as needed (t * t). This is the pattern for writing any new result/code rule.',n:'One new operator through every phase.'},
+ {s:'This ties everything together: longest match for the token, precedence and associativity in the grammar, a typing rule with premises, a result/code rule, then applying it.',w:'If time is short, do the AST, typing and IR-rule steps and skip the rest.',n:'Wrap up.'},
+ {s:'Questions. Homework 2 (scanning and parsing) is due Mon Nov 9. On the exam, show your work; state numbers and temp names may differ from ours as long as they are consistent.'}];
+function renderNotes(){const p=document.getElementById('notes');if(!p||p.hidden)return;const n=NOTES[cur]||{};
+  p.innerHTML=`<div class="nt-h">Notes · slide ${cur+1} / ${N}</div>`+(n.s?`<p><b>Say</b> ${n.s}</p>`:'')+(n.w?`<p><b>Watch for</b> ${n.w}</p>`:'')+(n.n?`<p class="nt-next"><b>Next</b> ${n.n}</p>`:'');}
+function toggleNotes(){const p=document.getElementById('notes');p.hidden=!p.hidden;document.getElementById('nbtn').classList.toggle('on',!p.hidden);
+  try{localStorage.setItem('w4115-notes',p.hidden?'0':'1')}catch(e){}renderNotes();fit();}
+document.getElementById('nbtn').onclick=toggleNotes;
+document.addEventListener('keydown',e=>{if(e.target.tagName==='SELECT')return;if(e.key==='n'||e.key==='N'){toggleNotes();e.preventDefault();}});
+try{if(localStorage.getItem('w4115-notes')==='1'){document.getElementById('notes').hidden=false;document.getElementById('nbtn').classList.add('on');}}catch(e){}
+renderNotes();
+
+fit();const m0=/^#s(\d+)$/.exec(location.hash);go(m0?(+m0[1]-1):0);
+</script>
+
+</html>
