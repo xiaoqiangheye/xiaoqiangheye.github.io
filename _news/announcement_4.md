@@ -5,4 +5,4 @@ inline: true
 related_posts: false
 ---
 
-We released [TensorLean](https://tensorlean.ai), the first framework to formally verify production GPU kernels — it verified 149 kernel instances and found 38 bugs in frontier kernels including FlashAttention, DeepSeek, and Liger Kernel. :rocket:
+We released the [blog](https://tensorlean.ai) and [bug report](https://github.com/TensorLean/TensorLean) of TensorLean, the first framework to formally verify production GPU kernels — verifying 149 kernel instances and finding 41 correctness bugs in production kernel libraries including FlashAttention, DeepGEMM, Liger Kernel, and Triton. :rocket:
